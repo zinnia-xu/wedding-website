@@ -1974,6 +1974,9 @@
         // Main form submission
         document.getElementById('pointsForm').addEventListener('submit', function(e) {
             e.preventDefault();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) return;
+            if (submitBtn) submitBtn.disabled = true;
             const who = document.getElementById('reqWho').value;
             const points = parseInt(document.getElementById('reqPoints').value);
             const reason = document.getElementById('reqReason').value;
@@ -1982,11 +1985,13 @@
             if (!who) {
                 statusDiv.className = 'form-status error';
                 statusDiv.textContent = 'Please select your name.';
+                if (submitBtn) submitBtn.disabled = false;
                 return;
             }
             if (isNaN(points) || points === 0) {
                 statusDiv.className = 'form-status error';
                 statusDiv.textContent = 'Please enter a non-zero number of points.';
+                if (submitBtn) submitBtn.disabled = false;
                 return;
             }
 
@@ -2002,10 +2007,12 @@
                 if (data.error) {
                     statusDiv.className = 'form-status error';
                     statusDiv.textContent = data.error;
+                    if (submitBtn) submitBtn.disabled = false;
                 } else {
                     statusDiv.className = 'form-status success';
                     statusDiv.textContent = '✓ Request submitted!';
                     document.getElementById('pointsForm').reset();
+                    if (submitBtn) submitBtn.disabled = false;
                     setTimeout(() => {
                         loadData();
                     }, 1500);
@@ -2014,6 +2021,7 @@
             .catch(err => {
                 statusDiv.className = 'form-status error';
                 statusDiv.textContent = 'Error submitting request.';
+                if (submitBtn) submitBtn.disabled = false;
                 console.error(err);
             });
         });
