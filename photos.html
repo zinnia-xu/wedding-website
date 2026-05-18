@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photos - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.58), rgba(10,30,18,0.58)), url('horses.jpeg') center 40% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before { content: none; }
+        .page-hero::after { content: none; }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            position: relative;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* ─── GUEST PHOTOS CTA ─── */
+        .guest-photos-cta {
+            background: var(--white);
+            border: 2px solid var(--cream-dark);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+        }
+        .guest-photos-cta h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--jungle);
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+        .guest-photos-cta p {
+            font-size: 0.95rem;
+            color: var(--text-mid);
+            margin-bottom: 1.25rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .guest-photos-btn {
+            display: inline-block;
+            padding: 0.85rem 2.2rem;
+            background: linear-gradient(135deg, var(--hot-pink), var(--orange));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .guest-photos-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(232,69,107,0.3);
+        }
+
+        /* ─── GALLERY ─── */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 5rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            grid-auto-flow: dense;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            background: var(--cream-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .gallery-item.wide {
+            grid-column: span 2;
+            aspect-ratio: 2/1;
+        }
+        .gallery-item.tall {
+            grid-row: span 2;
+            aspect-ratio: auto;
+        }
+
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+
+        .gallery-item .caption {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 2rem 1.2rem 1rem;
+            background: linear-gradient(transparent, rgba(26,60,42,0.75));
+            color: var(--white);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-item:hover .caption { opacity: 1; }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.92);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox img {
+            max-width: 90vw; max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .lightbox-caption {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .lightbox-close {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            background: none; border: none;
+            color: var(--white); font-size: 2rem;
+            cursor: pointer; opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .lightbox-close:hover { opacity: 1; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2.5rem 1rem 4rem; }
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+            }
+            .gallery-item.wide { grid-column: span 2; }
+            .gallery-item.tall { grid-row: span 1; aspect-ratio: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html" class="active">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="points.html">Points</a></li>
+                <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Photos</h1>
+        <p class="subtitle">Some of our favorite moments together</p>
+    </section>
+
+    <main>
+        <div class="guest-photos-cta">
+            <h2>Share Your Photos From the Trip!</h2>
+            <p>Add your favorite moments from our wedding to our shared album — everyone can view and upload photos here.</p>
+            <a href="https://photos.app.goo.gl/Xu1jWkSqjVRQA6pj8" target="_blank" rel="noopener" class="guest-photos-btn">Open Shared Album</a>
+        </div>
+
+        <div class="gallery-grid">
+
+            <!-- 2019 -->
+            <div class="gallery-item tall">
+                <img src="Photos/yellowstone.JPG" alt="Yellowstone National Park, Wyoming, 2019">
+                <div class="caption">Yellowstone National Park, Wyoming, 2019</div>
+            </div>
+
+            <!-- 2020 -->
+            <div class="gallery-item">
+                <img src="Photos/Dolores.JPG" alt="Dolores Park, San Francisco, 2020">
+                <div class="caption">Dolores Park, San Francisco, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/MVIMG_20200313_193555_Original.JPG" alt="San Francisco, 2020">
+                <div class="caption">San Francisco, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_20200828_181954_exported_333_1598849877002_Original.JPG" alt="Lake Tahoe, California, 2020">
+                <div class="caption">Lake Tahoe, California, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_0963_Original.JPG" alt="Fishing in the Sierras, California, 2020">
+                <div class="caption">Fishing in the Sierras, California, 2020</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/MVIMG_20200710_203444_Original.JPG" alt="Hawai'i, 2020">
+                <div class="caption">Hawai'i, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/PXL_20201124_025012535_Original.JPG" alt="Big Island, Hawai'i, 2020">
+                <div class="caption">Big Island, Hawai'i, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/PXL_20201127_214630753_Original.JPG" alt="Big Island, Hawai'i, 2020">
+                <div class="caption">Big Island, Hawai'i, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/PXL_20201129_235518293_Original.JPG" alt="Big Island, Hawai'i, 2020">
+                <div class="caption">Big Island, Hawai'i, 2020</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1360_Original.JPG" alt="Zion National Park, Utah, 2020">
+                <div class="caption">Zion National Park, Utah, 2020</div>
+            </div>
+
+            <!-- 2021 -->
+            <div class="gallery-item">
+                <img src="Photos/PXL_20210417_232643029.PORTRAIT~2_Original.jpg" alt="Big Island, Hawai'i, 2021">
+                <div class="caption">Big Island, Hawai'i, 2021</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_4679.jpeg" alt="Big Island, Hawai'i, 2021">
+                <div class="caption">Big Island, Hawai'i, 2021</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3243.jpeg" alt="Kauai, Hawai'i, 2021">
+                <div class="caption">Kauai, Hawai'i, 2021</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_6409.jpeg" alt="Kauai, Hawai'i, 2021">
+                <div class="caption">Kauai, Hawai'i, 2021</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8209.jpeg" alt="Seattle, Washington, 2021">
+                <div class="caption">Seattle, Washington, 2021</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/0792b420-2cbc-4872-84d6-a04e579247de.jpg" alt="Real Alcázar, Seville, Spain, 2021">
+                <div class="caption">Real Alcázar, Seville, Spain, 2021</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2355.jpeg" alt="Valencia, Spain, 2021">
+                <div class="caption">Valencia, Spain, 2021</div>
+            </div>
+
+            <!-- 2022 -->
+            <div class="gallery-item">
+                <img src="Photos/IMG_4940.jpeg" alt="Nikkō, Japan, 2022">
+                <div class="caption">Nikkō, Japan, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_4005.jpeg" alt="Tokyo, Japan, 2022">
+                <div class="caption">Tokyo, Japan, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5468.jpeg" alt="Kyoto, Japan, 2022">
+                <div class="caption">Kyoto, Japan, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5551.jpeg" alt="Kyoto, Japan, 2022">
+                <div class="caption">Kyoto, Japan, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9834.jpeg" alt="Malibu, California, 2022">
+                <div class="caption">Malibu, California, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8238.jpeg" alt="Point Reyes, California, 2022">
+                <div class="caption">Point Reyes, California, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8573.jpeg" alt="Bodega Bay, California, 2022">
+                <div class="caption">Bodega Bay, California, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_4399.jpeg" alt="Amsterdam, Netherlands, 2022">
+                <div class="caption">Amsterdam, Netherlands, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_0460.jpeg" alt="Brussels, Belgium, 2022">
+                <div class="caption">Brussels, Belgium, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2995.jpeg" alt="Washington, D.C., 2022">
+                <div class="caption">Washington, D.C., 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8985.jpeg" alt="Washington, D.C., 2022">
+                <div class="caption">Washington, D.C., 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8996.jpeg" alt="Maryland, 2022">
+                <div class="caption">Maryland, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9209.jpeg" alt="West Virginia, 2022">
+                <div class="caption">West Virginia, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1948.jpeg" alt="Olympic Peninsula, Washington, 2022">
+                <div class="caption">Olympic Peninsula, Washington, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_7066.jpeg" alt="Teotihuacán, Mexico, 2022">
+                <div class="caption">Teotihuacán, Mexico, 2022</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3769.jpeg" alt="Valparaíso, Chile, 2022">
+                <div class="caption">Valparaíso, Chile, 2022</div>
+            </div>
+
+            <!-- 2023 -->
+            <div class="gallery-item">
+                <img src="Photos/IMG_0625.jpeg" alt="Bangkok, Thailand, 2023">
+                <div class="caption">Bangkok, Thailand, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1964.jpeg" alt="Chiang Mai, Thailand, 2023">
+                <div class="caption">Chiang Mai, Thailand, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2253.jpeg" alt="Prague, Czech Republic, 2023">
+                <div class="caption">Prague, Czech Republic, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8949.jpeg" alt="Zagreb, Croatia, 2023">
+                <div class="caption">Zagreb, Croatia, 2023</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/IMG_8999.jpeg" alt="Plitvice Lakes, Croatia, 2023">
+                <div class="caption">Plitvice Lakes, Croatia, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5183.jpeg" alt="Israel, 2023">
+                <div class="caption">Israel, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5826.jpeg" alt="Tel Aviv, Israel, 2023">
+                <div class="caption">Tel Aviv, Israel, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5836.jpeg" alt="Israel, 2023">
+                <div class="caption">Israel, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5851.jpeg" alt="Sea of Galilee, Israel, 2023">
+                <div class="caption">Sea of Galilee, Israel, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2806.jpeg" alt="Kauai, Hawai'i, 2023">
+                <div class="caption">Kauai, Hawai'i, 2023</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/IMG_2840.jpeg" alt="Kauai, Hawai'i, 2023">
+                <div class="caption">Kauai, Hawai'i, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3418.jpeg" alt="Kauai, Hawai'i, 2023">
+                <div class="caption">Kauai, Hawai'i, 2023</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8070.jpeg" alt="Washington, D.C., 2023">
+                <div class="caption">Washington, D.C., 2023</div>
+            </div>
+
+            <!-- 2024 -->
+            <div class="gallery-item tall">
+                <img src="Photos/IMG_6260.jpeg" alt="Kealakekua Bay, Big Island, Hawai'i, 2024">
+                <div class="caption">Kealakekua Bay, Big Island, Hawai'i, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5885.jpeg" alt="Big Island, Hawai'i, 2024">
+                <div class="caption">Big Island, Hawai'i, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3675.jpeg" alt="Oahu, Hawai'i, 2024">
+                <div class="caption">Oahu, Hawai'i, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3871.jpeg" alt="Oahu, Hawai'i, 2024">
+                <div class="caption">Oahu, Hawai'i, 2024</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/0E176FF7-A1F4-4689-88B8-3B1272486022.jpeg" alt="Pacific coast, Hawai'i, 2024">
+                <div class="caption">Pacific coast, Hawai'i, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3507.jpeg" alt="Stanford University, California, 2024">
+                <div class="caption">Stanford University, California, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3900.jpeg" alt="San Francisco, California, 2024">
+                <div class="caption">San Francisco, California, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3903.jpeg" alt="San Francisco, California, 2024">
+                <div class="caption">San Francisco, California, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_6408.jpeg" alt="San Francisco, California, 2024">
+                <div class="caption">San Francisco, California, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9628.jpeg" alt="San Francisco, California, 2024">
+                <div class="caption">San Francisco, California, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2379.jpeg" alt="Taipei, Taiwan, 2024">
+                <div class="caption">Taipei, Taiwan, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2433.jpeg" alt="Taipei, Taiwan, 2024">
+                <div class="caption">Taipei, Taiwan, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_2458.jpeg" alt="Taipei, Taiwan, 2024">
+                <div class="caption">Taipei, Taiwan, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3117.jpeg" alt="Jiufen, Taiwan, 2024">
+                <div class="caption">Jiufen, Taiwan, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_4948.JPG" alt="Taipei, Taiwan, 2024">
+                <div class="caption">Taipei, Taiwan, 2024</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_3977.jpeg" alt="Annapolis, Maryland, 2024">
+                <div class="caption">Annapolis, Maryland, 2024</div>
+            </div>
+
+            <!-- 2025 -->
+            <div class="gallery-item wide">
+                <img src="Photos/Engaged.jpeg" alt="Engaged at Kealakekua Bay, Big Island, Hawai'i, 2025">
+                <div class="caption">Engaged at Kealakekua Bay, Big Island, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_6404.jpeg" alt="Kauai, Hawai'i, 2025">
+                <div class="caption">Kauai, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_6441.jpeg" alt="Kauai, Hawai'i, 2025">
+                <div class="caption">Kauai, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9171.jpeg" alt="Big Island, Hawai'i, 2025">
+                <div class="caption">Big Island, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9346.jpeg" alt="Big Island, Hawai'i, 2025">
+                <div class="caption">Big Island, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9835.JPG" alt="Big Island, Hawai'i, 2025">
+                <div class="caption">Big Island, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9840.JPG" alt="Big Island, Hawai'i, 2025">
+                <div class="caption">Big Island, Hawai'i, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5389.jpeg" alt="San Francisco, California, 2025">
+                <div class="caption">San Francisco, California, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8695.jpeg" alt="San Francisco, California, 2025">
+                <div class="caption">San Francisco, California, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8769.jpeg" alt="Chicago, Illinois, 2025">
+                <div class="caption">Chicago, Illinois, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_8782.jpeg" alt="Chicago, Illinois, 2025">
+                <div class="caption">Chicago, Illinois, 2025</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/IMG_0364.jpeg" alt="Hiroshima, Japan, 2025">
+                <div class="caption">Hiroshima, Japan, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5004.jpeg" alt="Tokyo, Japan, 2025">
+                <div class="caption">Tokyo, Japan, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1470.jpeg" alt="Fukuoka, Japan, 2025">
+                <div class="caption">Fukuoka, Japan, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_0746.jpeg" alt="Oita, Japan, 2025">
+                <div class="caption">Oita, Japan, 2025</div>
+            </div>
+            <div class="gallery-item tall">
+                <img src="Photos/IMG_4073.jpeg" alt="Raja Ampat, Indonesia, 2025">
+                <div class="caption">Raja Ampat, Indonesia, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5408.jpeg" alt="Raja Ampat, Indonesia, 2025">
+                <div class="caption">Raja Ampat, Indonesia, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1604.jpeg" alt="Singapore, 2025">
+                <div class="caption">Singapore, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1936.jpeg" alt="Singapore, 2025">
+                <div class="caption">Singapore, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_6118.jpeg" alt="Hanoi, Vietnam, 2025">
+                <div class="caption">Hanoi, Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_7044.jpeg" alt="Hạ Long Bay, Vietnam, 2025">
+                <div class="caption">Hạ Long Bay, Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item wide">
+                <img src="Photos/IMG_6501.jpeg" alt="Ninh Bình, Vietnam, 2025">
+                <div class="caption">Ninh Bình, Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_7328.jpeg" alt="Vietnam, 2025">
+                <div class="caption">Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_7435.jpeg" alt="Central Vietnam, 2025">
+                <div class="caption">Central Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_7865.jpeg" alt="Huế, Vietnam, 2025">
+                <div class="caption">Huế, Vietnam, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_0137.jpeg" alt="Paris, France, 2025">
+                <div class="caption">Paris, France, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_0922.jpeg" alt="Provence, France, 2025">
+                <div class="caption">Provence, France, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1112.jpeg" alt="Provence, France, 2025">
+                <div class="caption">Provence, France, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/6a773ba5-5f5f-4a6d-a732-ef1503c91003.jpg" alt="Ironman California, 2025">
+                <div class="caption">Ironman California, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/2C4FB508-82F0-4B55-BB07-82C01E5036D7.JPG" alt="Ironman California finish, 2025">
+                <div class="caption">Ironman California finish, 2025</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/Ironman.jpeg" alt="Ironwomen! 2025">
+                <div class="caption">Ironwomen! 2025</div>
+            </div>
+
+            <!-- 2026 -->
+            <div class="gallery-item">
+                <img src="Photos/IMG_0116.jpeg" alt="Costa Rica, 2026">
+                <div class="caption">Costa Rica, 2026</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/4aeb6fd8-c22e-4b69-a0a3-261b12357a78.jpg" alt="Costa Rica, 2026">
+                <div class="caption">Costa Rica, 2026</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_1658.JPG" alt="Costa Rica, 2026">
+                <div class="caption">Costa Rica, 2026</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_9755.jpeg" alt="Costa Rica, 2026">
+                <div class="caption">Costa Rica, 2026</div>
+            </div>
+            <div class="gallery-item">
+                <img src="Photos/IMG_5415.JPG" alt="Skiing, Utah, 2026">
+                <div class="caption">Skiing, Utah, 2026</div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" id="lightboxClose">&times;</button>
+        <img id="lightboxImg" src="" alt="">
+        <div class="lightbox-caption" id="lightboxCaption"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        // Randomize names
+        (function() {
+            const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+            const pick = names[Math.floor(Math.random() * 2)];
+            document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+            document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+        })();
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+
+        // Lightbox
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const img = item.querySelector('img');
+                const cap = item.querySelector('.caption');
+                if (img) {
+                    lightboxImg.src = img.src;
+                    lightboxImg.alt = img.alt;
+                    lightboxCaption.textContent = cap ? cap.textContent : '';
+                    lightbox.classList.add('active');
+                }
+            });
+        });
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox || e.target === lightboxImg) {
+                lightbox.classList.remove('active');
+            }
+        });
+        document.getElementById('lightboxClose').addEventListener('click', () => lightbox.classList.remove('active'));
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') lightbox.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

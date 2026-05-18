@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eurovision 2026 Cheatsheet - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── HERO HEADER ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.55), rgba(10,30,18,0.55)), url('Sunset.jpeg') center 50% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--text-mid);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+        .intro a {
+            color: var(--hot-pink);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .intro a:hover { text-decoration: underline; }
+
+        /* ─── TABLE ─── */
+        .euro-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+        }
+        .euro-table thead {
+            background: var(--jungle);
+            color: var(--white);
+        }
+        .euro-table th {
+            padding: 1rem 1.2rem;
+            text-align: left;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .euro-table td {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid var(--cream-dark);
+            font-size: 0.95rem;
+        }
+        .euro-table tbody tr:last-child td { border-bottom: none; }
+        .euro-table tbody tr:hover { background: var(--cream); }
+        .country-cell {
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .flag { margin-right: 0.5rem; }
+        .song-link {
+            color: var(--hot-pink);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .song-link:hover { text-decoration: underline; }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--jungle);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .back-link:hover {
+            background: var(--jungle-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2rem 1rem 4rem; }
+            .euro-table th { padding: 0.7rem 0.6rem; font-size: 0.7rem; }
+            .euro-table td { padding: 0.6rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="points.html">Points</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Eurovision 2026 Cheatsheet</h1>
+        <p class="subtitle">All 35 songs competing in Vienna this May</p>
+    </section>
+
+    <main>
+        <p class="intro">
+            Listen to all the songs and earn <strong>20 points</strong>!
+            <br>
+            <a href="https://open.spotify.com/playlist/37i9dQZF1DWVCKO3xAlT1Q?si=c3RJAlRzTdKfPaGVpbhYaw" target="_blank" rel="noopener">🎧 Listen on Spotify</a>
+        </p>
+
+        <table class="euro-table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Song</th>
+                    <th>Artist</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="country-cell"><span class="flag">🇦🇱</span>Albania</td><td>Nân</td><td>Alis</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇦🇲</span>Armenia</td><td>Paloma Rumba</td><td>Simón</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇦🇺</span>Australia</td><td>Eclipse</td><td>Delta Goodrem</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇦🇹</span>Austria</td><td>Tanzschein</td><td>Cosmó</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇦🇿</span>Azerbaijan</td><td>Just Go</td><td>Jiva</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇧🇪</span>Belgium</td><td>Dancing on the Ice</td><td>Essyla</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇧🇬</span>Bulgaria</td><td>Bangaranga</td><td>Dara</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇭🇷</span>Croatia</td><td>Andromeda</td><td>Lelek</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇨🇾</span>Cyprus</td><td>Jalla</td><td>Antigoni</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇨🇿</span>Czechia</td><td>Crossroads</td><td>Daniel Žižka</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇩🇰</span>Denmark</td><td>Før Vi Går Hjem</td><td>Søren Torpegaard Lund</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇪🇪</span>Estonia</td><td>Too Epic To Be True</td><td>Vanilla Ninja</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇫🇮</span>Finland</td><td>Liekinheitin</td><td>Linda Lampenius &times; Pete Parkkonen</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇫🇷</span>France</td><td>Regarde!</td><td>Monroe</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇬🇪</span>Georgia</td><td>On Replay</td><td>Bzikebi</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇩🇪</span>Germany</td><td>Fire</td><td>Sarah Engels</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇬🇷</span>Greece</td><td>Ferto</td><td>Akylas</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇮🇱</span>Israel</td><td>Michelle</td><td>Noam Bettan</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇮🇹</span>Italy</td><td>Per Sempre Sì</td><td>Sal Da Vinci</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇱🇻</span>Latvia</td><td>Ēnā</td><td>Atvara</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇱🇹</span>Lithuania</td><td>Sólo Quiero Más</td><td>Lion Ceccah</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇱🇺</span>Luxembourg</td><td>Mother Nature</td><td>Eva Marija</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇲🇹</span>Malta</td><td>Bella</td><td>Aidan</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇲🇩</span>Moldova</td><td>Viva, Moldova!</td><td>Satoshi</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇲🇪</span>Montenegro</td><td>Nova Zora</td><td>Tamara Živković</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇳🇴</span>Norway</td><td>Ya Ya Ya</td><td>Jonas Lovv</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇵🇱</span>Poland</td><td>Pray</td><td>Alicja</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇵🇹</span>Portugal</td><td>Rosa</td><td>Bandidos do Cante</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇷🇴</span>Romania</td><td>Choke Me</td><td>Alexandra Căpitănescu</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇸🇲</span>San Marino</td><td>Superstar</td><td>Senhit ft. Boy George</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇷🇸</span>Serbia</td><td>Kraj Mene</td><td>Lavina</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇸🇪</span>Sweden</td><td>My System</td><td>Felicia</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇨🇭</span>Switzerland</td><td>Alice</td><td>Veronica Fusaro</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇺🇦</span>Ukraine</td><td>Ridnym</td><td>Leleka</td></tr>
+                <tr><td class="country-cell"><span class="flag">🇬🇧</span>United Kingdom</td><td>Eins, Zwei, Drei</td><td>Look Mum No Computer</td></tr>
+            </tbody>
+        </table>
+
+        <div style="text-align:center;">
+            <a href="points.html" class="back-link">&larr; Back to Points</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+        });
+    </script>
+</body>
+</html>

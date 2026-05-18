@@ -1,0 +1,2521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Competition Test — Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+            min-height: 100vh;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.12); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 0.5rem; }
+        .hamburger span { width: 24px; height: 2px; background: white; border-radius: 2px; transition: all 0.3s; }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0; background: rgba(26,60,42,0.98); padding: 0.5rem 0 1rem; z-index: 999; }
+            .nav-links.open a { padding: 0.75rem 1.5rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+        }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.62), rgba(10,30,18,0.62)), url('kayak.jpeg') center 45% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            color: var(--white);
+            margin-bottom: 0.6rem;
+            font-weight: 400;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        /* ─── SECTION LABELS ─── */
+        .section-badge {
+            display: inline-block;
+            background: var(--jungle);
+            color: var(--white);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.3rem 0.85rem;
+            border-radius: 20px;
+            margin-bottom: 1.2rem;
+        }
+        .section-badge.timed { background: var(--hot-pink); }
+
+        /* ─── SCREEN CONTAINERS ─── */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ─── INTRO / TEAM NAME SCREEN ─── */
+        .intro-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .intro-emoji { font-size: 3.5rem; margin-bottom: 1rem; display: block; }
+        .intro-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--jungle);
+            margin-bottom: 0.6rem;
+        }
+        .intro-desc {
+            color: var(--text-mid);
+            font-size: 0.98rem;
+            line-height: 1.7;
+            margin-bottom: 2rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .overview-blocks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .overview-block {
+            background: var(--cream);
+            border-radius: 12px;
+            padding: 1rem 1.1rem;
+            border-left: 4px solid var(--jungle);
+        }
+        .overview-block.timed-block { border-left-color: var(--hot-pink); }
+        .overview-block .ob-label {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+        .overview-block .ob-val {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text);
+        }
+        .team-input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .team-input-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--jungle);
+            margin-bottom: 0.5rem;
+        }
+        .team-input-group input {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 2px solid var(--cream-dark);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            background: var(--cream);
+            transition: border-color 0.2s;
+        }
+        .team-input-group input:focus {
+            outline: none;
+            border-color: var(--jungle);
+            background: var(--white);
+        }
+        .start-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--jungle), var(--jungle-light));
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.04em;
+            transition: all 0.2s ease;
+        }
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,60,42,0.3);
+        }
+
+        /* ─── SECTION INTRO SCREEN ─── */
+        .section-intro-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .section-intro-emoji { font-size: 3rem; margin-bottom: 0.8rem; display: block; }
+        .section-intro-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.9rem;
+            color: var(--jungle);
+            margin-bottom: 0.5rem;
+        }
+        .section-intro-desc {
+            color: var(--text-mid);
+            font-size: 0.97rem;
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+        }
+        .ready-btn {
+            display: inline-block;
+            padding: 0.85rem 2.5rem;
+            background: var(--hot-pink);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .ready-btn:hover {
+            background: var(--pink-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(232,69,107,0.3);
+        }
+
+        /* ─── PROGRESS ─── */
+        .progress-wrap { margin-bottom: 1.5rem; }
+        .progress-bar {
+            width: 100%; height: 8px;
+            background: var(--cream-dark);
+            border-radius: 8px; overflow: hidden; margin-bottom: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--jungle), var(--jungle-light));
+            border-radius: 8px; transition: width 0.4s ease; width: 0%;
+        }
+        .progress-text {
+            font-size: 0.82rem; color: var(--text-light); font-weight: 600; text-align: right;
+        }
+
+        /* ─── QUESTION CARD ─── */
+        .question-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            margin-bottom: 1rem;
+        }
+        .question-label {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--text-light); font-weight: 700; margin-bottom: 0.75rem;
+        }
+        .question-text {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.45rem; color: var(--text);
+            line-height: 1.45; margin-bottom: 1.5rem;
+        }
+
+        /* ─── OPTIONS ─── */
+        .options { display: flex; flex-direction: column; gap: 0.6rem; }
+        .option-btn {
+            display: block; width: 100%; padding: 0.9rem 1.2rem;
+            background: var(--cream); border: 2px solid var(--cream-dark);
+            border-radius: 10px; font-family: 'DM Sans', sans-serif;
+            font-size: 1rem; font-weight: 600; color: var(--text);
+            cursor: pointer; transition: all 0.2s ease; text-align: left;
+        }
+        .option-btn:hover:not(.locked) {
+            border-color: var(--jungle); background: rgba(26,60,42,0.05); transform: translateX(4px);
+        }
+        .option-btn.correct { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+        .option-btn.wrong { background: #fce4ec; border-color: #e57373; color: #c62828; }
+        .option-btn.reveal { background: #e8f5e9; border-color: #4caf50; color: #2e7d32; }
+        .option-btn.locked { cursor: default; opacity: 0.75; }
+        .option-btn.correct.locked, .option-btn.wrong.locked, .option-btn.reveal.locked { opacity: 1; }
+
+        /* ─── FEEDBACK ─── */
+        .feedback {
+            text-align: center; margin-top: 1.1rem;
+            font-size: 1.05rem; font-weight: 700; min-height: 1.4em;
+        }
+        .feedback.correct { color: #2e7d32; }
+        .feedback.wrong { color: #c62828; }
+
+        /* ─── NEXT BUTTON ─── */
+        .next-btn {
+            display: none; margin: 1.2rem auto 0; padding: 0.8rem 2.2rem;
+            background: var(--jungle); color: var(--white); border: none;
+            border-radius: 10px; font-family: 'DM Sans', sans-serif;
+            font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+        }
+        .next-btn:hover { background: var(--jungle-mid); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+
+        /* ─── RESULTS ─── */
+        .results-card {
+            background: var(--white); border-radius: 20px; padding: 2.5rem 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07); text-align: center;
+        }
+        .results-emoji { font-size: 4rem; margin-bottom: 0.8rem; display: block; }
+        .results-title { font-family: 'DM Serif Display', serif; font-size: 2.2rem; color: var(--text); margin-bottom: 0.5rem; }
+        .results-team { font-size: 1.1rem; font-weight: 700; color: var(--hot-pink); margin-bottom: 0.5rem; }
+        .results-score { font-size: 1.1rem; color: var(--text-mid); margin-bottom: 0.3rem; }
+        .results-points { font-size: 1.5rem; color: var(--hot-pink); font-weight: 700; margin-bottom: 1.5rem; }
+        .results-msg { font-size: 0.95rem; color: var(--text-mid); line-height: 1.7; margin-bottom: 1.5rem; }
+        .score-breakdown {
+            background: var(--cream); border-radius: 12px; padding: 1.2rem 1.5rem;
+            margin-bottom: 1.5rem; text-align: left;
+        }
+        .score-breakdown h4 {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--text-light); font-weight: 700; margin-bottom: 0.8rem;
+        }
+        .breakdown-row {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 0.9rem; padding: 0.35rem 0; border-bottom: 1px solid var(--cream-dark);
+        }
+        .breakdown-row:last-child { border-bottom: none; }
+        .breakdown-row .b-section { font-weight: 600; color: var(--text); }
+        .breakdown-row .b-pts { font-weight: 700; color: var(--jungle); }
+        .results-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+        .btn-primary {
+            padding: 0.8rem 1.8rem; background: var(--hot-pink); color: var(--white);
+            border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem; font-weight: 700; cursor: pointer; text-decoration: none;
+            display: inline-block; transition: all 0.2s;
+        }
+        .btn-primary:hover { background: var(--pink-light); transform: translateY(-2px); }
+        .btn-secondary {
+            padding: 0.8rem 1.8rem; background: none; color: var(--jungle);
+            border: 2px solid var(--jungle); border-radius: 10px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: all 0.2s;
+        }
+        .btn-secondary:hover { background: rgba(26,60,42,0.06); }
+
+        /* ═══════════════════════════════════════
+           SPANGRAM GAME STYLES
+        ═══════════════════════════════════════ */
+
+        /* Header bar */
+        .spagram-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .spagram-theme {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            color: var(--jungle);
+        }
+        .spagram-theme small {
+            display: block;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            margin-bottom: 0.1rem;
+        }
+        .spagram-timer-block {
+            text-align: center;
+        }
+        .spagram-timer-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        .spagram-timer {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--jungle);
+            font-variant-numeric: tabular-nums;
+            line-height: 1.1;
+            transition: color 0.3s;
+        }
+        .spagram-timer.urgent { color: var(--hot-pink); }
+        .spagram-score-block { text-align: center; }
+        .spagram-score-label {
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+        .spagram-score-val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--hot-pink);
+            line-height: 1.1;
+        }
+
+        /* Found words row */
+        .spagram-found-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 0.8rem;
+            min-height: 2.2rem;
+            align-items: center;
+        }
+        .spagram-mystery {
+            width: 2rem; height: 2rem;
+            border-radius: 50%;
+            background: var(--cream-dark);
+            display: inline-block;
+        }
+        .spagram-word-chip {
+            padding: 0.3rem 0.9rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            animation: chipPop 0.35s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .spagram-word-chip.found-chip { background: #4a9bc2; color: white; }
+        .spagram-word-chip.spangram-chip { background: #f5d03e; color: #1a3c2a; }
+        @keyframes chipPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Grid wrapper */
+        .spagram-grid-wrapper {
+            position: relative;
+            max-width: 360px;
+            margin: 0 auto 1rem;
+            touch-action: none;
+        }
+        .spagram-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 7px;
+            position: relative;
+            z-index: 2;
+        }
+        #spagramCanvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .grid-cell {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: none;
+            font-size: clamp(0.85rem, 3vw, 1.05rem);
+            font-weight: 800;
+            cursor: pointer;
+            background: #c8dce4;
+            color: #1a3c2a;
+            transition: background 0.12s, transform 0.1s;
+            position: relative;
+            z-index: 2;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            font-family: 'DM Sans', sans-serif;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .grid-cell.selected {
+            background: #3a8dbb;
+            color: white;
+            transform: scale(1.08);
+            z-index: 3;
+        }
+        .grid-cell.found-word { background: #4a9bc2; color: white; }
+        .grid-cell.found-spangram { background: #f5d03e; color: #1a3c2a; }
+        .grid-cell.hint-glow {
+            animation: hintGlow 0.8s ease 2;
+        }
+        @keyframes hintGlow {
+            0%,100% { transform: scale(1); }
+            50% { transform: scale(1.2); background: var(--orange); color: white; }
+        }
+        .grid-cell.found-word.hint-glow,
+        .grid-cell.found-spangram.hint-glow { animation: none; }
+
+        /* Word found flash */
+        .word-found-flash {
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--jungle);
+            min-height: 1.6rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInOut 1.8s ease;
+        }
+        .word-found-flash.spangram-flash { color: #c49a00; }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(-4px); }
+            20% { opacity: 1; transform: translateY(0); }
+            70% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Controls row */
+        .spagram-controls {
+            display: flex;
+            gap: 0.6rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .spagram-btn {
+            padding: 0.55rem 1.4rem;
+            border-radius: 8px;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .spagram-btn:hover { transform: translateY(-1px); }
+        .spagram-btn.clear-btn { background: var(--cream-dark); color: var(--text-mid); }
+        .spagram-btn.hint-btn { background: var(--jungle); color: white; }
+        .spagram-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+        /* Status message */
+        .spagram-status {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            min-height: 1.4rem;
+            margin-top: 0.4rem;
+        }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 600px) {
+            main { padding: 2rem 1rem 4rem; }
+            .overview-blocks { grid-template-columns: 1fr; }
+            .question-text { font-size: 1.25rem; }
+            .intro-title { font-size: 1.7rem; }
+            .spagram-header { padding: 0.8rem 1rem; }
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background: var(--jungle);
+            color: rgba(255,255,255,0.6);
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+        }
+        footer span { color: var(--hot-pink); }
+
+        /* ═══════════════════════════════════════
+           WORDLE STYLES
+        ═══════════════════════════════════════ */
+        .wordle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .wordle-title-block small {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-light);
+        }
+        .wordle-title-block strong {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.4rem;
+            color: var(--jungle);
+        }
+        .wordle-attempts {
+            text-align: right;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .wordle-attempts span { font-size: 1.1rem; font-weight: 800; color: var(--jungle); }
+
+        /* Grid */
+        .wordle-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+            margin: 0.5rem auto 1.2rem;
+        }
+        .wordle-row {
+            display: flex;
+            gap: 6px;
+        }
+        .wordle-tile {
+            width: 56px; height: 56px;
+            border: 2px solid var(--cream-dark);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text);
+            background: var(--white);
+            transition: border-color 0.1s;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+        .wordle-tile.filled { border-color: #999; }
+        .wordle-tile.correct {
+            background: var(--jungle);
+            color: white;
+            border-color: var(--jungle);
+            animation: tileFlip 0.5s ease forwards;
+        }
+        .wordle-tile.present {
+            background: var(--orange);
+            color: white;
+            border-color: var(--orange);
+            animation: tileFlip 0.5s ease forwards;
+        }
+        .wordle-tile.absent {
+            background: #9e9e9e;
+            color: white;
+            border-color: #9e9e9e;
+            animation: tileFlip 0.5s ease forwards;
+        }
+        .wordle-tile.shake { animation: tileShake 0.4s ease; }
+        @keyframes tileFlip {
+            0%   { transform: rotateX(0deg); }
+            50%  { transform: rotateX(90deg); }
+            100% { transform: rotateX(0deg); }
+        }
+        @keyframes tileShake {
+            0%,100% { transform: translateX(0); }
+            20%,60% { transform: translateX(-5px); }
+            40%,80% { transform: translateX(5px); }
+        }
+
+        /* Keyboard */
+        .wordle-keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .wordle-key-row { display: flex; gap: 5px; }
+        .wkey {
+            height: 54px;
+            min-width: 36px;
+            padding: 0 6px;
+            border-radius: 6px;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+            cursor: pointer;
+            background: #d3d6da;
+            color: var(--text);
+            transition: background 0.15s, color 0.15s;
+            text-transform: uppercase;
+            touch-action: manipulation;
+        }
+        .wkey.wide { min-width: 56px; font-size: 0.72rem; }
+        .wkey.correct { background: var(--jungle); color: white; }
+        .wkey.present { background: var(--orange); color: white; }
+        .wkey.absent  { background: #787c7e; color: white; }
+
+        /* Wordle message */
+        .wordle-msg {
+            text-align: center;
+            min-height: 1.6rem;
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-mid);
+            margin-bottom: 0.3rem;
+        }
+        .wordle-msg.success { color: var(--jungle); font-size: 1rem; }
+        .wordle-msg.fail    { color: var(--hot-pink); }
+
+        /* Score display */
+        .wordle-score-row {
+            text-align: center;
+            font-size: 0.88rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 400px) {
+            .wordle-tile { width: 48px; height: 48px; font-size: 1.3rem; }
+            .wkey { height: 46px; min-width: 30px; font-size: 0.74rem; }
+            .wkey.wide { min-width: 48px; }
+        }
+
+        /* ═══════════════════════════════════════
+           CONNECTIONS GAME STYLES
+        ═══════════════════════════════════════ */
+        .conn-header {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+        }
+        .conn-timer-block { text-align: center; }
+        .conn-timer-label {
+            font-size: 0.68rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-light); font-weight: 700;
+        }
+        .conn-timer-val {
+            font-size: 1.8rem; font-weight: 800;
+            color: var(--jungle); font-variant-numeric: tabular-nums; line-height: 1.1;
+        }
+        .conn-wrong-block { text-align: center; }
+        .conn-wrong-label {
+            font-size: 0.68rem; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-light); font-weight: 700;
+        }
+        .conn-wrong-val {
+            font-size: 1.5rem; font-weight: 800;
+            color: var(--hot-pink); line-height: 1.1;
+        }
+        /* Solved category banners */
+        .conn-solved-area {
+            display: flex; flex-direction: column; gap: 6px;
+            margin-bottom: 0.75rem;
+        }
+        .conn-solved-banner {
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            text-align: center;
+            animation: chipPop 0.4s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .conn-solved-banner .csb-label {
+            font-size: 0.68rem; text-transform: uppercase;
+            letter-spacing: 0.1em; font-weight: 800; margin-bottom: 0.1rem;
+        }
+        .conn-solved-banner .csb-words {
+            font-size: 0.88rem; font-weight: 600;
+        }
+        /* Word grid */
+        .conn-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 1rem;
+        }
+        .conn-word-btn {
+            aspect-ratio: 1.8;
+            border-radius: 10px;
+            border: none;
+            background: var(--cream-dark);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: clamp(0.68rem, 2.5vw, 0.82rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            transition: background 0.12s, transform 0.1s, color 0.12s;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 0.2rem;
+            user-select: none; -webkit-user-select: none;
+        }
+        .conn-word-btn:hover:not(.conn-selected):not(:disabled) {
+            background: #bcd0da; transform: translateY(-2px);
+        }
+        .conn-word-btn.conn-selected {
+            background: var(--jungle); color: white; transform: scale(1.05);
+        }
+        .conn-word-btn:disabled { opacity: 0; pointer-events: none; }
+        .conn-word-btn.conn-shake {
+            animation: tileShake 0.4s ease;
+        }
+        /* Controls row */
+        .conn-controls {
+            display: flex; gap: 0.75rem; justify-content: center;
+            flex-wrap: wrap; margin-bottom: 0.5rem;
+        }
+        .conn-btn {
+            padding: 0.6rem 1.6rem;
+            border-radius: 8px; border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .conn-btn:hover { transform: translateY(-1px); }
+        .conn-btn.conn-submit-btn { background: var(--hot-pink); color: white; }
+        .conn-btn.conn-submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .conn-btn.conn-deselect-btn { background: var(--cream-dark); color: var(--text-mid); }
+        .conn-status {
+            text-align: center; font-size: 0.9rem;
+            font-weight: 600; color: var(--text-light);
+            min-height: 1.4rem; margin-top: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+<nav id="mainNav">
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo" id="navLogo">Z & A</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="our-story.html">Our Story</a></li>
+            <li><a href="photos.html">Photos</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="things-to-do.html">Activities</a></li>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="points.html">Points</a></li>
+            <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+            <li><a href="uni.html">Uni 🐱</a></li>
+        </ul>
+        <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<section class="page-hero">
+    <h1 class="page-title">🏖️ Beach Competition Test</h1>
+    <p class="subtitle">Saturday, May 23 · Hanalei Beach Pier</p>
+</section>
+
+<main>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 1: TEAM NAME ENTRY
+    ══════════════════════════════════════════════ -->
+    <div class="screen active" id="screen-intro">
+        <div class="intro-card">
+            <span class="intro-emoji">🌺</span>
+            <h2 class="intro-title">Welcome to the Test!</h2>
+            <p class="intro-desc">
+                Today's beach competition includes a knowledge test across four sections. Do your best — every point counts toward the leaderboard!
+            </p>
+
+            <div class="team-input-group">
+                <label for="teamNameInput">What's your team name?</label>
+                <select id="teamNameInput" style="width:100%;padding:0.75rem 1rem;border-radius:10px;border:2px solid var(--cream-dark);font-family:'DM Sans',sans-serif;font-size:1rem;background:var(--white);color:var(--text);-webkit-appearance:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7A7A' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 1rem center;cursor:pointer;">
+                    <option value="">Select your team…</option>
+                </select>
+                <p id="teamLoadStatus" style="font-size:0.78rem;color:var(--text-light);margin-top:0.4rem;text-align:center;"></p>
+            </div>
+
+            <button class="start-btn" onclick="startTest()">
+                Let's Go! 🌊
+            </button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 2: SECTION 1 INTRO
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section1-intro">
+        <div class="section-intro-card">
+            <span class="section-badge">Section 1 of 3</span>
+            <span class="section-intro-emoji">🧠</span>
+            <h2 class="section-intro-title">Zinnia & Andrew Trivia</h2>
+            <p class="section-intro-desc">
+                How well do you know the couple? Answer 5 questions about Andrew and Zinnia's story.
+                No timer on this one — think carefully! No cheating.<br><br>
+                <strong>5 questions · 1 point each · 5 points total</strong>
+            </p>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay" style="color:var(--jungle);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection1()">Ready — Let's Go! →</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 3: TRIVIA QUESTIONS
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-trivia">
+        <div class="progress-wrap">
+            <div class="progress-bar"><div class="progress-fill" id="triviaProgress"></div></div>
+            <div class="progress-text" id="triviaProgressText">Question 1 of 5</div>
+        </div>
+
+        <div class="question-card">
+            <div class="question-label" id="qLabel">Question 1 · Trivia</div>
+            <div class="question-text" id="qText"></div>
+            <div class="options" id="qOptions"></div>
+            <div class="feedback" id="qFeedback"></div>
+        </div>
+
+        <div style="text-align:center;">
+            <button class="next-btn" id="triviaNextBtn" onclick="nextTriviaQuestion()">Next Question →</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 4: SECTION 2 INTRO (SPANGRAM)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section2-intro">
+        <div class="section-intro-card">
+            <span class="section-badge timed">Section 2 of 3 · Timed</span>
+            <span class="section-intro-emoji">🔤</span>
+            <h2 class="section-intro-title">Kauai Word Search</h2>
+            <p class="section-intro-desc">
+                Find <strong>6 hidden words</strong> connected to the theme, plus one special
+                <strong>Spangram</strong> — a word that stretches across the whole grid.<br><br>
+                Tap letters to form connected paths, then hit <strong>Submit</strong> to lock in your word. Adjacent means any direction — including diagonals!<br><br>
+                <strong>This section is timed. Faster = better rank. 1st place = 5 pts, 2nd = 4, 3rd = 3…</strong>
+            </p>
+            <div style="background:#fff8e1; border:2px solid var(--orange); border-radius:12px; padding:0.9rem 1.2rem; margin-bottom:1.2rem; font-size:0.9rem; color:var(--text-mid);">
+                💡 <strong>Hints cost points!</strong> Every 2 hints used = <strong>−1 pt</strong> from your rank score. Use them wisely!
+            </div>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay2" style="color:var(--jungle);">—</strong>
+                &nbsp;·&nbsp; Trivia score: <strong id="triviaPtsPreview" style="color:var(--hot-pink);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection2()">Start Timer & Go! ⏱</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 5: SPANGRAM GAME
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-spangram">
+
+        <!-- Header bar -->
+        <div class="spagram-header">
+            <div class="spagram-theme">
+                <small>Theme</small>
+                Kauai
+            </div>
+            <div class="spagram-timer-block">
+                <div class="spagram-timer-label">Time</div>
+                <div class="spagram-timer" id="spagramTimerDisplay">0:00</div>
+            </div>
+            <div class="spagram-score-block">
+                <div class="spagram-score-label">Hints Used</div>
+                <div class="spagram-score-val" id="spagramScoreDisplay">0</div>
+            </div>
+        </div>
+
+        <!-- Found words -->
+        <div class="spagram-found-row" id="spagramFoundRow">
+            <!-- Mystery dots filled in as words are found -->
+        </div>
+
+        <!-- Word found flash message -->
+        <div class="word-found-flash" id="wordFoundFlash" style="visibility:hidden;"></div>
+
+        <!-- Grid -->
+        <div class="spagram-grid-wrapper" id="spagramGridWrapper">
+            <canvas id="spagramCanvas"></canvas>
+            <div class="spagram-grid" id="spagramGrid"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="spagram-controls">
+            <button class="spagram-btn clear-btn" onclick="clearCurrentPath()">Clear ✕</button>
+            <button class="spagram-btn" style="background:var(--jungle-light);color:white;" onclick="submitSpagramPath()">Submit ↵</button>
+            <button class="spagram-btn hint-btn" id="hintBtn" onclick="showHint()" title="−1 pt per 2 hints used">Hint 💡</button>
+        </div>
+        <div class="spagram-status" id="spagramStatus"></div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 6: SECTION 3 INTRO (MORE TRIVIA)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section3-intro">
+        <div class="section-intro-card">
+            <span class="section-badge">Section 3 of 4</span>
+            <span class="section-intro-emoji">🧠</span>
+            <h2 class="section-intro-title">More Trivia</h2>
+            <p class="section-intro-desc">
+                Five more questions about Andrew and Zinnia's story. No timer on this section. No cheating.<br><br>
+                <strong>5 questions · 1 point each · 5 points total</strong>
+            </p>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay3" style="color:var(--jungle);">—</strong>
+                &nbsp;·&nbsp; Score so far: <strong id="scoreSoFarPreview" style="color:var(--hot-pink);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection3()">Ready — Let's Go! →</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 7: SECTION 4 INTRO (WORDLE)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section4-intro">
+        <div class="section-intro-card">
+            <span class="section-badge" style="background:var(--orange);">Section 4 of 4</span>
+            <span class="section-intro-emoji">🟩</span>
+            <h2 class="section-intro-title">Wordle</h2>
+            <p class="section-intro-desc">
+                Guess the 5-letter word in up to 6 tries. After each guess:<br><br>
+                <strong style="color:var(--jungle);">■ Green</strong> = right letter, right spot<br>
+                <strong style="color:var(--orange);">■ Orange</strong> = right letter, wrong spot<br>
+                <strong style="color:#9e9e9e;">■ Gray</strong> = letter not in the word<br><br>
+                <strong>This section is timed. Fastest wins! 1st = 5 pts, 2nd = 4, 3rd = 3…</strong>
+            </p>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay4" style="color:var(--jungle);">—</strong>
+                &nbsp;·&nbsp; Score so far: <strong id="scoreSoFarPreview4" style="color:var(--hot-pink);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection4()">Let's Wordle! →</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 8: WORDLE GAME
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-wordle">
+
+        <div class="wordle-header">
+            <div class="wordle-title-block">
+                <small>Section 4 of 5</small>
+                <strong>🟩 Wordle</strong>
+            </div>
+            <div style="text-align:center;">
+                <div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);font-weight:700;">Time</div>
+                <div id="wordleTimerDisplay" style="font-size:1.5rem;font-weight:800;color:var(--jungle);font-variant-numeric:tabular-nums;">0:00</div>
+            </div>
+            <div class="wordle-attempts">
+                Attempts<br><span id="wordleAttemptsDisplay">0</span> / 6
+            </div>
+        </div>
+
+        <div class="wordle-msg" id="wordleMsg">Guess the 5-letter word!</div>
+        <div class="wordle-score-row" id="wordleScoreRow"></div>
+
+        <!-- 6×5 grid -->
+        <div class="wordle-grid" id="wordleGrid"></div>
+
+        <!-- On-screen keyboard -->
+        <div class="wordle-keyboard">
+            <div class="wordle-key-row">
+                <button class="wkey" data-key="Q" onclick="wordleKey('Q')">Q</button>
+                <button class="wkey" data-key="W" onclick="wordleKey('W')">W</button>
+                <button class="wkey" data-key="E" onclick="wordleKey('E')">E</button>
+                <button class="wkey" data-key="R" onclick="wordleKey('R')">R</button>
+                <button class="wkey" data-key="T" onclick="wordleKey('T')">T</button>
+                <button class="wkey" data-key="Y" onclick="wordleKey('Y')">Y</button>
+                <button class="wkey" data-key="U" onclick="wordleKey('U')">U</button>
+                <button class="wkey" data-key="I" onclick="wordleKey('I')">I</button>
+                <button class="wkey" data-key="O" onclick="wordleKey('O')">O</button>
+                <button class="wkey" data-key="P" onclick="wordleKey('P')">P</button>
+            </div>
+            <div class="wordle-key-row">
+                <button class="wkey" data-key="A" onclick="wordleKey('A')">A</button>
+                <button class="wkey" data-key="S" onclick="wordleKey('S')">S</button>
+                <button class="wkey" data-key="D" onclick="wordleKey('D')">D</button>
+                <button class="wkey" data-key="F" onclick="wordleKey('F')">F</button>
+                <button class="wkey" data-key="G" onclick="wordleKey('G')">G</button>
+                <button class="wkey" data-key="H" onclick="wordleKey('H')">H</button>
+                <button class="wkey" data-key="J" onclick="wordleKey('J')">J</button>
+                <button class="wkey" data-key="K" onclick="wordleKey('K')">K</button>
+                <button class="wkey" data-key="L" onclick="wordleKey('L')">L</button>
+            </div>
+            <div class="wordle-key-row">
+                <button class="wkey wide" onclick="wordleSubmit()">Enter</button>
+                <button class="wkey" data-key="Z" onclick="wordleKey('Z')">Z</button>
+                <button class="wkey" data-key="X" onclick="wordleKey('X')">X</button>
+                <button class="wkey" data-key="C" onclick="wordleKey('C')">C</button>
+                <button class="wkey" data-key="V" onclick="wordleKey('V')">V</button>
+                <button class="wkey" data-key="B" onclick="wordleKey('B')">B</button>
+                <button class="wkey" data-key="N" onclick="wordleKey('N')">N</button>
+                <button class="wkey" data-key="M" onclick="wordleKey('M')">M</button>
+                <button class="wkey wide" onclick="wordleBackspace()">⌫</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 9: SECTION 5 INTRO (FINAL TRIVIA)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section5-intro">
+        <div class="section-intro-card">
+            <span class="section-badge">Section 5 of 6</span>
+            <span class="section-intro-emoji">🧠</span>
+            <h2 class="section-intro-title">Final Trivia Round</h2>
+            <p class="section-intro-desc">
+                Last five questions — a mix of Zinnia, Andrew, and Uni facts. No timer. No cheating.<br><br>
+                <strong>5 questions · 1 point each · 5 points total</strong>
+            </p>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay5" style="color:var(--jungle);">—</strong>
+                &nbsp;·&nbsp; Score so far: <strong id="scoreSoFarPreview5" style="color:var(--hot-pink);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection5()">Last Round! →</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 10: SECTION 6 INTRO (CONNECTIONS)
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-section6-intro">
+        <div class="section-intro-card">
+            <span class="section-badge timed">Section 6 of 6 · Timed</span>
+            <span class="section-intro-emoji">🔗</span>
+            <h2 class="section-intro-title">Connections</h2>
+            <p class="section-intro-desc">
+                Group the 16 words into 4 categories of 4. Select 4 words and hit <strong>Submit</strong> — if you're right, they lock in. If not, you get a <strong>+5 second penalty</strong> added to your time.<br><br>
+                <strong>This section is timed. Fastest wins! 1st = 5 pts, 2nd = 4, 3rd = 3…</strong>
+            </p>
+            <p style="color:var(--text-light); font-size:0.88rem; margin-bottom:1.5rem;">
+                Team: <strong id="teamNameDisplay6" style="color:var(--jungle);">—</strong>
+                &nbsp;·&nbsp; Score so far: <strong id="scoreSoFarPreview6" style="color:var(--hot-pink);">—</strong>
+            </p>
+            <button class="ready-btn" onclick="startSection6()">Start Timer & Go! ⏱</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 11: CONNECTIONS GAME
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-connections">
+
+        <div class="conn-header">
+            <div>
+                <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-light);font-weight:700;margin-bottom:0.1rem;">Section 6 of 6</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--jungle);">🔗 Connections</div>
+            </div>
+            <div class="conn-timer-block">
+                <div class="conn-timer-label">Time</div>
+                <div class="conn-timer-val" id="connTimerDisplay">0:00</div>
+            </div>
+            <div class="conn-wrong-block">
+                <div class="conn-wrong-label">Penalties</div>
+                <div class="conn-wrong-val" id="connWrongDisplay">+0s</div>
+            </div>
+        </div>
+
+        <p style="text-align:center;font-size:0.82rem;color:var(--text-light);font-weight:600;margin-bottom:0.6rem;">Create four groups of four!</p>
+
+        <!-- Solved banners appear here -->
+        <div class="conn-solved-area" id="connSolvedArea"></div>
+
+        <!-- 4×4 word grid -->
+        <div class="conn-grid" id="connGrid"></div>
+
+        <div class="conn-controls">
+            <button class="conn-btn conn-deselect-btn" onclick="connDeselectAll()">Deselect All</button>
+            <button class="conn-btn conn-submit-btn" id="connSubmitBtn" onclick="connSubmit()" disabled>Submit</button>
+        </div>
+        <div class="conn-status" id="connStatus"></div>
+
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         SCREEN 12: FINAL RESULTS
+    ══════════════════════════════════════════════ -->
+    <div class="screen" id="screen-results">
+        <div class="results-card">
+            <span class="results-emoji" id="resultsEmoji">🏆</span>
+            <h2 class="results-title" id="resultsTitle">Results!</h2>
+            <div class="results-team" id="resultsTeam"></div>
+            <div class="results-score" id="resultsScore"></div>
+            <div class="results-points" id="resultsPoints"></div>
+
+            <div class="score-breakdown" id="scoreBreakdown">
+                <h4>Score Breakdown</h4>
+                <div class="breakdown-row">
+                    <span class="b-section">🧠 Zinnia & Andrew Trivia</span>
+                    <span class="b-pts" id="breakdownTrivia">—</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="b-section">🔤 Kauai Word Search</span>
+                    <span class="b-pts" id="breakdownSpagram">—</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="b-section">🧠 More Trivia</span>
+                    <span class="b-pts" id="breakdownSection3">—</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="b-section">🟩 Wordle</span>
+                    <span class="b-pts" id="breakdownWordle">—</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="b-section">🧠 Final Trivia</span>
+                    <span class="b-pts" id="breakdownSection5">—</span>
+                </div>
+                <div class="breakdown-row">
+                    <span class="b-section">🔗 Connections</span>
+                    <span class="b-pts" id="breakdownConnections">—</span>
+                </div>
+            </div>
+
+            <p class="results-msg" id="resultsMsg"></p>
+
+            <div style="font-size:0.8rem; color:var(--text-light); margin-bottom:1rem;" id="submitStatus"></div>
+
+            <div class="results-btns">
+                <a href="beach-leaderboard.html" class="btn-primary">Beach Leaderboard 🏖️</a>
+                <button class="btn-secondary" onclick="restartTest()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    <p>Made with love by <span>Zinnia</span> · May 24, 2026 · Common Ground Kauai</p>
+</footer>
+
+<script>
+    // ── Nav logo ──
+    const names = ['Zinnia & Andrew', 'Andrew & Zinnia'];
+    const chosen = names[Math.floor(Math.random() * 2)];
+    document.getElementById('navLogo').textContent = chosen.split(' & ')[0][0] + ' & ' + chosen.split(' & ')[1][0];
+
+    // ═══════════════════════════════════
+    // TRIVIA STATE
+    // ═══════════════════════════════════
+    let teamName = '';
+    let triviaIndex = 0;
+    let triviaScore = 0;
+    let triviaAnswered = false;
+
+    const triviaQuestions = [
+        {
+            q: 'Where did Andrew and Zinnia first technically meet before heading to Dolores Park?',
+            options: ['Philz Coffee', 'Qualitea', 'Bi-Rite Creamery', 'Tartine Bakery'],
+            answer: 1,
+            fun: 'They got boba — still a favorite!'
+        },
+        {
+            q: 'What style of partner dancing did Andrew and Zinnia start taking classes for together?',
+            options: ['West Coast Swing', 'Salsa', 'Lindy Hop', 'Bachata'],
+            answer: 0,
+            fun: 'Dancing to pop music is way more fun than dancing to old timey swing music.'
+        },
+        {
+            q: 'After the wedding, what will their official anniversary date become (and why)?',
+            options: [
+                'May 25th — the average of the wedding date and when they started dating',
+                'May 24th — the wedding date',
+                'May 26th — when they started dating',
+                'March 17th — the day SF\'s stay-at-home order was issued'
+            ],
+            answer: 0,
+            fun: 'Obviously the only logical choice is May 25.'
+        },
+        {
+            q: 'Why did they consider waiting until 2029 to get married (before Zinnia vetoed the idea)?',
+            options: [
+                'So May 26th would fall on a weekend and they could keep one anniversary date',
+                'To save more money',
+                'To plan a bigger wedding',
+                'To celebrate a 10-year anniversary'
+            ],
+            answer: 0,
+            fun: 'Andrew really wanted to keep May 26th so he would only have to remember one day. Zinnia wanted to get married.'
+        },
+        {
+            q: 'How many months after they started dating did Zinnia move into Andrew\'s Noe Valley apartment?',
+            options: ['Three months', 'One month', 'Six months', 'One year'],
+            answer: 0,
+            fun: 'A completely reasonable amount of time during the pandemic.'
+        }
+    ];
+
+    const resultMessages = [
+        { min: 100, emoji: '🌺', title: 'Island Legends!', msg: 'Four sections. Crushed. Zinnia & Andrew are genuinely honored — and a little intimidated.' },
+        { min: 80,  emoji: '🏆', title: 'Nearly Flawless!', msg: 'Excellent effort across all four sections. You clearly came prepared.' },
+        { min: 55,  emoji: '🌊', title: 'Strong Showing!', msg: 'Solid trivia, solid word skills. A very respectable performance.' },
+        { min: 30,  emoji: '🌴', title: 'Getting There!', msg: 'You know enough to celebrate with us. That\'s what matters.' },
+        { min: 0,   emoji: '🐌', title: 'You Tried!', msg: 'The good news: you\'re still invited to the wedding.' }
+    ];
+
+    // ── Section 3, 4 & 5 state ──
+    let section3Score = 0;
+    let section5Score = 0;
+    let wordleScore   = 0;
+    let triviaMode = 'section1'; // 'section1', 'section3', or 'section5'
+
+    // ── Wordle constants ──
+    const WORDLE_WORD        = 'KAYAK';
+    const WORDLE_MAX_GUESSES = 6;
+    const WORDLE_SCORING     = [25, 20, 15, 10, 5, 2]; // pts for solving in 1..6 guesses
+
+    // ── Wordle game state ──
+    let wordleGuesses     = [];   // submitted guess strings
+    let wordleCurrentGuess = '';  // letters typed so far
+    let wordleGameOver    = false;
+    let keyStates         = {};   // letter → best state
+    let wordleTimerHandle = null;
+    let wordleElapsed     = 0;    // seconds elapsed (count up)
+    let wordleElapsedSec  = 0;    // final elapsed on completion
+    let wordleValidWords  = null; // Set of valid words, null = still loading
+
+    // Load word list in background as soon as page loads
+    (async () => {
+        try {
+            const r = await fetch('https://raw.githubusercontent.com/tabatkins/wordle-list/main/words');
+            const text = await r.text();
+            wordleValidWords = new Set(text.trim().split('\n').map(w => w.trim().toUpperCase()));
+            wordleValidWords.add('KAYAK'); // ensure our answer is always valid
+        } catch(e) {
+            wordleValidWords = new Set(); // empty = skip validation gracefully
+        }
+    })();
+
+    // ── Connections state ──
+    const CONN_CATEGORIES = [
+        { label: 'States That Were Once Independent Republics',  words: ['CALIFORNIA','VERMONT','HAWAII','TEXAS'],       color: '#7c5cbf', bg: '#ede3f7' },
+        { label: 'Parts of a House',             words: ['LANAI','DECK','STOOP','TERRACE'],              color: '#3a8a4a', bg: '#ddf0e0' },
+        { label: "Zinnia's Race Locations",      words: ['OAHU','SACRAMENTO','ALCATRAZ','COZUMEL'],      color: '#2a72b5', bg: '#ddeaf8' },
+        { label: 'Disney Characters',            words: ['MAUI','HERCULES','ELSA','JAFAR'],              color: '#c08a10', bg: '#fdf3d0' },
+    ];
+    let connSelected      = [];   // currently selected words
+    let connFoundCats     = [];   // indices of found categories
+    let connTimerHandle   = null;
+    let connElapsed       = 0;
+    let connElapsedSec    = 0;
+    let connWrongCount    = 0;
+    let connPenaltySec    = 0;    // total penalty seconds added
+
+    const section3Questions = [
+        {
+            q: 'What made fall 2020 in San Francisco especially miserable, beyond the pandemic?',
+            options: ['Wildfire season', 'An earthquake', 'A water shortage', 'A heat wave'],
+            answer: 0,
+            fun: 'The sky turned orange from smoke. It was as apocalyptic as it sounds — Hawaii sounded way nicer.'
+        },
+        {
+            q: 'Approximately how long did Andrew and Zinnia end up staying in Hawaii during the pandemic?',
+            options: ['Five months', 'Two weeks', 'One month', 'Three months'],
+            answer: 0,
+            fun: 'A two-week trip turned into a five-month adventure. Remote work hits different when you\'re doing it from paradise.'
+        },
+        {
+            q: 'Where did Andrew and Zinnia propose to each other?',
+            options: ['Kealakekua Bay, Big Island', 'Dolores Park, San Francisco', 'Hanalei Bay, Kauai', 'Half Dome, Yosemite'],
+            answer: 0,
+            fun: 'They proposed to each other — same place, different moments. One of their favorite places!'
+        },
+        {
+            q: 'What did Andrew and Zinnia do to celebrate their six-month anniversary — years before getting engaged at the same spot?',
+            options: ['Swam with dolphins', 'Snorkeled with sea turtles', 'Went paddleboarding', 'Watched the sunset from a sailboat'],
+            answer: 0,
+            fun: 'The same bay, years later, became their engagement spot. Full circle!'
+        },
+        {
+            q: 'What name did Andrew and Zinnia almost give their cat instead of Uni?',
+            options: ['Cali', 'Luna', 'Pepper', 'Nori'],
+            answer: 3,
+            fun: 'Nori was the runner-up. Uni won because it\'s tasty and a cute name. She remains unimpressed by either.'
+        }
+    ];
+
+    const section5Questions = [
+        {
+            q: "What is Uni's favorite room in the house?",
+            options: ['The kitchen', 'The bedroom', 'The garage', 'The office'],
+            answer: 2,
+            fun: "Uni loves the garage because she loves to roll around on the concrete and loves to get dirty."
+        },
+        {
+            q: 'Which of these pets has Zinnia eaten?',
+            options: ['Bunny', 'Duck', 'Goose', 'All of the above'],
+            answer: 3,
+            fun: "😬"
+        },
+        {
+            q: 'What is the South American dish that Zinnia and Andrew had once and fell so in love with that they now make it at home?',
+            options: ['Pupusas', 'Cachapas', 'Quesadillas', 'Arepas'],
+            answer: 1,
+            fun: "Cachapas — Venezuelan corn pancakes filled with cheese and other toppings. IT'S SO TASTY! Who doesn't love corn."
+        },
+        {
+            q: 'How long did it take Zinnia and Andrew to make a Baked Alaska?',
+            options: ['2 hours', '5 hours', '8 hours', '11 hours'],
+            answer: 3,
+            fun: "Eleven hours. It involved hand-beating meringue (because no KitchenAid mixer), creating homemade ice cream with dry ice (because no ice cream maker), making multiple weird flavors including beet (because science?), and baking and torching."
+        },
+        {
+            q: "What is Andrew's preferred beard length?",
+            options: ['1mm', '3mm', '5mm', '7mm'],
+            answer: 2,
+            fun: "5mm. They tested all the lengths."
+        }
+    ];
+
+    // ═══════════════════════════════════
+    // SPANGRAM DATA
+    // ═══════════════════════════════════
+    /*
+      Grid (8 rows × 6 cols):
+      Row 0: W H I S A N
+      Row 1: E L E R L D
+      Row 2: H O L E W H
+      Row 3: U N I W A A
+      Row 4: H A V E I I
+      Row 5: N R I E A N
+      Row 6: A P N C R E
+      Row 7: L E I E E N
+    */
+    const GRID_LETTERS = [
+        ['W','H','I','S','A','N'],
+        ['E','L','E','R','L','D'],
+        ['H','O','L','E','W','H'],
+        ['U','N','I','W','A','A'],
+        ['H','A','V','E','I','I'],
+        ['N','R','I','E','A','N'],
+        ['A','P','N','C','R','E'],
+        ['L','E','I','E','E','N']
+    ];
+
+    const SPAGRAM_WORDS = {
+        'ISLAND':      [[0,2],[0,3],[1,4],[0,4],[0,5],[1,5]],
+        'HAWAII':      [[2,5],[3,5],[2,4],[3,4],[4,4],[4,5]],
+        'NENE':        [[5,5],[6,5],[7,5],[7,4]],
+        'PRINCEVILLE': [[6,1],[5,1],[5,2],[6,2],[6,3],[5,3],[4,2],[3,2],[2,2],[1,1],[1,0]],
+        'HONU':        [[2,0],[2,1],[3,1],[3,0]],
+        'HANALEI':     [[4,0],[4,1],[5,0],[6,0],[7,0],[7,1],[7,2]],
+    };
+    const SPANGRAM_CELLS = [[0,0],[0,1],[1,2],[1,3],[2,3],[3,3],[4,3],[5,4],[6,4],[7,3]];
+    const SPANGRAM_NAME  = 'WHERE WE ARE';
+    const TOTAL_WORDS    = Object.keys(SPAGRAM_WORDS).length; // 6
+
+    // ── Spangram game state ──
+    let spagramCurrentPath  = [];       // [[row,col], ...]
+    let spagramFoundWords   = new Set();// word names
+    let spagramFoundPaths   = [];       // [{cells, type}]
+    let spagramFoundSpangram = false;
+    let spagramScore        = 25;       // starts at 25, -2 per hint
+    let spagramTimerHandle  = null;
+    let spagramElapsed      = 0;        // seconds elapsed (count up)
+    let spagramElapsedSec   = 0;        // final elapsed on completion
+    let spagramActive       = false;
+    let hintsUsed           = 0;
+
+    // ═══════════════════════════════════
+    // SHARED HELPERS
+    // ═══════════════════════════════════
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ═══════════════════════════════════
+    // LOAD TEAMS FOR DROPDOWN
+    // ═══════════════════════════════════
+    async function loadTeamDropdown() {
+        const sel = document.getElementById('teamNameInput');
+        const status = document.getElementById('teamLoadStatus');
+        try {
+            const res = await fetch('/.netlify/functions/get-beach-scores');
+            if (!res.ok) throw new Error();
+            const { teams } = await res.json();
+            if (teams && teams.length > 0) {
+                // Handle both string format and { name, members } object format
+                const names = teams.map(t => typeof t === 'string' ? t : (t.name || ''));
+                sel.innerHTML = '<option value="">Select your team…</option>' +
+                    names.map(n => `<option value="${n.replace(/"/g,'&quot;')}">${n}</option>`).join('');
+                status.textContent = `${names.length} teams loaded ✓`;
+            } else {
+                status.textContent = 'Teams not yet set — check back soon!';
+            }
+        } catch(e) {
+            status.textContent = 'Could not load teams. Enter your name below.';
+            // Fallback: convert to text input
+            const fallback = document.createElement('input');
+            fallback.type = 'text'; fallback.id = 'teamNameInput';
+            fallback.maxLength = 60; fallback.autocomplete = 'off';
+            fallback.placeholder = 'Type your team name…';
+            fallback.style.cssText = 'width:100%;padding:0.75rem 1rem;border-radius:10px;border:2px solid var(--cream-dark);font-family:"DM Sans",sans-serif;font-size:1rem;';
+            sel.parentNode.replaceChild(fallback, sel);
+        }
+    }
+    loadTeamDropdown();
+
+    // Refresh team list whenever the tab regains focus, but only before the test starts
+    window.addEventListener('focus', () => {
+        const introScreen = document.getElementById('screen-intro');
+        if (introScreen && introScreen.classList.contains('active')) {
+            loadTeamDropdown();
+        }
+    });
+
+    // ═══════════════════════════════════
+    // START FLOW
+    // ═══════════════════════════════════
+    function startTest() {
+        const input = document.getElementById('teamNameInput').value.trim();
+        if (!input) {
+            document.getElementById('teamNameInput').style.borderColor = 'var(--hot-pink)';
+            return;
+        }
+        teamName = input;
+        document.getElementById('teamNameDisplay').textContent = teamName;
+        showScreen('screen-section1-intro');
+    }
+
+    // ═══════════════════════════════════
+    // SECTION 1: TRIVIA
+    // ═══════════════════════════════════
+    function startSection1() {
+        triviaMode = 'section1';
+        triviaIndex = 0;
+        triviaScore = 0;
+        showScreen('screen-trivia');
+        renderTriviaQuestion();
+    }
+
+    function startSection3() {
+        triviaMode = 'section3';
+        triviaIndex = 0;
+        section3Score = 0;
+        showScreen('screen-trivia');
+        renderTriviaQuestion();
+    }
+
+    function startSection5() {
+        triviaMode = 'section5';
+        triviaIndex = 0;
+        section5Score = 0;
+        showScreen('screen-trivia');
+        renderTriviaQuestion();
+    }
+
+    function currentQuestions() {
+        if (triviaMode === 'section3') return section3Questions;
+        if (triviaMode === 'section5') return section5Questions;
+        return triviaQuestions;
+    }
+
+    function renderTriviaQuestion() {
+        triviaAnswered = false;
+        const questions = currentQuestions();
+        const q = questions[triviaIndex];
+        const total = questions.length;
+        const sectionNum = triviaMode === 'section3' ? 3 : triviaMode === 'section5' ? 5 : 1;
+        const questionNum = triviaMode === 'section3' ? triviaIndex + 6 : triviaMode === 'section5' ? triviaIndex + 11 : triviaIndex + 1;
+
+        const pct = (triviaIndex / total) * 100;
+        document.getElementById('triviaProgress').style.width = pct + '%';
+        document.getElementById('triviaProgressText').textContent = `Question ${triviaIndex + 1} of ${total} · Section ${sectionNum}`;
+
+        document.getElementById('qLabel').textContent = `Question ${questionNum} · Zinnia & Andrew Trivia`;
+        document.getElementById('qText').textContent = q.q;
+        document.getElementById('qFeedback').textContent = '';
+        document.getElementById('qFeedback').className = 'feedback';
+
+        const optContainer = document.getElementById('qOptions');
+        optContainer.innerHTML = '';
+        q.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.textContent = String.fromCharCode(65 + i) + ')  ' + opt;
+            btn.onclick = () => selectTriviaAnswer(i);
+            optContainer.appendChild(btn);
+        });
+
+        const nextBtn = document.getElementById('triviaNextBtn');
+        nextBtn.style.display = 'none';
+        nextBtn.textContent = triviaIndex < total - 1 ? 'Next Question →'
+            : (triviaMode === 'section5' ? 'See My Results →' : 'Next Section →');
+    }
+
+    function selectTriviaAnswer(chosen) {
+        if (triviaAnswered) return;
+        triviaAnswered = true;
+
+        const q = currentQuestions()[triviaIndex];
+        const btns = document.querySelectorAll('#qOptions .option-btn');
+        const feedback = document.getElementById('qFeedback');
+
+        btns.forEach((btn, i) => {
+            btn.classList.add('locked');
+            if (i === q.answer) btn.classList.add('correct');
+            else if (i === chosen) btn.classList.add('wrong');
+        });
+
+        if (chosen === q.answer) {
+            if (triviaMode === 'section3') section3Score += 1;
+            else if (triviaMode === 'section5') section5Score += 1;
+            else triviaScore += 1;
+            feedback.textContent = '✅ Correct! ' + q.fun;
+            feedback.className = 'feedback correct';
+        } else {
+            feedback.textContent = '❌ Not quite. ' + q.fun;
+            feedback.className = 'feedback wrong';
+        }
+
+        const total = currentQuestions().length;
+        const pct = ((triviaIndex + 1) / total) * 100;
+        document.getElementById('triviaProgress').style.width = pct + '%';
+        document.getElementById('triviaNextBtn').style.display = 'block';
+    }
+
+    function nextTriviaQuestion() {
+        triviaIndex++;
+        const questions = currentQuestions();
+        if (triviaIndex < questions.length) {
+            renderTriviaQuestion();
+        } else if (triviaMode === 'section1') {
+            // Go to Section 2 intro
+            document.getElementById('teamNameDisplay2').textContent = teamName;
+            document.getElementById('triviaPtsPreview').textContent = triviaScore + ' / 5 pts';
+            showScreen('screen-section2-intro');
+        } else if (triviaMode === 'section3') {
+            // Section 3 complete → Section 4 (Wordle) intro
+            document.getElementById('teamNameDisplay4').textContent = teamName;
+            document.getElementById('scoreSoFarPreview4').textContent = (triviaScore + section3Score) + ' pts trivia · rank pts pending';
+            showScreen('screen-section4-intro');
+        } else {
+            // Section 5 complete → Section 6 (Connections) intro
+            document.getElementById('teamNameDisplay6').textContent = teamName;
+            document.getElementById('scoreSoFarPreview6').textContent = (triviaScore + section3Score + section5Score) + ' pts trivia · rank pts pending';
+            showScreen('screen-section6-intro');
+        }
+    }
+
+    // ═══════════════════════════════════
+    // SECTION 2: SPANGRAM
+    // ═══════════════════════════════════
+
+    function startSection2() {
+        // Reset state
+        spagramCurrentPath   = [];
+        spagramFoundWords    = new Set();
+        spagramFoundPaths    = [];
+        spagramFoundSpangram = false;
+        spagramScore         = 0;
+        spagramElapsed       = 0;
+        spagramElapsedSec    = 0;
+        spagramActive        = true;
+        hintsUsed            = 0;
+
+        buildSpagramGrid();
+        initFoundRow();
+        document.getElementById('spagramScoreDisplay').textContent = '0';
+        document.getElementById('wordFoundFlash').style.visibility = 'hidden';
+        document.getElementById('spagramStatus').textContent = '';
+
+        showScreen('screen-spangram');
+        startSpagramTimer();
+        redrawCanvas();
+    }
+
+    // ── Build grid ──
+    function buildSpagramGrid() {
+        const grid = document.getElementById('spagramGrid');
+        grid.innerHTML = '';
+        for (let r = 0; r < GRID_LETTERS.length; r++) {
+            for (let c = 0; c < GRID_LETTERS[r].length; c++) {
+                const cell = document.createElement('button');
+                cell.className = 'grid-cell';
+                cell.textContent = GRID_LETTERS[r][c];
+                cell.dataset.row = r;
+                cell.dataset.col = c;
+                cell.addEventListener('click', () => handleCellClick(r, c));
+                grid.appendChild(cell);
+            }
+        }
+    }
+
+    // ── Initialize mystery dots ──
+    function initFoundRow() {
+        const row = document.getElementById('spagramFoundRow');
+        row.innerHTML = '';
+        // 6 regular word slots
+        for (let i = 0; i < TOTAL_WORDS; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'spagram-mystery';
+            dot.id = `mystery-${i}`;
+            row.appendChild(dot);
+        }
+        // Spangram slot (10 dots to hint at length)
+        for (let i = 0; i < 10; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'spagram-mystery';
+            dot.style.background = '#e8d87a';
+            dot.id = `mystery-sp-${i}`;
+            row.appendChild(dot);
+        }
+    }
+
+    // ── Timer (count up) ──
+    function startSpagramTimer() {
+        spagramElapsed = 0;
+        updateTimerDisplay();
+        spagramTimerHandle = setInterval(() => {
+            spagramElapsed++;
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function stopSpagramTimer() {
+        if (spagramTimerHandle) { clearInterval(spagramTimerHandle); spagramTimerHandle = null; }
+        spagramElapsedSec = spagramElapsed;
+    }
+
+    function updateTimerDisplay() {
+        const min = Math.floor(spagramElapsed / 60);
+        const sec = spagramElapsed % 60;
+        const display = `${min}:${sec.toString().padStart(2,'0')}`;
+        const el = document.getElementById('spagramTimerDisplay');
+        if (el) el.textContent = display;
+    }
+
+    // ── Cell interaction ──
+    function handleCellClick(r, c) {
+        if (!spagramActive) return;
+        const cell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+        if (!cell) return;
+
+        // Ignore already-found cells
+        if (cell.classList.contains('found-word') || cell.classList.contains('found-spangram')) {
+            return;
+        }
+
+        const path = spagramCurrentPath;
+
+        // Tapping the last cell in path → undo that cell
+        if (path.length > 0) {
+            const last = path[path.length - 1];
+            if (last[0] === r && last[1] === c) {
+                spagramCurrentPath = path.slice(0, -1);
+                cell.classList.remove('selected');
+                redrawCanvas();
+                return;
+            }
+        }
+
+        // Already in path (not last) → reset
+        const inPath = path.some(([pr,pc]) => pr === r && pc === c);
+        if (inPath) { clearCurrentPath(); return; }
+
+        // Empty path → start fresh
+        if (path.length === 0) {
+            spagramCurrentPath.push([r, c]);
+            cell.classList.add('selected');
+            redrawCanvas();
+            return;
+        }
+
+        // Non-adjacent → reset and start from tapped cell
+        const last = path[path.length - 1];
+        if (!isAdjacent(last, [r, c])) {
+            clearCurrentPath();
+            spagramCurrentPath.push([r, c]);
+            cell.classList.add('selected');
+            redrawCanvas();
+            return;
+        }
+
+        // Adjacent → extend path
+        spagramCurrentPath.push([r, c]);
+        cell.classList.add('selected');
+        redrawCanvas();
+        checkCurrentPath();
+    }
+
+    function isAdjacent([r1,c1], [r2,c2]) {
+        return Math.abs(r1-r2) <= 1 && Math.abs(c1-c2) <= 1 && !(r1===r2 && c1===c2);
+    }
+
+    function clearCurrentPath() {
+        spagramCurrentPath.forEach(([r,c]) => {
+            const cell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+            if (cell) cell.classList.remove('selected');
+        });
+        spagramCurrentPath = [];
+        redrawCanvas();
+    }
+
+    // ── Path matching ──
+    function pathMatchesWord(path, wordCells) {
+        if (path.length !== wordCells.length) return false;
+        const fwd = path.every(([r,c],i) => r === wordCells[i][0] && c === wordCells[i][1]);
+        if (fwd) return true;
+        const len = wordCells.length;
+        return path.every(([r,c],i) => r === wordCells[len-1-i][0] && c === wordCells[len-1-i][1]);
+    }
+
+    // Called when player clicks Submit button
+    function submitSpagramPath() {
+        if (!spagramActive) return;
+        const path = spagramCurrentPath;
+        if (path.length === 0) return;
+
+        // Check regular words
+        for (const [word, cells] of Object.entries(SPAGRAM_WORDS)) {
+            if (!spagramFoundWords.has(word) && pathMatchesWord(path, cells)) {
+                spagramFoundWords.add(word);
+                const pathCopy = [...path];
+                spagramFoundPaths.push({ cells: pathCopy, type: 'word' });
+                markFoundCells(pathCopy, 'word');
+                spagramCurrentPath = [];
+                updateFoundRow(word, 'word');
+                updateSpagramScore();
+                redrawCanvas();
+                showWordFoundFlash(word, false);
+                document.getElementById('spagramStatus').textContent = '';
+                checkAllFound();
+                return;
+            }
+        }
+
+        // Check spangram
+        if (!spagramFoundSpangram && pathMatchesWord(path, SPANGRAM_CELLS)) {
+            spagramFoundSpangram = true;
+            const pathCopy = [...path];
+            spagramFoundPaths.push({ cells: pathCopy, type: 'spangram' });
+            markFoundCells(pathCopy, 'spangram');
+            spagramCurrentPath = [];
+            updateFoundRow(SPANGRAM_NAME, 'spangram');
+            updateSpagramScore();
+            redrawCanvas();
+            showWordFoundFlash(SPANGRAM_NAME, true);
+            document.getElementById('spagramStatus').textContent = '';
+            checkAllFound();
+            return;
+        }
+
+        // No match — show "not a word" and clear
+        const statusEl = document.getElementById('spagramStatus');
+        statusEl.textContent = '✗ Not a word';
+        statusEl.style.color = 'var(--hot-pink)';
+        setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = ''; }, 1500);
+        clearCurrentPath();
+    }
+
+    // Keep checkCurrentPath as no-op (auto-check disabled; Submit button now used)
+    function checkCurrentPath() { /* no-op — submit required */ }
+
+    function markFoundCells(path, type) {
+        path.forEach(([r,c]) => {
+            const cell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+            if (cell) {
+                cell.classList.remove('selected');
+                cell.classList.add(type === 'spangram' ? 'found-spangram' : 'found-word');
+            }
+        });
+    }
+
+    // ── Update found words row ──
+    let foundWordCount = 0;
+    function updateFoundRow(word, type) {
+        const row = document.getElementById('spagramFoundRow');
+        if (type === 'spangram') {
+            // Replace yellow mystery dots with spangram chip
+            for (let i = 0; i < 10; i++) {
+                const dot = document.getElementById(`mystery-sp-${i}`);
+                if (dot) dot.remove();
+            }
+            const chip = document.createElement('span');
+            chip.className = 'spagram-word-chip spangram-chip';
+            chip.textContent = word;
+            row.appendChild(chip);
+        } else {
+            // Replace next mystery dot with word chip
+            const dot = document.getElementById(`mystery-${foundWordCount}`);
+            if (dot) dot.remove();
+            const chip = document.createElement('span');
+            chip.className = 'spagram-word-chip found-chip';
+            chip.textContent = word;
+            row.appendChild(chip);
+            foundWordCount++;
+        }
+    }
+
+    function updateSpagramScore() {
+        // Score is rank-based (server-side). Locally just track hints used.
+        const el = document.getElementById('spagramScoreDisplay');
+        if (el) el.textContent = hintsUsed;
+    }
+
+    function showWordFoundFlash(word, isSpangram) {
+        const el = document.getElementById('wordFoundFlash');
+        if (!el) return;
+        el.textContent = isSpangram ? `⭐ SPANGRAM: ${word}!` : `✓ ${word}`;
+        el.className = 'word-found-flash' + (isSpangram ? ' spangram-flash' : '');
+        el.style.visibility = 'visible';
+        setTimeout(() => { el.style.visibility = 'hidden'; }, 1800);
+    }
+
+    function checkAllFound() {
+        if (spagramFoundWords.size === TOTAL_WORDS && spagramFoundSpangram) {
+            stopSpagramTimer();
+            spagramActive = false;
+            document.getElementById('spagramStatus').textContent = '🎉 You found them all!';
+            setTimeout(goToSection3, 1800);
+        }
+    }
+
+    function endSpagramSection(allFound) {
+        stopSpagramTimer();
+        spagramActive = false;
+        clearCurrentPath();
+        if (!allFound) {
+            const found = spagramFoundWords.size + (spagramFoundSpangram ? 1 : 0);
+            document.getElementById('spagramStatus').textContent =
+                `⏰ Time's up! Found ${found} of ${TOTAL_WORDS + 1} words.`;
+            setTimeout(goToSection3, 2200);
+        }
+    }
+
+    function goToSection3() {
+        document.getElementById('teamNameDisplay3').textContent = teamName;
+        document.getElementById('scoreSoFarPreview').textContent = triviaScore + ' pts trivia · rank pts pending';
+        showScreen('screen-section3-intro');
+    }
+
+    // ── Hint ──
+    function showHint() {
+        const unfoundEntries = Object.entries(SPAGRAM_WORDS).filter(([w]) => !spagramFoundWords.has(w));
+        if (!spagramFoundSpangram) unfoundEntries.push([SPANGRAM_NAME, SPANGRAM_CELLS]);
+        if (unfoundEntries.length === 0) return;
+
+        hintsUsed++;
+        updateSpagramScore(); // update hints display
+
+        // Show hint penalty info in status
+        const penalty = Math.floor(hintsUsed / 2);
+        const statusEl = document.getElementById('spagramStatus');
+        statusEl.style.color = 'var(--orange)';
+        statusEl.textContent = `Hint used (${hintsUsed} total · −${penalty} pt${penalty !== 1 ? 's' : ''} penalty)`;
+        setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = ''; }, 2500);
+
+        // Glow ALL cells of a random unfound word
+        const [, cells] = unfoundEntries[Math.floor(Math.random() * unfoundEntries.length)];
+        cells.forEach(([r, c]) => {
+            const cell = document.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+            if (cell && !cell.classList.contains('found-word') && !cell.classList.contains('found-spangram')) {
+                cell.classList.add('hint-glow');
+                setTimeout(() => cell.classList.remove('hint-glow'), 1800);
+            }
+        });
+    }
+
+    // ── Canvas drawing ──
+    function redrawCanvas() {
+        const canvas = document.getElementById('spagramCanvas');
+        if (!canvas) return;
+        const wrapper = document.getElementById('spagramGridWrapper');
+        if (!wrapper) return;
+        const wRect = wrapper.getBoundingClientRect();
+        canvas.width = wRect.width;
+        canvas.height = wRect.height;
+
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const getCellCenter = ([r, c]) => {
+            const cell = wrapper.querySelector(`[data-row="${r}"][data-col="${c}"]`);
+            if (!cell) return null;
+            const cr = cell.getBoundingClientRect();
+            return { x: cr.left - wRect.left + cr.width/2, y: cr.top - wRect.top + cr.height/2, r: cr.width/2 };
+        };
+
+        const drawPath = (cells, color) => {
+            if (cells.length < 2) return;
+            const first = getCellCenter(cells[0]);
+            if (!first) return;
+            ctx.beginPath();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.lineWidth = first.r * 1.6;
+            ctx.strokeStyle = color;
+            ctx.moveTo(first.x, first.y);
+            for (let i = 1; i < cells.length; i++) {
+                const pt = getCellCenter(cells[i]);
+                if (pt) ctx.lineTo(pt.x, pt.y);
+            }
+            ctx.stroke();
+        };
+
+        // Draw found paths
+        spagramFoundPaths.forEach(({ cells, type }) => {
+            drawPath(cells, type === 'spangram' ? 'rgba(245,208,62,0.65)' : 'rgba(74,155,194,0.65)');
+        });
+
+        // Draw current selection
+        if (spagramCurrentPath.length >= 2) {
+            drawPath(spagramCurrentPath, 'rgba(58,141,187,0.45)');
+        }
+    }
+
+    // Redraw on resize
+    window.addEventListener('resize', redrawCanvas);
+
+    // ═══════════════════════════════════
+    // SECTION 4: WORDLE
+    // ═══════════════════════════════════
+
+    function startSection4() {
+        wordleGuesses      = [];
+        wordleCurrentGuess = '';
+        wordleGameOver     = false;
+        wordleScore        = 0;
+        keyStates          = {};
+        wordleElapsed      = 0;
+        wordleElapsedSec   = 0;
+        buildWordleGrid();
+        resetWordleKeys();
+        document.getElementById('wordleMsg').textContent = 'Guess the 5-letter word!';
+        document.getElementById('wordleMsg').className   = 'wordle-msg';
+        document.getElementById('wordleScoreRow').textContent = '';
+        document.getElementById('wordleAttemptsDisplay').textContent = '0';
+        document.getElementById('wordleTimerDisplay').textContent = '0:00';
+        showScreen('screen-wordle');
+        // Enable physical keyboard
+        document.addEventListener('keydown', handleWordleKeydown);
+        // Start timer
+        wordleTimerHandle = setInterval(() => {
+            wordleElapsed++;
+            const m = Math.floor(wordleElapsed / 60);
+            const s = wordleElapsed % 60;
+            const el = document.getElementById('wordleTimerDisplay');
+            if (el) el.textContent = m + ':' + s.toString().padStart(2,'0');
+        }, 1000);
+    }
+
+    function buildWordleGrid() {
+        const grid = document.getElementById('wordleGrid');
+        grid.innerHTML = '';
+        for (let r = 0; r < WORDLE_MAX_GUESSES; r++) {
+            const row = document.createElement('div');
+            row.className = 'wordle-row';
+            row.id = `wrow-${r}`;
+            for (let c = 0; c < 5; c++) {
+                const tile = document.createElement('div');
+                tile.className = 'wordle-tile';
+                tile.id = `wtile-${r}-${c}`;
+                row.appendChild(tile);
+            }
+            grid.appendChild(row);
+        }
+    }
+
+    function resetWordleKeys() {
+        document.querySelectorAll('.wkey[data-key]').forEach(k => {
+            k.className = 'wkey';
+        });
+    }
+
+    function handleWordleKeydown(e) {
+        if (!document.getElementById('screen-wordle').classList.contains('active')) return;
+        if (e.key === 'Enter') { wordleSubmit(); return; }
+        if (e.key === 'Backspace') { wordleBackspace(); return; }
+        if (/^[a-zA-Z]$/.test(e.key)) wordleKey(e.key.toUpperCase());
+    }
+
+    function wordleKey(letter) {
+        if (wordleGameOver || wordleCurrentGuess.length >= 5) return;
+        wordleCurrentGuess += letter;
+        updateCurrentRow();
+    }
+
+    function wordleBackspace() {
+        if (wordleGameOver || wordleCurrentGuess.length === 0) return;
+        wordleCurrentGuess = wordleCurrentGuess.slice(0, -1);
+        updateCurrentRow();
+    }
+
+    function updateCurrentRow() {
+        const rowIdx = wordleGuesses.length;
+        for (let c = 0; c < 5; c++) {
+            const tile = document.getElementById(`wtile-${rowIdx}-${c}`);
+            if (!tile) continue;
+            const letter = wordleCurrentGuess[c] || '';
+            tile.textContent = letter;
+            tile.className = 'wordle-tile' + (letter ? ' filled' : '');
+        }
+    }
+
+    function wordleSubmit() {
+        if (wordleGameOver) return;
+        if (wordleCurrentGuess.length !== 5) {
+            shakeCurrentRow();
+            document.getElementById('wordleMsg').textContent = 'Word must be 5 letters!';
+            return;
+        }
+
+        const guess   = wordleCurrentGuess;
+
+        // Validate against word list (if loaded)
+        if (wordleValidWords && wordleValidWords.size > 0 && !wordleValidWords.has(guess)) {
+            shakeCurrentRow();
+            document.getElementById('wordleMsg').textContent = 'Not a valid word!';
+            return;
+        }
+
+        const rowIdx  = wordleGuesses.length;
+        const result  = evaluateGuess(guess, WORDLE_WORD);
+        wordleGuesses.push(guess);
+        wordleCurrentGuess = '';
+
+        // Animate tiles with stagger
+        for (let c = 0; c < 5; c++) {
+            const tile   = document.getElementById(`wtile-${rowIdx}-${c}`);
+            const state  = result[c];
+            const delay  = c * 120;
+            setTimeout(() => {
+                tile.className = `wordle-tile ${state}`;
+            }, delay);
+        }
+
+        // Update keyboard states after animation
+        setTimeout(() => {
+            updateKeyStates(guess, result);
+            document.getElementById('wordleAttemptsDisplay').textContent = wordleGuesses.length;
+
+            const won = result.every(r => r === 'correct');
+            if (won) {
+                wordleScore = WORDLE_SCORING[rowIdx] || 0;
+                document.getElementById('wordleMsg').textContent =
+                    ['Genius!', 'Magnificent!', 'Impressive!', 'Splendid!', 'Great!', 'Phew!'][rowIdx] + ` 🎉`;
+                document.getElementById('wordleMsg').className = 'wordle-msg success';
+                document.getElementById('wordleScoreRow').textContent =
+                    `+${wordleScore} pts — solved in ${rowIdx + 1} ${rowIdx === 0 ? 'guess' : 'guesses'}!`;
+                endWordle();
+            } else if (wordleGuesses.length >= WORDLE_MAX_GUESSES) {
+                wordleScore = 0;
+                document.getElementById('wordleMsg').textContent = `The word was ${WORDLE_WORD}`;
+                document.getElementById('wordleMsg').className = 'wordle-msg fail';
+                document.getElementById('wordleScoreRow').textContent = '0 pts — better luck next time!';
+                endWordle();
+            } else {
+                document.getElementById('wordleMsg').textContent = 'Guess the 5-letter word!';
+            }
+        }, 5 * 120 + 200);
+    }
+
+    function evaluateGuess(guess, target) {
+        const result    = Array(5).fill('absent');
+        const targetArr = target.split('');
+        const guessArr  = guess.split('');
+        // Pass 1: exact matches
+        for (let i = 0; i < 5; i++) {
+            if (guessArr[i] === targetArr[i]) {
+                result[i]    = 'correct';
+                targetArr[i] = null;
+                guessArr[i]  = null;
+            }
+        }
+        // Pass 2: present (wrong position)
+        for (let i = 0; i < 5; i++) {
+            if (guessArr[i] === null) continue;
+            const idx = targetArr.indexOf(guessArr[i]);
+            if (idx !== -1) {
+                result[i]    = 'present';
+                targetArr[idx] = null;
+            }
+        }
+        return result;
+    }
+
+    function updateKeyStates(guess, result) {
+        const priority = { correct: 3, present: 2, absent: 1 };
+        for (let i = 0; i < 5; i++) {
+            const letter = guess[i];
+            const state  = result[i];
+            if (!keyStates[letter] || priority[state] > priority[keyStates[letter]]) {
+                keyStates[letter] = state;
+            }
+        }
+        document.querySelectorAll('.wkey[data-key]').forEach(btn => {
+            const state = keyStates[btn.dataset.key];
+            btn.className = 'wkey' + (state ? ` ${state}` : '');
+        });
+    }
+
+    function shakeCurrentRow() {
+        const rowIdx = wordleGuesses.length;
+        const row = document.getElementById(`wrow-${rowIdx}`);
+        if (!row) return;
+        row.querySelectorAll('.wordle-tile').forEach(t => {
+            t.classList.add('shake');
+            setTimeout(() => t.classList.remove('shake'), 400);
+        });
+    }
+
+    function endWordle() {
+        wordleGameOver = true;
+        wordleElapsedSec = wordleElapsed;
+        if (wordleTimerHandle) { clearInterval(wordleTimerHandle); wordleTimerHandle = null; }
+        document.removeEventListener('keydown', handleWordleKeydown);
+        setTimeout(goToSection5, 2200);
+    }
+
+    function goToSection5() {
+        document.getElementById('teamNameDisplay5').textContent = teamName;
+        document.getElementById('scoreSoFarPreview5').textContent = (triviaScore + section3Score) + ' pts trivia · rank pts pending';
+        showScreen('screen-section5-intro');
+    }
+
+    // ═══════════════════════════════════
+    // SECTION 6: CONNECTIONS
+    // ═══════════════════════════════════
+
+    function startSection6() {
+        connSelected    = [];
+        connFoundCats   = [];
+        connElapsed     = 0;
+        connElapsedSec  = 0;
+        connWrongCount  = 0;
+        connPenaltySec  = 0;
+
+        document.getElementById('connTimerDisplay').textContent = '0:00';
+        document.getElementById('connWrongDisplay').textContent = '+0s';
+        document.getElementById('connSolvedArea').innerHTML     = '';
+        document.getElementById('connStatus').textContent       = '';
+        document.getElementById('connSubmitBtn').disabled       = true;
+
+        buildConnGrid();
+        showScreen('screen-connections');
+
+        connTimerHandle = setInterval(() => {
+            connElapsed++;
+            const m = Math.floor(connElapsed / 60);
+            const s = connElapsed % 60;
+            const el = document.getElementById('connTimerDisplay');
+            if (el) el.textContent = m + ':' + s.toString().padStart(2,'0');
+        }, 1000);
+    }
+
+    function buildConnGrid() {
+        // Collect all 16 words and shuffle
+        const allWords = CONN_CATEGORIES.flatMap(c => c.words);
+        for (let i = allWords.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allWords[i], allWords[j]] = [allWords[j], allWords[i]];
+        }
+        const grid = document.getElementById('connGrid');
+        grid.innerHTML = '';
+        allWords.forEach(word => {
+            const btn = document.createElement('button');
+            btn.className = 'conn-word-btn';
+            btn.id = 'conn-' + word;
+            btn.textContent = word;
+            btn.onclick = () => connToggleWord(word, btn);
+            grid.appendChild(btn);
+        });
+    }
+
+    function connToggleWord(word, btn) {
+        const idx = connSelected.indexOf(word);
+        if (idx !== -1) {
+            connSelected.splice(idx, 1);
+            btn.classList.remove('conn-selected');
+        } else {
+            if (connSelected.length >= 4) return;
+            connSelected.push(word);
+            btn.classList.add('conn-selected');
+        }
+        document.getElementById('connSubmitBtn').disabled = connSelected.length !== 4;
+    }
+
+    function connDeselectAll() {
+        connSelected.forEach(w => {
+            const btn = document.getElementById('conn-' + w);
+            if (btn) btn.classList.remove('conn-selected');
+        });
+        connSelected = [];
+        document.getElementById('connSubmitBtn').disabled = true;
+    }
+
+    function connSubmit() {
+        if (connSelected.length !== 4) return;
+
+        // Check if selection matches any unfound category
+        for (let i = 0; i < CONN_CATEGORIES.length; i++) {
+            if (connFoundCats.includes(i)) continue;
+            const cat = CONN_CATEGORIES[i];
+            const match = connSelected.every(w => cat.words.includes(w)) && cat.words.every(w => connSelected.includes(w));
+            if (match) {
+                // Correct!
+                connFoundCats.push(i);
+                const foundWords = [...connSelected];
+                connSelected = [];
+
+                // Disable and hide matched buttons
+                foundWords.forEach(w => {
+                    const btn = document.getElementById('conn-' + w);
+                    if (btn) { btn.disabled = true; btn.classList.remove('conn-selected'); }
+                });
+
+                // Add solved banner
+                const banner = document.createElement('div');
+                banner.className = 'conn-solved-banner';
+                banner.style.background = cat.bg;
+                banner.style.borderLeft = `5px solid ${cat.color}`;
+                banner.innerHTML = `<div class="csb-label" style="color:${cat.color}">${cat.label}</div>
+                    <div class="csb-words">${cat.words.join(' · ')}</div>`;
+                document.getElementById('connSolvedArea').appendChild(banner);
+
+                document.getElementById('connSubmitBtn').disabled = true;
+                document.getElementById('connStatus').textContent = '';
+
+                if (connFoundCats.length === CONN_CATEGORIES.length) {
+                    // All found!
+                    clearInterval(connTimerHandle); connTimerHandle = null;
+                    connElapsedSec = connElapsed;
+                    document.getElementById('connStatus').textContent = '🎉 You got them all!';
+                    setTimeout(showResults, 2000);
+                } else {
+                    const left = CONN_CATEGORIES.length - connFoundCats.length;
+                    document.getElementById('connStatus').textContent = `✓ Nice! ${left} group${left !== 1 ? 's' : ''} left.`;
+                }
+                return;
+            }
+        }
+
+        // Wrong guess — apply +5s penalty
+        connWrongCount++;
+        connPenaltySec += 5;
+        connElapsed += 5; // add to running timer
+        document.getElementById('connWrongDisplay').textContent = '+' + connPenaltySec + 's';
+
+        const statusEl = document.getElementById('connStatus');
+        statusEl.textContent = '✗ Not quite — +5 seconds!';
+        statusEl.style.color = 'var(--hot-pink)';
+        setTimeout(() => { statusEl.textContent = ''; statusEl.style.color = ''; }, 1500);
+
+        // Shake all selected
+        connSelected.forEach(w => {
+            const btn = document.getElementById('conn-' + w);
+            if (btn) {
+                btn.classList.add('conn-shake');
+                setTimeout(() => btn.classList.remove('conn-shake'), 400);
+                btn.classList.remove('conn-selected');
+            }
+        });
+        connSelected = [];
+        document.getElementById('connSubmitBtn').disabled = true;
+    }
+
+    // ═══════════════════════════════════
+    // RESULTS
+    // ═══════════════════════════════════
+    function showResults() {
+        showScreen('screen-results');
+        stopSpagramTimer();
+        if (wordleTimerHandle)  { clearInterval(wordleTimerHandle);  wordleTimerHandle  = null; }
+        if (connTimerHandle)    { clearInterval(connTimerHandle);    connTimerHandle    = null; if (!connElapsedSec) connElapsedSec = connElapsed; }
+        document.removeEventListener('keydown', handleWordleKeydown);
+
+        const triviaTotal = triviaScore + section3Score + section5Score; // max 15
+        const hintPenalty = Math.floor(hintsUsed / 2);
+
+        // Result message based on trivia total (rank pts unknown locally)
+        let res = resultMessages[resultMessages.length - 1];
+        const triviaThresholds = [
+            { min: 15, emoji: '🧠', title: 'Trivia Mastermind!', msg: 'A perfect trivia score — you know them better than they know themselves!' },
+            { min: 12, emoji: '🌺', title: 'Very Impressive!', msg: 'You clearly paid attention to the important details.' },
+            { min: 8,  emoji: '🌊', title: 'Good Effort!', msg: 'A solid foundation. Check the leaderboard to see how your rank sections went!' },
+            { min: 0,  emoji: '🐢', title: 'You Tried!', msg: 'The good news: you\'re still invited to the wedding.' }
+        ];
+        for (const r of triviaThresholds) {
+            if (triviaTotal >= r.min) { res = r; break; }
+        }
+
+        document.getElementById('resultsEmoji').textContent    = res.emoji;
+        document.getElementById('resultsTitle').textContent    = res.title;
+        document.getElementById('resultsTeam').textContent     = '🏖️ Team: ' + teamName;
+        document.getElementById('resultsScore').textContent    = `Trivia: ${triviaTotal} / 15 pts · Rank pts on leaderboard`;
+        document.getElementById('resultsPoints').textContent   = `${triviaTotal} / 15 trivia pts + rank TBD`;
+
+        document.getElementById('breakdownTrivia').textContent   = `${triviaScore} / 5 pts`;
+
+        // S2: show time + hints
+        const spMin = Math.floor(spagramElapsedSec / 60);
+        const spSec = spagramElapsedSec % 60;
+        const spTimeStr = spMin > 0 ? `${spMin}m ${spSec}s` : `${spagramElapsedSec}s`;
+        const hintPenStr = hintPenalty > 0 ? ` · −${hintPenalty} hint penalty` : '';
+        document.getElementById('breakdownSpagram').textContent = `${spTimeStr} · ${hintsUsed} hint${hintsUsed !== 1 ? 's' : ''}${hintPenStr} · rank TBD`;
+
+        document.getElementById('breakdownSection3').textContent = `${section3Score} / 5 pts`;
+        document.getElementById('breakdownSection5').textContent = `${section5Score} / 5 pts`;
+
+        // S4: show time + guesses
+        const wMin = Math.floor(wordleElapsedSec / 60);
+        const wSec = wordleElapsedSec % 60;
+        const wTimeStr = wMin > 0 ? `${wMin}m ${wSec}s` : `${wordleElapsedSec}s`;
+        const wGuesses = wordleGuesses.length;
+        const wSolved = wordleGuesses.length > 0 && evaluateGuess(wordleGuesses[wordleGuesses.length-1], WORDLE_WORD).every(r => r === 'correct');
+        document.getElementById('breakdownWordle').textContent = wSolved
+            ? `${wTimeStr} · solved in ${wGuesses} guess${wGuesses !== 1 ? 'es' : ''} · rank TBD`
+            : `${wTimeStr} · not solved · rank TBD`;
+
+        // S6: Connections
+        const cMin = Math.floor(connElapsedSec / 60);
+        const cSec = connElapsedSec % 60;
+        const cTimeStr = cMin > 0 ? `${cMin}m ${cSec}s` : `${connElapsedSec}s`;
+        const cGroups = connFoundCats.length;
+        document.getElementById('breakdownConnections').textContent = cGroups === 4
+            ? `${cTimeStr} incl. ${connPenaltySec}s penalty · rank TBD`
+            : `${cGroups} / 4 groups · rank TBD`;
+
+        document.getElementById('resultsMsg').textContent = res.msg;
+
+        submitBeachScore(teamName, triviaScore, section3Score, section5Score, spagramElapsedSec, hintsUsed, wordleElapsedSec, wordleGuesses.length, wSolved, connElapsedSec, connWrongCount);
+    }
+
+    async function submitBeachScore(team, s1, s3, s5, spagramTime, hints, wordleTime, wordleGuessCount, wordleSolved, connTime, connWrong) {
+        const statusEl = document.getElementById('submitStatus');
+        try {
+            const res = await fetch('/.netlify/functions/submit-beach-score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    teamName: team,
+                    triviaScore: s1,
+                    section3Score: s3,
+                    section5Score: s5,
+                    spagramElapsedSec: spagramTime,
+                    spagramHints: hints,
+                    wordleElapsedSec: wordleTime,
+                    wordleGuesses: wordleGuessCount,
+                    wordleSolved: wordleSolved,
+                    connElapsedSec: connTime,
+                    connWrongCount: connWrong
+                })
+            });
+            if (res.ok) statusEl.textContent = '✓ Score saved to leaderboard';
+        } catch (e) { /* silent fail */ }
+    }
+
+    function restartTest() {
+        triviaIndex = 0;
+        triviaScore = 0;
+        section3Score = 0;
+        section5Score = 0;
+        wordleScore = 0;
+        triviaAnswered = false;
+        triviaMode = 'section1';
+        spagramCurrentPath   = [];
+        spagramFoundWords    = new Set();
+        spagramFoundPaths    = [];
+        spagramFoundSpangram = false;
+        spagramScore         = 0;
+        spagramActive        = false;
+        foundWordCount       = 0;
+        spagramElapsed       = 0;
+        spagramElapsedSec    = 0;
+        hintsUsed            = 0;
+        wordleGuesses        = [];
+        wordleCurrentGuess   = '';
+        wordleGameOver       = false;
+        wordleElapsed        = 0;
+        wordleElapsedSec     = 0;
+        keyStates            = {};
+        connSelected         = [];
+        connFoundCats        = [];
+        connElapsed          = 0;
+        connElapsedSec       = 0;
+        connWrongCount       = 0;
+        connPenaltySec       = 0;
+        stopSpagramTimer();
+        if (wordleTimerHandle) { clearInterval(wordleTimerHandle); wordleTimerHandle = null; }
+        if (connTimerHandle)   { clearInterval(connTimerHandle);   connTimerHandle   = null; }
+        document.removeEventListener('keydown', handleWordleKeydown);
+        document.getElementById('teamNameInput').value = '';
+        showScreen('screen-intro');
+    }
+
+    // ── Nav scroll shadow ──
+    window.addEventListener('scroll', () => {
+        document.getElementById('mainNav').classList.toggle('scrolled', window.scrollY > 20);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+[build]
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions."daily-summary"]
+  schedule = "0 7 * * *"  # 9pm Hawaii time (UTC-10) = 07:00 UTC

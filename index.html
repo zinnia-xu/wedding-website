@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zinnia & Andrew | May 24, 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --jungle: #1A3C2A;
+      --jungle-mid: #245838;
+      --jungle-light: #2E7245;
+      --hot-pink: #E8456B;
+      --pink-light: #F2728E;
+      --pink-soft: #FFF0F3;
+      --orange: #E8823C;
+      --orange-light: #F0A060;
+      --cream: #FFF8F0;
+      --cream-dark: #F0E6D6;
+      --white: #FFFFFF;
+      --text: #1A1A1A;
+      --text-mid: #4A4A4A;
+      --text-light: #7A7A7A;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      background: var(--cream);
+      overflow-x: hidden;
+      font-weight: 500;
+    }
+
+    /* ─── NAVIGATION ─── */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: rgba(26, 60, 42, 0.97);
+      backdrop-filter: blur(12px);
+      transition: box-shadow 0.3s ease;
+    }
+    nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 72px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem; font-weight: 400; color: var(--white);
+      letter-spacing: 0.02em; text-decoration: none;
+    }
+    .nav-links {
+      display: flex; gap: 0.15rem; list-style: none;
+      flex-wrap: wrap; justify-content: center;
+    }
+    .nav-links a {
+      text-decoration: none; color: rgba(255,255,255,0.7);
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.5rem 0.9rem; border-radius: 6px;
+      transition: all 0.3s ease; white-space: nowrap;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--white); background: rgba(255,255,255,0.12);
+    }
+    .hamburger {
+      display: none; flex-direction: column; gap: 6px;
+      cursor: pointer; background: none; border: none; padding: 5px;
+    }
+    .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative;
+      background: var(--jungle);
+      padding: 120px 2rem 80px;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('kayak.jpeg') center/cover no-repeat;
+    }
+    .hero-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(26, 60, 42, 0.55) 0%,
+        rgba(26, 60, 42, 0.65) 40%,
+        rgba(26, 60, 42, 0.75) 100%
+      );
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(232,69,107,0.12) 0%, transparent 60%);
+      border-radius: 50%; z-index: 1;
+    }
+    .hero::after {
+      content: ''; position: absolute; bottom: -150px; left: -150px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(232,130,60,0.1) 0%, transparent 60%);
+      border-radius: 50%; z-index: 1;
+    }
+    .hero-content { position: relative; z-index: 1; }
+
+    /* Decorative floral corner accents */
+    .hero-floral-tl, .hero-floral-br, .hero-floral-tr, .hero-floral-bl {
+      position: absolute; z-index: 0; opacity: 0.12; pointer-events: none;
+    }
+    .hero-floral-tl { top: 80px; left: 20px; transform: rotate(-15deg); }
+    .hero-floral-br { bottom: 30px; right: 20px; transform: rotate(165deg); }
+    .hero-floral-tr { top: 100px; right: 60px; transform: rotate(25deg); opacity: 0.08; }
+    .hero-floral-bl { bottom: 60px; left: 60px; transform: rotate(-45deg); opacity: 0.08; }
+
+    .flower-decoration { display: flex; align-items: center; justify-content: center; gap: 1.2rem; margin-bottom: 2rem; }
+    .flower-line { width: 60px; height: 2px; background: var(--hot-pink); border-radius: 2px; }
+    .flower-icon { display: flex; align-items: center; }
+
+    .hero-date-top {
+      font-size: 0.9rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--orange-light); font-weight: 700; margin-bottom: 1.5rem;
+    }
+    .hero-names {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.5rem, 9vw, 7.5rem); font-weight: 400;
+      color: var(--white); line-height: 1.05; margin-bottom: 0.5rem;
+    }
+    .hero-names .amp {
+      font-style: italic; color: var(--hot-pink);
+      display: block; font-size: 0.45em; margin: 0.25em 0;
+    }
+    .hero-adventure {
+      font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--orange-light); font-weight: 700; margin-top: 2rem;
+    }
+    .hero-tagline {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.3rem; font-style: italic; color: rgba(255,255,255,0.7);
+      margin: 0.6rem 0 0; font-weight: 400;
+    }
+    .hero-details { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; margin-top: 2.5rem; }
+    .hero-detail {
+      font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.6); font-weight: 600;
+    }
+    .hero-detail.venue {
+      font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+      text-transform: none; letter-spacing: 0.02em; color: var(--white); font-weight: 400;
+    }
+    .hero-detail.location { color: var(--orange-light); font-size: 0.85rem; }
+
+    .countdown { display: flex; gap: 2.5rem; justify-content: center; margin-top: 3rem; }
+    .countdown-item { text-align: center; }
+    .countdown-number {
+      font-family: 'DM Serif Display', serif; font-size: 3rem;
+      font-weight: 400; color: var(--white); line-height: 1;
+    }
+    .countdown-label {
+      font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-top: 0.4rem; font-weight: 600;
+    }
+
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      color: rgba(255,255,255,0.5); font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase; font-weight: 600;
+      animation: float 2.5s ease-in-out infinite;
+    }
+    .scroll-arrow { width: 2px; height: 30px; background: linear-gradient(to bottom, var(--hot-pink), transparent); border-radius: 2px; }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ─── INTRO ─── */
+    .intro { padding: 6rem 2rem; text-align: center; background: var(--cream); }
+    .intro-inner { max-width: 700px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--hot-pink); font-weight: 700; margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'DM Serif Display', serif; font-size: 2.8rem;
+      font-weight: 400; color: var(--jungle); margin-bottom: 1.5rem;
+    }
+    .intro p { font-size: 1.05rem; line-height: 1.85; color: var(--text-mid); font-weight: 400; }
+
+    .divider { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1.5rem auto 0; max-width: 350px; }
+    .divider-line { flex: 1; height: 2px; background: linear-gradient(to right, transparent, var(--cream-dark), transparent); border-radius: 2px; }
+    .divider-icon { display: flex; align-items: center; }
+
+    /* ─── INFO CARDS ─── */
+    .info-cards { padding: 0 2rem 6rem; background: var(--white); position: relative; overflow: hidden; }
+    .card-icon-svg { margin-bottom: 0.8rem; display: flex; justify-content: center; }
+    .pineapple-accent-left, .pineapple-accent-right {
+      position: absolute; opacity: 0.06; pointer-events: none;
+    }
+    .pineapple-accent-left { top: 2rem; left: -10px; transform: rotate(-10deg); }
+    .pineapple-accent-right { bottom: 2rem; right: -10px; transform: rotate(15deg); }
+    .cards-grid {
+      max-width: 1000px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem;
+    }
+    .card {
+      background: var(--cream); border-radius: 16px; padding: 2.5rem 2rem;
+      text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 2px solid transparent;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); border-color: var(--cream-dark); }
+    .card-link { text-decoration: none; color: inherit; display: block; cursor: pointer; }
+    .card-title {
+      font-family: 'DM Serif Display', serif; font-size: 1.4rem;
+      color: var(--jungle); margin-bottom: 0.6rem; font-weight: 400;
+    }
+    .card-text { font-size: 0.9rem; color: var(--text-mid); line-height: 1.7; font-weight: 400; }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      padding: 5rem 2rem; text-align: center;
+      background: linear-gradient(135deg, var(--hot-pink) 0%, var(--orange) 100%);
+      color: var(--white);
+      position: relative; overflow: hidden;
+    }
+    .cta-section .section-title { color: var(--white); position: relative; z-index: 1; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-weight: 500; font-size: 1.05rem; position: relative; z-index: 1; }
+    .cta-floral-left, .cta-floral-right {
+      position: absolute; opacity: 0.15; pointer-events: none;
+    }
+    .cta-floral-left { top: 50%; left: 20px; transform: translateY(-50%) rotate(-20deg); }
+    .cta-floral-right { top: 50%; right: 20px; transform: translateY(-50%) rotate(20deg) scaleX(-1); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 3rem 2rem; text-align: center; background: var(--jungle);
+    }
+    .footer-names {
+      font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+      color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+    }
+    .footer-date {
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1100px) {
+      .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .hero-floral-tl, .hero-floral-br, .hero-floral-tr, .hero-floral-bl,
+      .pineapple-accent-left, .pineapple-accent-right,
+      .cta-floral-left, .cta-floral-right { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; position: absolute;
+        top: 72px; left: 0; right: 0;
+        background: rgba(26, 60, 42, 0.98);
+        padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      }
+      .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+      .hamburger { display: flex; }
+      .countdown { gap: 1.5rem; }
+      .countdown-number { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Z &amp; A</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="our-story.html">Our Story</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="things-to-do.html">Activities</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="points.html">Points</a></li>
+        <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <!-- Floral corner accents -->
+    <div class="hero-floral-tl">
+      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 20C95 50 120 70 150 75C120 80 95 100 90 130C85 100 60 80 30 75C60 70 85 50 90 20Z" fill="#E8456B"/>
+        <path d="M50 5C53 25 68 38 88 40C68 42 53 55 50 75C47 55 32 42 12 40C32 38 47 25 50 5Z" fill="#F0A060"/>
+        <path d="M140 90C142 105 152 114 167 115C152 116 142 125 140 140C138 125 128 116 113 115C128 114 138 105 140 90Z" fill="#E8456B"/>
+        <circle cx="90" cy="75" r="6" fill="#F0A060"/>
+        <circle cx="50" cy="40" r="4" fill="#E8456B"/>
+        <circle cx="140" cy="115" r="3" fill="#F0A060"/>
+        <path d="M70 140C72 125 65 110 50 105" stroke="#E8456B" stroke-width="1.5" fill="none"/>
+        <path d="M110 140C108 125 115 110 130 105" stroke="#F0A060" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="hero-floral-br">
+      <svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M90 20C95 50 120 70 150 75C120 80 95 100 90 130C85 100 60 80 30 75C60 70 85 50 90 20Z" fill="#E8456B"/>
+        <path d="M50 5C53 25 68 38 88 40C68 42 53 55 50 75C47 55 32 42 12 40C32 38 47 25 50 5Z" fill="#F0A060"/>
+        <path d="M140 90C142 105 152 114 167 115C152 116 142 125 140 140C138 125 128 116 113 115C128 114 138 105 140 90Z" fill="#E8456B"/>
+        <circle cx="90" cy="75" r="6" fill="#F0A060"/>
+        <circle cx="50" cy="40" r="4" fill="#E8456B"/>
+      </svg>
+    </div>
+    <div class="hero-floral-tr">
+      <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M60 10C63 35 80 48 105 50C80 52 63 65 60 90C57 65 40 52 15 50C40 48 57 35 60 10Z" fill="#F2728E"/>
+        <circle cx="60" cy="50" r="5" fill="#F0A060"/>
+        <path d="M25 80C27 68 22 56 10 52" stroke="#F2728E" stroke-width="1.5" fill="none"/>
+        <path d="M95 80C93 68 98 56 110 52" stroke="#F0A060" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="hero-floral-bl">
+      <svg width="100" height="140" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Pineapple -->
+        <ellipse cx="50" cy="80" rx="28" ry="38" fill="#F0A060"/>
+        <path d="M30 80L50 60L70 80L50 100Z" stroke="#E8823C" stroke-width="1" fill="none" opacity="0.4"/>
+        <path d="M22 80L50 52L78 80L50 108Z" stroke="#E8823C" stroke-width="1" fill="none" opacity="0.3"/>
+        <path d="M35 42C40 30 50 20 50 20C50 20 60 30 65 42" stroke="#2E7245" stroke-width="2.5" fill="none"/>
+        <path d="M40 45C43 35 50 25 50 25C50 25 57 35 60 45" stroke="#245838" stroke-width="2" fill="none"/>
+        <path d="M44 46C46 38 50 30 50 30C50 30 54 38 56 46" stroke="#2E7245" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="hero-content">
+      <div class="flower-decoration">
+        <span class="flower-line"></span>
+        <span class="flower-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 2C15.5 7 19 10.5 24 12C19 13.5 15.5 17 14 22C12.5 17 9 13.5 4 12C9 10.5 12.5 7 14 2Z" fill="#E8456B" opacity="0.9"/>
+            <path d="M14 5C15 8.5 17.5 11 21 12C17.5 13 15 15.5 14 19C13 15.5 10.5 13 7 12C10.5 11 13 8.5 14 5Z" fill="#F2728E"/>
+            <circle cx="14" cy="12" r="3" fill="#F0A060"/>
+          </svg>
+        </span>
+        <span class="flower-line"></span>
+      </div>
+      <p class="hero-date-top">Sunday, May 24, 2026</p>
+      <h1 class="hero-names">
+        Zinnia
+        <span class="amp">&amp;</span>
+        Andrew
+      </h1>
+      <p class="hero-adventure">A week of adventure on the Garden Isle &mdash; Kauai, Hawaii</p>
+      <p class="hero-tagline">We can't wait to celebrate with you!</p>
+      <div class="hero-details">
+        <span class="hero-detail venue">Common Ground Kauai</span>
+        <span class="hero-detail location">Kilauea, Hawaii</span>
+      </div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-item">
+          <div class="countdown-number" id="days">--</div>
+          <div class="countdown-label">Days</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number" id="hours">--</div>
+          <div class="countdown-label">Hours</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number" id="minutes">--</div>
+          <div class="countdown-label">Minutes</div>
+        </div>
+        <div class="countdown-item">
+          <div class="countdown-number" id="seconds">--</div>
+          <div class="countdown-label">Seconds</div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Intro -->
+  <section class="intro">
+    <div class="intro-inner">
+      <span class="section-label">We're Getting Married</span>
+      <h2 class="section-title">Aloha!</h2>
+      <p>
+        We are so excited to celebrate our love surrounded by the people who mean the most to us,
+        in a place that holds a special spot in our hearts. The lush beauty of Kauai's North Shore
+        will be the backdrop for a weekend of joy, togetherness, and unforgettable memories.
+        We can't wait to share it all with you.
+      </p>
+      <div class="divider">
+        <span class="divider-line"></span>
+        <span class="divider-icon">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 1C11 5 14 7.5 18 8.5C14 9.5 11 12 10 16C9 12 6 9.5 2 8.5C6 7.5 9 5 10 1Z" fill="#E8823C" opacity="0.7"/>
+            <circle cx="10" cy="8.5" r="2.5" fill="#E8456B"/>
+          </svg>
+        </span>
+        <span class="divider-line"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Info Cards -->
+  <section class="info-cards">
+    <!-- Pineapple accents -->
+    <div class="pineapple-accent-left">
+      <svg width="100" height="150" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="85" rx="30" ry="42" fill="#F0A060"/>
+        <path d="M28 85L50 58L72 85L50 112Z" stroke="#E8823C" stroke-width="1.5" fill="none"/>
+        <path d="M20 85L50 50L80 85L50 120Z" stroke="#E8823C" stroke-width="1" fill="none" opacity="0.5"/>
+        <path d="M33 43C39 28 50 15 50 15C50 15 61 28 67 43" stroke="#2E7245" stroke-width="3" fill="none"/>
+        <path d="M38 46C42 33 50 22 50 22C50 22 58 33 62 46" stroke="#245838" stroke-width="2.5" fill="none"/>
+        <path d="M43 47C46 38 50 28 50 28C50 28 54 38 57 47" stroke="#2E7245" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="pineapple-accent-right">
+      <svg width="100" height="150" viewBox="0 0 100 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="50" cy="85" rx="30" ry="42" fill="#F0A060"/>
+        <path d="M28 85L50 58L72 85L50 112Z" stroke="#E8823C" stroke-width="1.5" fill="none"/>
+        <path d="M20 85L50 50L80 85L50 120Z" stroke="#E8823C" stroke-width="1" fill="none" opacity="0.5"/>
+        <path d="M33 43C39 28 50 15 50 15C50 15 61 28 67 43" stroke="#2E7245" stroke-width="3" fill="none"/>
+        <path d="M38 46C42 33 50 22 50 22C50 22 58 33 62 46" stroke="#245838" stroke-width="2.5" fill="none"/>
+        <path d="M43 47C46 38 50 28 50 28C50 28 54 38 57 47" stroke="#2E7245" stroke-width="2" fill="none"/>
+      </svg>
+    </div>
+    <div class="cards-grid">
+      <a href="schedule.html#group-activities" class="card card-link">
+        <div class="card-icon-svg">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4L20.5 8H28L22 13L24 21L18 17L12 21L14 13L8 8H15.5L18 4Z" stroke="#E8456B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M6 28H30" stroke="#E8456B" stroke-width="2" stroke-linecap="round"/>
+            <path d="M10 32H26" stroke="#E8456B" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="card-title">Group Activities</h3>
+        <p class="card-text">Saturday, May 16 &ndash; Friday, May 22<br>See <span style="color:var(--hot-pink);font-weight:600;">Activities</span> tab</p>
+      </a>
+      <a href="schedule.html#competition" class="card card-link">
+        <div class="card-icon-svg">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 26C8 22 14 20 18 20C22 20 28 22 32 26" stroke="#E8823C" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M18 20V10" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+            <path d="M18 10L26 14" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+            <path d="M2 30H34" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="10" cy="8" r="3" stroke="#E8823C" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="card-title">Beach Competition</h3>
+        <p class="card-text">Saturday, May 23<br>Hanalei Beach Pier</p>
+      </a>
+      <a href="schedule.html#ceremony" class="card card-link">
+        <div class="card-icon-svg">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6C18 6 8 12 8 20C8 25.5 12.5 30 18 30C23.5 30 28 25.5 28 20C28 12 18 6 18 6Z" stroke="#1A3C2A" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 20C14 17 16 14 18 12C20 14 22 17 22 20" stroke="#1A3C2A" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <path d="M18 12V24" stroke="#1A3C2A" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M15 18L18 15L21 18" stroke="#1A3C2A" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="card-title">The Ceremony &amp; Reception</h3>
+        <p class="card-text">Sunday, May 24, 2026<br>Common Ground Kauai</p>
+      </a>
+      <a href="schedule.html#farewell-brunch" class="card card-link">
+        <div class="card-icon-svg">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 18H30" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+            <path d="M8 18C8 12 12 8 18 8C24 8 28 12 28 18" stroke="#E8823C" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M28 18C30 18 32 16 32 14" stroke="#E8823C" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <path d="M10 22H26" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 26H22" stroke="#E8823C" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="card-title">Farewell Brunch</h3>
+        <p class="card-text">Monday, May 25, 2026<br>TBD</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p class="footer-names">Zinnia &amp; Andrew</p>
+    <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+  </footer>
+
+  <script>
+    // Randomize names
+    (function() {
+        const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+        const pick = names[Math.floor(Math.random() * 2)];
+        document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+        document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+        const heroNames = document.querySelector('.hero-names');
+        if (heroNames) heroNames.innerHTML = pick[0] + '<span class="amp">&amp;</span>' + pick[1];
+    })();
+    function updateCountdown() {
+      const wedding = new Date('2026-05-24T16:00:00-10:00');
+      const now = new Date();
+      const diff = wedding - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').innerHTML = '<p style="font-family:DM Serif Display,serif;font-size:1.8rem;color:var(--hot-pink);">Today is the day!</p>';
+        return;
+      }
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      document.getElementById('days').textContent = d;
+      document.getElementById('hours').textContent = h;
+      document.getElementById('minutes').textContent = m;
+      document.getElementById('seconds').textContent = s;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

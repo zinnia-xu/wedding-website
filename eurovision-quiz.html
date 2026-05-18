@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eurovision 2026 Quiz - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── HERO HEADER ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.55), rgba(10,30,18,0.55)), url('Sunset.jpeg') center 50% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 3rem 2rem 5rem;
+        }
+
+        .quiz-intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--text-mid);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ─── PROGRESS ─── */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--cream-dark);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--jungle), var(--jungle-light));
+            border-radius: 8px;
+            transition: width 0.4s ease;
+            width: 0%;
+        }
+        .progress-text {
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* ─── QUESTION CARD ─── */
+        .question-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            margin-bottom: 1.5rem;
+        }
+        .question-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .song-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .artist-name {
+            font-size: 1rem;
+            color: var(--hot-pink);
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .question-prompt {
+            font-size: 0.95rem;
+            color: var(--text-mid);
+            margin-bottom: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* ─── OPTIONS ─── */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: var(--cream);
+            border: 2px solid var(--cream-dark);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .option-btn:hover:not(.locked) {
+            border-color: var(--jungle);
+            background: rgba(26, 60, 42, 0.05);
+            transform: translateX(4px);
+        }
+        .option-btn.correct {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        .option-btn.wrong {
+            background: #fce4ec;
+            border-color: #e57373;
+            color: #c62828;
+        }
+        .option-btn.reveal {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        .option-btn.locked {
+            cursor: default;
+            opacity: 0.7;
+        }
+        .option-btn.correct.locked, .option-btn.wrong.locked, .option-btn.reveal.locked {
+            opacity: 1;
+        }
+
+        .feedback {
+            text-align: center;
+            margin-top: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-height: 1.5em;
+        }
+        .feedback.correct { color: #2e7d32; }
+        .feedback.wrong { color: #c62828; }
+
+        /* ─── NEXT BUTTON ─── */
+        .next-btn {
+            display: none;
+            margin: 1.5rem auto 0;
+            padding: 0.8rem 2rem;
+            background: var(--jungle);
+            color: var(--white);
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .next-btn:hover {
+            background: var(--jungle-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ─── RESULTS ─── */
+        .results-card {
+            display: none;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .results-emoji {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .results-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        .results-score {
+            font-size: 1.2rem;
+            color: var(--text-mid);
+            margin-bottom: 0.3rem;
+        }
+        .results-points {
+            font-size: 1.4rem;
+            color: var(--hot-pink);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+        .results-msg {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        .results-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .results-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        .results-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .results-btn.primary {
+            background: var(--hot-pink);
+            color: var(--white);
+        }
+        .results-btn.secondary {
+            background: var(--cream-dark);
+            color: var(--text);
+        }
+        .results-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* ─── HONESTY CHECK ─── */
+        .honesty-card {
+            display: none;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .honesty-card .honesty-emoji { font-size: 3rem; margin-bottom: 1rem; }
+        .honesty-card h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .honesty-card p {
+            color: var(--text-mid);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        .honesty-options {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .honesty-btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid var(--cream-dark);
+            background: var(--cream);
+            color: var(--text);
+        }
+        .honesty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .honesty-btn.honest {
+            border-color: var(--jungle);
+            background: rgba(26, 60, 42, 0.05);
+        }
+        .honesty-btn.honest:hover { background: rgba(26, 60, 42, 0.1); }
+        .honesty-btn.cheated {
+            border-color: var(--hot-pink);
+            background: rgba(232, 69, 107, 0.05);
+        }
+        .honesty-btn.cheated:hover { background: rgba(232, 69, 107, 0.1); }
+
+        /* ─── SUBMIT SECTION ─── */
+        .submit-section {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--cream-dark);
+        }
+        .submit-section label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-mid);
+        }
+        .submit-section select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--cream-dark);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            background: var(--cream);
+        }
+        .submit-status {
+            text-align: center;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            font-size: 0.95rem;
+        }
+        .submit-status.success { color: #2e7d32; }
+        .submit-status.error { color: #c62828; }
+
+        /* ─── LOCKED SCREEN ─── */
+        .locked-card {
+            display: none;
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            text-align: center;
+        }
+        .locked-card .locked-emoji { font-size: 3rem; margin-bottom: 1rem; }
+        .locked-card h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+        }
+        .locked-card p {
+            color: var(--text-mid);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2rem 1.5rem 4rem; }
+            .question-card { padding: 1.5rem; }
+            .song-name { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="points.html">Points</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Eurovision 2026 Quiz</h1>
+        <p class="subtitle">Match the song to the country — earn up to 10 points!</p>
+    </section>
+
+    <main>
+        <!-- Locked screen (shown if already taken) -->
+        <div class="locked-card" id="lockedCard">
+            <div class="locked-emoji">🔒</div>
+            <h2>Quiz Already Taken</h2>
+            <p>You've already submitted your Eurovision Quiz points. Each person can only take this quiz once!</p>
+            <div class="results-actions">
+                <a href="points.html" class="results-btn secondary">← Back to Points</a>
+                <a href="eurovision.html" class="results-btn secondary">Cheatsheet</a>
+            </div>
+        </div>
+
+        <div id="quizContainer">
+            <p class="quiz-intro">
+                You'll be shown 10 songs from Eurovision 2026. For each one, pick the country it represents. Each correct answer is worth <strong>1 point</strong> on the wedding leaderboard!
+                <br><br>
+                <span style="color:var(--hot-pink); font-weight:600;">You can only take this quiz once after listening to all the songs. No cheating!</span>
+            </p>
+
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">Question 1 of 10</div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-label" id="questionLabel">Question 1</div>
+                <div class="song-name" id="songName"></div>
+                <div class="artist-name" id="artistName"></div>
+                <div class="question-prompt">Which country does this song represent?</div>
+                <div class="options" id="options"></div>
+                <div class="feedback" id="feedback"></div>
+                <button class="next-btn" id="nextBtn">Next Question →</button>
+            </div>
+
+            <!-- Honesty check (shown after Q10, before results) -->
+            <div class="honesty-card" id="honestyCard">
+                <div class="honesty-emoji">🤔</div>
+                <h2>One Last Question...</h2>
+                <p>Be honest — did you cheat? (Look up answers, use the cheatsheet, etc.)<br>We believe in the honor system!</p>
+                <div class="honesty-options">
+                    <button class="honesty-btn honest" id="btnHonest">✅ Nope, all me!</button>
+                    <button class="honesty-btn cheated" id="btnCheated">😬 Yeah, I cheated...</button>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="results-card" id="resultsCard">
+                <div class="results-emoji" id="resultsEmoji"></div>
+                <div class="results-title" id="resultsTitle"></div>
+                <div class="results-score" id="resultsScore"></div>
+                <div class="results-points" id="resultsPoints"></div>
+                <div class="results-msg" id="resultsMsg"></div>
+
+                <div class="submit-section" id="submitSection">
+                    <label for="submitName">Select your name to submit points:</label>
+                    <select id="submitName">
+                        <option value="">— select your name —</option>
+                    </select>
+                    <button class="results-btn primary" id="submitBtn" style="width:100%;">Submit Points to Leaderboard</button>
+                    <div class="submit-status" id="submitStatus"></div>
+                </div>
+
+                <div class="results-actions" style="margin-top:1.5rem;">
+                    <a href="points.html" class="results-btn secondary">← Back to Points</a>
+                    <a href="eurovision.html" class="results-btn secondary">Cheatsheet</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        // Nav
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 30);
+        });
+
+        const API_BASE = '/.netlify/functions';
+
+        // Check if quiz already submitted
+        if (localStorage.getItem('eurovisionQuizSubmitted')) {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('lockedCard').style.display = 'block';
+        }
+
+        // Song data
+        const ALL_SONGS = [
+            { country: "Albania", flag: "🇦🇱", artist: "Alis", song: "Nân" },
+            { country: "Armenia", flag: "🇦🇲", artist: "Simón", song: "Paloma Rumba" },
+            { country: "Australia", flag: "🇦🇺", artist: "Delta Goodrem", song: "Eclipse" },
+            { country: "Austria", flag: "🇦🇹", artist: "Cosmó", song: "Tanzschein" },
+            { country: "Azerbaijan", flag: "🇦🇿", artist: "Jiva", song: "Just Go" },
+            { country: "Belgium", flag: "🇧🇪", artist: "Essyla", song: "Dancing on the Ice" },
+            { country: "Bulgaria", flag: "🇧🇬", artist: "Dara", song: "Bangaranga" },
+            { country: "Croatia", flag: "🇭🇷", artist: "Lelek", song: "Andromeda" },
+            { country: "Cyprus", flag: "🇨🇾", artist: "Antigoni", song: "Jalla" },
+            { country: "Czechia", flag: "🇨🇿", artist: "Daniel Žižka", song: "Crossroads" },
+            { country: "Denmark", flag: "🇩🇰", artist: "Søren Torpegaard Lund", song: "Før Vi Går Hjem" },
+            { country: "Estonia", flag: "🇪🇪", artist: "Vanilla Ninja", song: "Too Epic To Be True" },
+            { country: "Finland", flag: "🇫🇮", artist: "Linda Lampenius × Pete Parkkonen", song: "Liekinheitin" },
+            { country: "France", flag: "🇫🇷", artist: "Monroe", song: "Regarde!" },
+            { country: "Georgia", flag: "🇬🇪", artist: "Bzikebi", song: "On Replay" },
+            { country: "Germany", flag: "🇩🇪", artist: "Sarah Engels", song: "Fire" },
+            { country: "Greece", flag: "🇬🇷", artist: "Akylas", song: "Ferto" },
+            { country: "Israel", flag: "🇮🇱", artist: "Noam Bettan", song: "Michelle" },
+            { country: "Italy", flag: "🇮🇹", artist: "Sal Da Vinci", song: "Per Sempre Sì" },
+            { country: "Latvia", flag: "🇱🇻", artist: "Atvara", song: "Ēnā" },
+            { country: "Lithuania", flag: "🇱🇹", artist: "Lion Ceccah", song: "Sólo Quiero Más" },
+            { country: "Luxembourg", flag: "🇱🇺", artist: "Eva Marija", song: "Mother Nature" },
+            { country: "Malta", flag: "🇲🇹", artist: "Aidan", song: "Bella" },
+            { country: "Moldova", flag: "🇲🇩", artist: "Satoshi", song: "Viva, Moldova!" },
+            { country: "Montenegro", flag: "🇲🇪", artist: "Tamara Živković", song: "Nova Zora" },
+            { country: "Norway", flag: "🇳🇴", artist: "Jonas Lovv", song: "Ya Ya Ya" },
+            { country: "Poland", flag: "🇵🇱", artist: "Alicja", song: "Pray" },
+            { country: "Portugal", flag: "🇵🇹", artist: "Bandidos do Cante", song: "Rosa" },
+            { country: "Romania", flag: "🇷🇴", artist: "Alexandra Căpitănescu", song: "Choke Me" },
+            { country: "San Marino", flag: "🇸🇲", artist: "Senhit ft. Boy George", song: "Superstar" },
+            { country: "Serbia", flag: "🇷🇸", artist: "Lavina", song: "Kraj Mene" },
+            { country: "Sweden", flag: "🇸🇪", artist: "Felicia", song: "My System" },
+            { country: "Switzerland", flag: "🇨🇭", artist: "Veronica Fusaro", song: "Alice" },
+            { country: "Ukraine", flag: "🇺🇦", artist: "Leleka", song: "Ridnym" },
+            { country: "United Kingdom", flag: "🇬🇧", artist: "Look Mum No Computer", song: "Eins, Zwei, Drei" }
+        ];
+
+        const TOTAL_QUESTIONS = 10;
+        let questions = [];
+        let currentQ = 0;
+        let score = 0;
+        let answered = false;
+        let didCheat = false;
+        let finalPoints = 0;
+
+        function shuffle(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function generateQuiz() {
+            const picked = shuffle(ALL_SONGS).slice(0, TOTAL_QUESTIONS);
+            questions = picked.map(correct => {
+                const wrongPool = ALL_SONGS.filter(s => s.country !== correct.country);
+                const wrongs = shuffle(wrongPool).slice(0, 3);
+                const options = shuffle([correct, ...wrongs]);
+                return { correct, options };
+            });
+        }
+
+        function showQuestion() {
+            answered = false;
+            const q = questions[currentQ];
+            document.getElementById('questionLabel').textContent = 'Question ' + (currentQ + 1);
+            document.getElementById('songName').textContent = '🎵 "' + q.correct.song + '"';
+            document.getElementById('artistName').textContent = 'by ' + q.correct.artist;
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('feedback').className = 'feedback';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('progressText').textContent = 'Question ' + (currentQ + 1) + ' of ' + TOTAL_QUESTIONS;
+            document.getElementById('progressFill').style.width = (currentQ / TOTAL_QUESTIONS * 100) + '%';
+
+            const optionsEl = document.getElementById('options');
+            optionsEl.innerHTML = '';
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt.flag + '  ' + opt.country;
+                btn.addEventListener('click', () => handleAnswer(btn, opt, q));
+                optionsEl.appendChild(btn);
+            });
+        }
+
+        function handleAnswer(btn, selected, q) {
+            if (answered) return;
+            answered = true;
+
+            const allBtns = document.querySelectorAll('.option-btn');
+            allBtns.forEach(b => b.classList.add('locked'));
+
+            const isCorrect = selected.country === q.correct.country;
+            const feedback = document.getElementById('feedback');
+
+            if (isCorrect) {
+                score++;
+                btn.classList.add('correct');
+                feedback.textContent = '✓ Correct!';
+                feedback.className = 'feedback correct';
+            } else {
+                btn.classList.add('wrong');
+                feedback.textContent = '✗ The answer was ' + q.correct.flag + ' ' + q.correct.country;
+                feedback.className = 'feedback wrong';
+                allBtns.forEach(b => {
+                    if (b.textContent.includes(q.correct.country)) {
+                        b.classList.add('reveal');
+                    }
+                });
+            }
+
+            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('nextBtn').textContent =
+                currentQ < TOTAL_QUESTIONS - 1 ? 'Next Question →' : 'Continue →';
+        }
+
+        function showHonestyCheck() {
+            document.getElementById('questionCard').style.display = 'none';
+            document.getElementById('progressText').style.display = 'none';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('honestyCard').style.display = 'block';
+        }
+
+        function showResults() {
+            document.getElementById('honestyCard').style.display = 'none';
+
+            finalPoints = didCheat ? 0 : score;
+
+            const card = document.getElementById('resultsCard');
+            card.style.display = 'block';
+
+            let emoji, title;
+            if (didCheat) {
+                emoji = '😬'; title = 'Honesty Points!';
+            } else if (score === 10) { emoji = '🏆'; title = 'Perfect Score!'; }
+            else if (score >= 8) { emoji = '🌟'; title = 'Eurovision Expert!'; }
+            else if (score >= 6) { emoji = '🎤'; title = 'Nice Work!'; }
+            else if (score >= 4) { emoji = '🎵'; title = 'Not Bad!'; }
+            else { emoji = '📻'; title = 'Keep Listening!'; }
+
+            document.getElementById('resultsEmoji').textContent = emoji;
+            document.getElementById('resultsTitle').textContent = title;
+            document.getElementById('resultsScore').textContent = 'You got ' + score + ' out of ' + TOTAL_QUESTIONS + ' correct';
+
+            if (didCheat) {
+                document.getElementById('resultsPoints').textContent = '0 points (you cheated!)';
+                document.getElementById('resultsMsg').textContent = 'Thanks for being honest! Unfortunately cheaters get 0 points. But hey, at least your conscience is clear!';
+                document.getElementById('submitSection').style.display = 'none';
+            } else {
+                document.getElementById('resultsPoints').textContent = finalPoints + ' point' + (finalPoints !== 1 ? 's' : '') + ' earned!';
+                document.getElementById('resultsMsg').textContent = 'Select your name below and submit to add your points to the leaderboard!';
+                // Load guest names for the dropdown
+                loadGuestNames();
+            }
+        }
+
+        function loadGuestNames() {
+            fetch(API_BASE + '/get-leaderboard')
+                .then(r => r.json())
+                .then(data => {
+                    const sel = document.getElementById('submitName');
+                    const guests = (data.guests || []).map(g => g.name).sort();
+                    guests.forEach(name => {
+                        const opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        sel.appendChild(opt);
+                    });
+                })
+                .catch(() => {});
+        }
+
+        // Honesty buttons
+        document.getElementById('btnHonest').addEventListener('click', () => {
+            didCheat = false;
+            showResults();
+        });
+        document.getElementById('btnCheated').addEventListener('click', () => {
+            didCheat = true;
+            showResults();
+        });
+
+        // Next button
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            currentQ++;
+            if (currentQ < TOTAL_QUESTIONS) {
+                showQuestion();
+            } else {
+                showHonestyCheck();
+            }
+        });
+
+        // Submit points
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            const name = document.getElementById('submitName').value;
+            const status = document.getElementById('submitStatus');
+
+            if (!name) {
+                status.className = 'submit-status error';
+                status.textContent = 'Please select your name first.';
+                return;
+            }
+
+            const payload = {
+                who: name,
+                points: finalPoints,
+                reason: 'Eurovision 2026 Quiz — scored ' + score + '/10' + (didCheat ? ' (admitted cheating)' : '')
+            };
+
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Submitting...';
+
+            fetch(API_BASE + '/submit-points', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    status.className = 'submit-status error';
+                    status.textContent = data.error;
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitBtn').textContent = 'Submit Points to Leaderboard';
+                } else {
+                    status.className = 'submit-status success';
+                    status.textContent = '✓ Points submitted! Check the leaderboard.';
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('submitName').disabled = true;
+                    localStorage.setItem('eurovisionQuizSubmitted', 'true');
+                }
+            })
+            .catch(() => {
+                status.className = 'submit-status error';
+                status.textContent = 'Something went wrong. Try again.';
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Points to Leaderboard';
+            });
+        });
+
+        // Start quiz (only if not locked)
+        if (!localStorage.getItem('eurovisionQuizSubmitted')) {
+            generateQuiz();
+            showQuestion();
+        }
+    </script>
+</body>
+</html>

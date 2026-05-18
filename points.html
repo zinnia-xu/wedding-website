@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Points - Z & A's Kauai Wedding</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav#navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--white);
+            z-index: 1000;
+            transition: box-shadow 0.3s ease;
+        }
+
+        nav#navbar.scrolled {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--jungle);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--hot-pink);
+        }
+
+        .nav-links a.active {
+            color: var(--hot-pink);
+            font-weight: 700;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* Hero Section */
+        .page-hero {
+            margin-top: 80px;
+            padding: 80px 2rem;
+            background: linear-gradient(135deg, rgba(26, 60, 42, 0.7), rgba(36, 88, 56, 0.7)), url('waterfall.jpeg') center/cover;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #f0f0f0;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1000px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            margin-bottom: 4rem;
+        }
+
+        section h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--jungle);
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--hot-pink);
+        }
+
+        /* Points Activity Feed */
+        .feed-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .feed-filter-bar select {
+            border: 2px solid var(--cream-dark);
+            border-radius: 8px;
+            padding: 0.45rem 0.85rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            background: var(--white);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .feed-filter-bar select:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+        }
+
+        .feed-filter-summary {
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .feed-summary-chip {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .feed-summary-chip.earned  { background: #dcfce7; color: #166534; }
+        .feed-summary-chip.pending { background: #ede9fe; color: #5b21b6; }
+        .feed-summary-chip.denied  { background: #fee2e2; color: #991b1b; }
+
+        .feed-scroll-wrap {
+            position: relative;
+        }
+
+        .feed-list {
+            list-style: none;
+            height: 520px;
+            overflow-y: auto;
+            border: 1px solid var(--cream-dark);
+            border-radius: 12px;
+            background-color: var(--white);
+            scroll-behavior: smooth;
+        }
+
+        .feed-scroll-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+            border-radius: 0 0 12px 12px;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .feed-scroll-hint {
+            text-align: center;
+            font-size: 0.82rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+            transition: opacity 0.3s ease;
+            user-select: none;
+        }
+
+        .feed-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid var(--cream-dark);
+            align-items: flex-start;
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-item.pending {
+            background-color: #f3e8ff;
+        }
+
+        .feed-item.denied {
+            background-color: #fff0f0;
+            opacity: 0.75;
+        }
+
+        .feed-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--hot-pink);
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .feed-item.pending .feed-icon {
+            background-color: #a78bfa;
+        }
+
+        .feed-item.denied .feed-icon {
+            background-color: #f87171;
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-text {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .feed-text strong {
+            font-weight: 700;
+        }
+
+        .feed-points {
+            color: var(--hot-pink);
+            font-weight: 700;
+        }
+
+        .feed-pending-badge {
+            display: inline-block;
+            background-color: #a78bfa;
+            color: var(--white);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .feed-time {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .feed-empty {
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* feed expand button removed — all items shown in scrollable box */
+
+        /* Ways to Get Points */
+        .pv-category {
+            margin-bottom: 2.5rem;
+        }
+
+        .pv-category-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            color: var(--jungle);
+            margin-bottom: 1.2rem;
+        }
+
+        .pv-items-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .pv-item {
+            background-color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pv-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            border-color: var(--hot-pink);
+        }
+
+        .pv-item.tbd {
+            cursor: default;
+        }
+
+        .pv-item.tbd:hover {
+            transform: none;
+            border-color: transparent;
+        }
+
+        .pv-name {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .pv-sub {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .pv-pts {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .pv-pts.pink {
+            color: var(--hot-pink);
+        }
+
+        .pv-pts.amber {
+            color: var(--orange);
+        }
+
+        .pv-pts.green {
+            color: var(--jungle-light);
+        }
+
+        .pv-limit {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--text-light);
+            background: var(--cream-dark);
+            border-radius: 4px;
+            padding: 0.1rem 0.4rem;
+            display: inline-block;
+            margin-top: 0.3rem;
+        }
+
+        .pv-bonus-section {
+            background-color: #f3e8ff;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+        }
+
+        .pv-bonus-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            color: var(--jungle);
+            margin-bottom: 1.5rem;
+        }
+
+        .pv-bonus-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .pv-bonus-item {
+            background-color: var(--white);
+            padding: 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pv-bonus-item:hover {
+            transform: translateX(4px);
+            border-color: #a78bfa;
+        }
+
+        .pv-bonus-item.tbd {
+            cursor: default;
+        }
+
+        .pv-bonus-item.tbd:hover {
+            transform: none;
+            border-color: transparent;
+        }
+
+        .pv-bonus-item strong {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .pv-bonus-item .pv-pts {
+            color: #a78bfa;
+        }
+
+        .pv-section-heading {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--jungle);
+            margin: 2.5rem 0 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--jungle);
+        }
+        .pv-section-heading:first-of-type { margin-top: 0; }
+        .pv-section-desc {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .pv-sub-heading {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.15rem;
+            color: var(--text-mid);
+            margin: 1.8rem 0 1rem;
+            padding-left: 0.3rem;
+        }
+        .pv-sub-heading:first-of-type { margin-top: 0.5rem; }
+
+        .pv-footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Timeline block */
+        .timeline-block {
+            background: linear-gradient(135deg, #1A3C2A, #245838);
+            color: #fff;
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin-top: 1.5rem;
+        }
+        .timeline-block h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.2rem;
+            font-weight: 400;
+            margin-bottom: 1rem;
+            color: #fff;
+            opacity: 0.9;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+        .timeline-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+        .timeline-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.85rem;
+        }
+        .timeline-date {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1rem;
+            color: #E8823C;
+            white-space: nowrap;
+            min-width: 120px;
+            font-weight: 400;
+        }
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.88);
+            line-height: 1.4;
+        }
+        .timeline-desc strong {
+            color: #fff;
+        }
+        @media (max-width: 500px) {
+            .timeline-row { flex-direction: column; gap: 0.15rem; }
+            .timeline-date { min-width: unset; }
+        }
+
+        /* Honor system banner */
+        .honor-banner {
+            background: linear-gradient(135deg, #f3e8ff, #fce7f3);
+            border: 2px solid #a78bfa;
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .honor-banner .honor-icon {
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .honor-banner p {
+            font-size: 0.97rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+            margin: 0;
+        }
+        .honor-banner strong {
+            color: var(--jungle);
+        }
+
+        /* Submit Points Form */
+        .submit-form {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background-color: var(--white);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 0 3px rgba(232, 69, 107, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+            grid-column: 1 / -1;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-submit {
+            background-color: var(--hot-pink);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            grid-column: 1 / -1;
+        }
+
+        .form-submit:hover {
+            background-color: var(--pink-light);
+        }
+
+        .form-status {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            display: none;
+            grid-column: 1 / -1;
+        }
+
+        .form-status.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        .form-status.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+
+        /* Modal */
+        #activityModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 2000;
+        }
+
+        #activityModal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            max-width: 420px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--jungle);
+            margin-bottom: 0.5rem;
+            padding-right: 2rem;
+        }
+
+        .modal-points-display {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-points-number {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--hot-pink);
+            font-weight: 700;
+        }
+
+        .modal-form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-form-group label {
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .modal-form-group select {
+            padding: 0.75rem;
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            background-color: var(--white);
+        }
+
+        .modal-form-group select:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 0 3px rgba(232, 69, 107, 0.1);
+        }
+
+        .modal-submit {
+            background-color: var(--hot-pink);
+            color: var(--white);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .modal-submit:hover {
+            background-color: var(--pink-light);
+        }
+
+        .modal-submit:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        #modalStatus {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        #modalStatus.success {
+            background-color: #d1fae5;
+            color: #065f46;
+            display: block;
+        }
+
+        #modalStatus.error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            display: block;
+        }
+
+        /* Recipe Modal */
+        #bananaModal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 2000; opacity: 0; visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+            padding: 1rem;
+        }
+        #bananaModal.open { opacity: 1; visibility: visible; }
+        #bananaModal .modal-card { max-width: 440px; width: 100%; max-height: 90vh; overflow-y: auto; }
+
+        #recipeModal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 2000;
+            padding: 1rem;
+        }
+        #recipeModal.open { opacity: 1; visibility: visible; }
+        #recipeModal .modal-card { max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .recipe-textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            resize: vertical;
+            min-height: 100px;
+        }
+        .recipe-textarea:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 0 3px rgba(232,69,107,0.1);
+        }
+        .recipe-input {
+            padding: 0.75rem;
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        .recipe-input:focus {
+            outline: none;
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 0 3px rgba(232,69,107,0.1);
+        }
+        #recipeStatus.success { background-color: #d1fae5; color: #065f46; display: block; }
+        #recipeStatus.error { background-color: #fee2e2; color: #991b1b; display: block; }
+        #recipeStatus { padding: 1rem; border-radius: 6px; margin-bottom: 1rem; text-align: center; display: none; }
+
+        /* Footer */
+        footer {
+            background-color: var(--jungle);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-names {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-date {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                gap: 0;
+                background-color: var(--white);
+                padding: 1rem 2rem;
+                list-style: none;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links a {
+                padding: 0.75rem 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .page-hero {
+                padding: 60px 2rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .pv-items-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="points.html" class="active">Points</a></li>
+                <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="page-hero">
+        <h1 class="page-title">Points</h1>
+        <p class="subtitle">Earn points, track your progress, and WIN our wedding!</p>
+    </section>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Slack Banner -->
+        <div style="background: var(--jungle); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+            <span style="color: var(--white); font-size: 0.97rem; font-weight: 600;">💬 Join our Slack to stay connected, post evidence for points, and keep up with wedding week updates!</span>
+            <a href="https://join.slack.com/t/andrewzinniawedding/shared_invite/zt-3vrqzcd0k-eEdojL__cyoq0R0PbZNidA" target="_blank" rel="noopener" style="flex-shrink:0; background: var(--hot-pink); color: var(--white); font-size: 0.88rem; font-weight: 700; padding: 0.55rem 1.2rem; border-radius: 8px; text-decoration: none; white-space: nowrap; transition: background 0.2s;" onmouseover="this.style.background='#c0394f'" onmouseout="this.style.background='var(--hot-pink)'">Join Slack →</a>
+        </div>
+
+        <!-- Welcome Description -->
+        <section id="welcomeSection" style="margin-bottom:2.5rem;">
+            <h2>Welcome to Our Wedding Competition!</h2>
+            <p style="font-size:1.02rem; color:var(--text-mid); line-height:1.85; margin-top:1rem;">
+                Starting <strong>May 1st</strong>, the competition is open! Compete with your fellow guests for one of <strong>4 prizes</strong> by participating in activities, doing fun side quests related to things Zinnia &amp; Andrew love, and helping make our wedding as fun and memorable as possible!
+            </p>
+            <p style="font-size:1.02rem; color:var(--text-mid); line-height:1.85; margin-top:0.8rem;">
+                Some activities can be completed before the wedding weekend even begins! There's also a form at the bottom to request points for anything else you think you deserve credit for. May the best guest win!
+            </p>
+
+            <div class="timeline-block">
+                <h3>📅 Key Dates</h3>
+                <div class="timeline-dates">
+                    <div class="timeline-row">
+                        <div class="timeline-date">May 1</div>
+                        <div class="timeline-desc"><strong>Points system & leaderboard open!</strong> Start earning.</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-date">Sat, May 23 · midnight</div>
+                        <div class="timeline-desc"><strong>Last call for points submissions.</strong> All requests must be in by midnight — no exceptions!</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-date">Sat, May 23</div>
+                        <div class="timeline-desc"><strong>Leaderboard goes dark.</strong> We'll hide the standings so the final results are a surprise 🤫</div>
+                    </div>
+                    <div class="timeline-row">
+                        <div class="timeline-date">Sun, May 24 🎉</div>
+                        <div class="timeline-desc"><strong>Winners announced at the wedding!</strong> Get excited — prizes will be epic.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Prizes Section -->
+        <section id="prizesSection" style="margin-bottom:2.5rem;">
+            <h2>🏆 Prizes</h2>
+            <p style="font-size:1.02rem; color:var(--text-mid); line-height:1.85; margin-top:0.5rem; margin-bottom:0.5rem;">There are <strong>4 prizes</strong> up for grabs — fun and exciting, we promise.</p>
+            <p style="font-size:1.02rem; color:var(--text-mid); line-height:1.85; margin-bottom:1.5rem;">🎁 <strong>All prizes will be revealed and awarded on wedding day</strong> — May 24th at the reception!</p>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem;">
+
+                <!-- 1st Place -->
+                <div style="background:linear-gradient(135deg,#fffbe6,#fff3c4); border:2px solid #f5c842; border-radius:14px; padding:1.4rem 1.2rem; text-align:center;">
+                    <div style="font-size:2.2rem; margin-bottom:0.4rem;">🥇</div>
+                    <div style="font-weight:800; font-size:1.05rem; color:var(--jungle); margin-bottom:0.2rem;">1st Place</div>
+                    <div style="font-size:0.88rem; color:var(--text-mid);">Wedding Competition Winner!</div>
+                </div>
+
+                <!-- 2nd Place -->
+                <div style="background:linear-gradient(135deg,#f4f4f4,#e8e8e8); border:2px solid #aaaaaa; border-radius:14px; padding:1.4rem 1.2rem; text-align:center;">
+                    <div style="font-size:2.2rem; margin-bottom:0.4rem;">🥈</div>
+                    <div style="font-weight:800; font-size:1.05rem; color:var(--jungle); margin-bottom:0.2rem;">2nd Place</div>
+                    <div style="font-size:0.88rem; color:var(--text-mid);">Wedding Competition Winner!</div>
+                </div>
+
+                <!-- 3rd Place -->
+                <div style="background:linear-gradient(135deg,#fdf0e6,#fde0c4); border:2px solid #cd7f32; border-radius:14px; padding:1.4rem 1.2rem; text-align:center;">
+                    <div style="font-size:2.2rem; margin-bottom:0.4rem;">🥉</div>
+                    <div style="font-weight:800; font-size:1.05rem; color:var(--jungle); margin-bottom:0.2rem;">3rd Place</div>
+                    <div style="font-size:0.88rem; color:var(--text-mid);">Wedding Competition Winner!</div>
+                </div>
+
+                <!-- Lottery -->
+                <div style="background:linear-gradient(135deg,#fdf0f8,#fce4f4); border:2px solid var(--hot-pink); border-radius:14px; padding:1.4rem 1.2rem; text-align:center;">
+                    <div style="font-size:2.2rem; margin-bottom:0.4rem;">🎟️</div>
+                    <div style="font-weight:800; font-size:1.05rem; color:var(--jungle); margin-bottom:0.3rem;">Lottery Prize</div>
+                    <div style="font-size:0.9rem; color:var(--text-mid); line-height:1.5;">Open to <em>anyone with points</em> — the more points you have, the more entries you get!</div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Points Activity Feed -->
+        <section id="activitySection">
+            <h2>Points Activity</h2>
+            <div class="feed-filter-bar">
+                <select id="feedPersonFilter" onchange="applyFeedFilter()">
+                    <option value="">👥 All guests</option>
+                </select>
+                <div class="feed-filter-summary" id="feedFilterSummary"></div>
+            </div>
+            <div class="feed-scroll-wrap">
+                <ul class="feed-list" id="feedList">
+                    <li class="feed-empty">Loading...</li>
+                </ul>
+                <div class="feed-scroll-fade" id="feedScrollFade"></div>
+            </div>
+            <div class="feed-scroll-hint" id="feedScrollHint">
+                <span>↕</span> scroll to see more
+            </div>
+        </section>
+
+        <!-- Ways to Get Points -->
+        <section id="pointsValuesSection">
+            <h2>Ways to Get Points</h2>
+
+            <div class="honor-banner">
+                <div class="honor-icon">🤝</div>
+                <p><strong>We're running on the honor system!</strong> Tap any activity below to claim your points instantly — no approval needed. That said, if you end up a top finisher, we'll do a quick review, so <strong>keep your receipts</strong> (photos, Strava, your word of honor 😄). May the most adventurous guest win!</p>
+            </div>
+
+            <p style="font-size:0.92rem;color:var(--text-light);margin-bottom:1.5rem;font-style:italic;">Tap any activity to claim your points!</p>
+
+            <!-- ═══ PARTICIPATE IN ACTIVITIES ═══ -->
+            <div class="pv-section-heading">Participate in Kauai Activities</div>
+
+            <!-- Water Activities -->
+            <div class="pv-category">
+                <div class="pv-category-title">🌊 Water Activities</div>
+                <div class="pv-items-row">
+                    <div class="pv-item" data-activity="Napali Coast Kayak" data-points="100">
+                        <div class="pv-name">Napali Coast Kayak</div>
+                        <div class="pv-sub">17-mile full day</div>
+                        <div class="pv-pts pink">100 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Ni'ihau 3-Tank Dive" data-points="80">
+                        <div class="pv-name">Ni'ihau 3-Tank Dive</div>
+                        <div class="pv-pts pink">80 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Try Scuba" data-points="65">
+                        <div class="pv-name">Try Scuba</div>
+                        <div class="pv-sub">Discover Scuba experience</div>
+                        <div class="pv-pts amber">65 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Deep Sea Fishing" data-points="60">
+                        <div class="pv-name">Deep Sea Fishing</div>
+                        <div class="pv-pts amber">60 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Go Spearfishing" data-points="60">
+                        <div class="pv-name">Go Spearfishing</div>
+                        <div class="pv-pts amber">60 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="E-Foiling" data-points="55">
+                        <div class="pv-name">E-Foiling</div>
+                        <div class="pv-pts amber">55 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Certified Scuba Dive" data-points="50">
+                        <div class="pv-name">Certified Scuba Dive</div>
+                        <div class="pv-pts amber">50 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item surfing-item" data-activity="Surfing" data-points="45">
+                        <div class="pv-name">Surfing</div>
+                        <div class="pv-sub">45 → 35 → 25 → 15 pts per session</div>
+                        <div class="pv-pts amber">45 pts 1st session</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Shorter Kayak Trips" data-points="35">
+                        <div class="pv-name">Shorter Kayak Trips</div>
+                        <div class="pv-pts green">35 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Snorkeling" data-points="20">
+                        <div class="pv-name">Snorkeling</div>
+                        <div class="pv-pts green">20 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Land Adventures -->
+            <div class="pv-category">
+                <div class="pv-category-title">🥾 Land Adventures</div>
+                <div class="pv-items-row">
+                    <div class="pv-item" data-activity="Kalalau Trail to Hanakapi'ai Beach" data-points="40">
+                        <div class="pv-name">Kalalau Trail</div>
+                        <div class="pv-sub">To Hanakapi'ai Beach · ~4 mi · Moderate</div>
+                        <div class="pv-pts amber">40 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Kalalau Trail to Hanakapi'ai Falls" data-points="55">
+                        <div class="pv-name">Kalalau Trail</div>
+                        <div class="pv-sub">To Hanakapi'ai Falls · ~8 mi · Strenuous</div>
+                        <div class="pv-pts amber">55 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Kalalau Trail Backpacking" data-points="75">
+                        <div class="pv-name">Kalalau Trail Backpacking</div>
+                        <div class="pv-sub">Full trail · 11 mi · Epic</div>
+                        <div class="pv-pts amber">75 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Alaka'i Swamp Trail" data-points="65">
+                        <div class="pv-name">Alaka'i Swamp Trail</div>
+                        <div class="pv-sub">~7 mi round trip</div>
+                        <div class="pv-pts amber">65 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Awa'awapuhi Trail" data-points="55">
+                        <div class="pv-name">Awa'awapuhi Trail</div>
+                        <div class="pv-sub">~6 mi round trip</div>
+                        <div class="pv-pts amber">55 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Waipo'o Falls Hike" data-points="40">
+                        <div class="pv-name">Waipo'o Falls Hike</div>
+                        <div class="pv-sub">~3 mi round trip</div>
+                        <div class="pv-pts amber">40 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Zipline" data-points="40">
+                        <div class="pv-name">Zipline</div>
+                        <div class="pv-pts amber">40 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Biking" data-points="30">
+                        <div class="pv-name">Biking</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Rent a Dog from Kauai Humane Society" data-points="30">
+                        <div class="pv-name">🐕 Rent a Dog for a Day</div>
+                        <div class="pv-sub">Take a shelter dog for a field trip! <a href="https://kauaihumane.org/service/field-trips/" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--hot-pink); font-weight:600;">Book here →</a></div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Adopt a Dog from Kauai Humane Society" data-points="200">
+                        <div class="pv-name">🐾 Adopt a Dog</div>
+                        <div class="pv-sub">If you fell in love with the dog you took on a field trip, adopt it! We want more friends with dogs! <a href="https://kauaihumane.org/adopting/off-island-adoptions/" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--hot-pink); font-weight:600;">Adopt here →</a></div>
+                        <div class="pv-pts pink">200 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tours & Cultural -->
+            <div class="pv-category">
+                <div class="pv-category-title">🚁 Tours &amp; Cultural</div>
+                <div class="pv-items-row">
+                    <div class="pv-item" data-activity="Helicopter Tour" data-points="65">
+                        <div class="pv-name">Helicopter Tour</div>
+                        <div class="pv-pts amber">65 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Botanical Gardens" data-points="30">
+                        <div class="pv-name">Botanical Gardens</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Coffee Tour" data-points="30">
+                        <div class="pv-name">Coffee Tour</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Chocolate Farm" data-points="30">
+                        <div class="pv-name">Chocolate Farm</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Kilohana Plantation Railway Tour" data-points="30">
+                        <div class="pv-name">Kilohana Plantation Railway Tour</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Wailua River Cruise" data-points="30">
+                        <div class="pv-name">Wailua River Cruise</div>
+                        <div class="pv-pts green">30 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                    <div class="pv-item" data-activity="Kilauea Point National Wildlife Refuge & Lighthouse" data-points="25">
+                        <div class="pv-name">Kilauea Point National Wildlife Refuge &amp; Lighthouse</div>
+                        <div class="pv-pts green">25 pts</div>
+                        <div class="pv-limit">1× per day</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ OTHER WAYS TO GET POINTS ═══ -->
+            <div class="pv-section-heading">Other Ways to Get Points</div>
+
+            <div style="background: var(--pink-soft); border: 2px solid var(--pink-light); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; font-size: 0.95rem; color: var(--text-mid); line-height: 1.7;">
+                💡 <strong style="color: var(--jungle);">Don't see something that deserves points?</strong> Use the <a href="#submitSection" style="color: var(--hot-pink); font-weight: 600; text-decoration: none; border-bottom: 2px solid var(--pink-light);">request form at the bottom</a> to make your case — Zinnia &amp; Andrew will evaluate it! Be creative. We're told we're too stingy with approvals, so… push us. 👀
+            </div>
+
+            <!-- Food -->
+            <div class="pv-sub-heading">🍽 Food</div>
+            <div class="pv-bonus-section" style="margin-top:0;">
+                <div class="pv-bonus-items">
+                    <div class="pv-bonus-item bingo-item">
+                        <strong>🎯 Kauai Food Adventure Bingo</strong> <span class="pv-pts">up to +50 pts</span>
+                        <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.25rem;">
+                            Work your way through the <a href="https://docs.google.com/spreadsheets/d/1Yk-r--1g4zR-vFyhudy7FZuwiimPOyL1gXcvf56LGDs/edit?usp=sharing" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--hot-pink);font-weight:600;">Kauai Food Bingo card →</a> and claim each milestone separately!
+                        </div>
+                        <div style="font-size:0.82rem;margin-top:0.5rem;display:grid;gap:0.2rem;">
+                            <div>🟩 <strong>Row of 5</strong> — <strong>+15 pts</strong></div>
+                            <div>⬛ <strong>Full Blackout</strong> — <strong>+35 pts</strong> additional <span style="color:var(--text-light);">(50 pts total if you got the row too)</span></div>
+                        </div>
+                        <div style="font-size:0.85rem;color:var(--text-light);margin-top:0.4rem;">📸 Post your completed card as evidence to Slack, then claim each milestone separately!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Try poi" data-points="5">
+                        <strong>🍠 Try Poi</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a selfie or video of your reaction to the poi to Slack! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Shave Ice selfie" data-points="5">
+                        <strong>🍧 Shave Ice Selfie</strong> <span class="pv-pts">+5 pts each</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a selfie of you with a shave ice — <strong>once per day, must be a unique shop each time!</strong> Tell us what you rate it out of 5.</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Try a New Fruit" data-points="5">
+                        <strong>🍈 Try a New Fruit</strong> <span class="pv-pts">+5 pts per new fruit</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Claim once per new fruit you try! Post a photo and your thoughts to Slack.</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Bake Something from Scratch" data-points="15">
+                        <strong>🧁 Bake Something from Scratch in Hawaii</strong> <span class="pv-pts">+15 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Must be enough to share with a group — no solo baking! Post a photo and describe what you made. And if you're feeling generous — give Zinnia &amp; Andrew a sample for bonus goodwill! 🎁</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wildlife -->
+            <div class="pv-sub-heading">🦎 Wildlife</div>
+            <div class="pv-bonus-section" style="margin-top:0;">
+                <div class="pv-bonus-items">
+                    <div class="pv-bonus-item" data-activity="Chicken Selfie" data-points="5">
+                        <strong>🐔 Chicken Selfie</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Take a selfie of you with at least 5+ chickens and post to Slack! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Rare Animal Photo" data-points="10">
+                        <strong>🐢 Rare Animal Photo</strong> <span class="pv-pts">+10 pts per unique animal</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo of a rare animal to Slack — monk seals, turtles, and other unusual wildlife welcome. Birds and geckos don't count for this one! <strong>Claim once per unique rare animal.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item birding-item" data-activity="Go Birding" data-points="5">
+                        <strong>🦅 Go Birding</strong> <span class="pv-pts">+5 pts per unique bird type</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Spot and photograph any of these birds — must submit photo to Slack for confirmation!</div>
+                        <div style="font-size: 0.82rem; margin-top: 0.5rem; display: grid; gap: 0.3rem;">
+                            <div>🪿 <strong>Nēnē</strong> (Hawaiian State Goose) — Princeville plateau, Kokee State Park</div>
+                            <div>🐦 <strong>Red-footed Booby</strong> — Kilauea Point National Wildlife Refuge</div>
+                            <div>🕊️ <strong>White-tailed Tropicbird</strong> — Napali Coast cliffs, Kilauea Point</div>
+                            <div>🦉 <strong>Pueo</strong> (Hawaiian Short-eared Owl) — open fields at dusk, Kokee area</div>
+                            <div>🌊 <strong>Laysan Albatross</strong> — Kilauea Point, nesting Nov–Jul</div>
+                        </div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Snail Eggs" data-points="5">
+                        <strong>🐌 Snail Eggs</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Find and post a picture of snail eggs to the Slack! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Day Gecko" data-points="5">
+                        <strong>🦎 Day Gecko</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Take a selfie of you with a day gecko and post to Slack! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item fishing-item" data-activity="Go Fishing" data-points="5">
+                        <strong>🎣 Go Fishing</strong> <span class="pv-pts">+5 pts per unique species</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">5 pts for each unique type of fish, crab, or bivalve you catch during the month of May. Post a photo to Slack for confirmation!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Spot a Spinner Dolphin" data-points="10">
+                        <strong>🐬 Spot a Spinner Dolphin</strong> <span class="pv-pts">+10 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo or video to Slack for confirmation. Hanalei Bay is a great spot! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Spot a Humpback Whale" data-points="10">
+                        <strong>🐋 Spot a Humpback Whale</strong> <span class="pv-pts">+10 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo or video to Slack. Bonus bragging rights if you catch a breach! <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Catch a Kauai Sunrise or Sunset" data-points="5">
+                        <strong>🌅 Catch a Kauai Sunrise or Sunset</strong> <span class="pv-pts">+5 pts each</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Up to 10 pts total — claim once for a sunrise, once for a sunset. Post your photo to Slack!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entertainment -->
+            <div class="pv-sub-heading">🎶 Entertainment</div>
+            <div class="pv-bonus-section" style="margin-top:0;">
+                <div class="pv-bonus-items">
+                    <div class="pv-bonus-item" data-activity="Listen to all Eurovision 2026 songs" data-points="20">
+                        <strong>🎤 Listen to all of the Eurovision 2026 songs</strong> <span class="pv-pts">+20 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;"><a href="https://open.spotify.com/playlist/37i9dQZF1DWVCKO3xAlT1Q?si=c3RJAlRzTdKfPaGVpbhYaw" target="_blank" rel="noopener" style="color:var(--hot-pink);">Listen on Spotify</a> &nbsp;|&nbsp; <a href="eurovision.html" style="color:var(--hot-pink);">Link to Eurovision Cheatsheet</a></div>
+                        <div style="font-size:0.88rem; color:var(--text-mid); margin-top:0.4rem;">Let us know in the Slack what your favorite Eurovision song was!</div>
+                    </div>
+                    <a href="eurovision-quiz.html" style="text-decoration:none; color:inherit; display:block;">
+                    <div class="pv-bonus-item quiz-direct">
+                        <strong>🏅 Take the Eurovision Quiz</strong> <span class="pv-pts">up to 10 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Once you've listened to the whole playlist and memorized the countries, click here to take the quiz! You can only take it once, no cheating!</div>
+                    </div>
+                    </a>
+                    <div class="pv-bonus-item" data-activity="Watch Chief of War (Apple TV)" data-points="20">
+                        <strong>📺 Watch Chief of War (Apple TV)</strong> <span class="pv-pts">+20 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Learn a bit about Hawaiian history — but fun! Let us know what you thought in the Slack.</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Watch My Octopus Teacher (Netflix)" data-points="5">
+                        <strong>🐙 Watch My Octopus Teacher (Netflix)</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Octopus are our friends and we really like them. Let us know what you thought in the Slack!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Watch LISTERS: A Glimpse Into Extreme Birdwatching" data-points="5">
+                        <strong>🦜 Watch LISTERS: A Glimpse Into Extreme Birdwatching (YouTube)</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Get in the birdwatching spirit before you arrive in Kauai. (YouTube) Let us know what you thought in the Slack!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Win a Round of Mahjong" data-points="5">
+                        <strong>🀄 Win a Round of Mahjong</strong> <span class="pv-pts">+5 pts per win</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Beat your tablemates fair and square. Post your winning hand to Slack! <strong>Claim up to 3 wins.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item tbd">
+                        <strong>🎶 Eurovision Prediction Competition</strong> <span class="pv-pts">up to +30 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem;">Place your bets on who will win Eurovision 2026 — points awarded from a pool based on how well you predict the results. See <strong>#eurovision</strong> on Slack for details coming soon!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Triathlon -->
+            <div class="pv-sub-heading">🏅 Triathlon</div>
+            <div class="pv-bonus-section" style="margin-top:0;">
+                <div class="pv-bonus-items">
+                    <div style="font-size: 0.85rem; color: var(--text-light); padding: 0 0.25rem 0.5rem; font-style: italic;">These don't have to be on Kauai — completing them beforehand counts too!</div>
+                    <div class="pv-bonus-item" data-activity="Open Water Swimming" data-points="10">
+                        <strong>🏊 Open Water Swimming</strong> <span class="pv-pts">+10 pts (once only)</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Swim in the open ocean (not just a pool!). Post a photo or Strava screenshot to Slack.</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Go on a Run" data-points="10">
+                        <strong>🏃 Go on a Run</strong> <span class="pv-pts">+10 pts (once only)</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">One claim per person. Post a Strava screenshot or photo from your run to Slack!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Go Biking" data-points="10">
+                        <strong>🚴 Go Biking</strong> <span class="pv-pts">+10 pts (once only)</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">One claim per person. Post a photo or Strava screenshot to Slack!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Us Out -->
+            <div class="pv-sub-heading">🤝 Help Us Out</div>
+            <div class="pv-bonus-section" style="margin-top:0;">
+                <div class="pv-bonus-items">
+                    <div class="pv-bonus-item banana-item" id="bananaItem">
+                        <strong>🐌 Make a banana slug art for our themed bathroom!</strong> <span class="pv-pts">+30 pts</span>
+                        <div style="font-size:0.88rem; color:var(--text-light); margin-top:0.3rem; line-height:1.5;">Our guest bathroom is currently decorated with 20+ ceramic banana slugs. We would like to add some art to add to the theme! Help us out by gifting us any related artwork (embroider a banana slug, linocut a banana slug, watercolor a banana slug, bead a banana slug, whatever medium you desire!) <strong>Post a photo to Slack!</strong></div>
+                        <div style="font-size:0.88rem; color:var(--hot-pink); margin-top:0.5rem; font-weight:600; line-height:1.6;">🐌 Multiple Banana Slug Arts now accepted!! Each additional sluggy has a 50% discount factor:<br>
+                        <span style="font-weight:400; color:var(--text-mid);">2nd slug: 15 pts &nbsp;·&nbsp; 3rd slug: 8 pts &nbsp;·&nbsp; 4th slug: 4 pts &nbsp;·&nbsp; 5th slug: 2 pts</span></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Team Captain" data-points="10">
+                        <strong>🚩 Team Captain</strong> <span class="pv-pts">+10 pts per attendee (not counting yourself)</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Thank you so much for helping to coordinate fun activities!!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Raised one of the soon-to-be-married" data-points="100">
+                        <strong>👨‍👩‍👧 Raised one of the soon-to-be-married</strong> <span class="pv-pts">+100 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Thanks Mom &amp; Dad!</div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Selfie with Zinnia and Andrew" data-points="5">
+                        <strong>📸 Selfie with Zinnia &amp; Andrew</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Get both of us in the same photo! Post it to Slack. <strong>Claim once only.</strong></div>
+                    </div>
+                    <div class="pv-bonus-item" data-activity="Got scuba certified for this trip" data-points="50">
+                        <strong>🤿 Got scuba certified for this trip</strong> <span class="pv-pts">+50 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">We need more scuba friends for scuba adventures!!</div>
+                    </div>
+                    <div class="pv-bonus-item recipe-item" id="recipeItem">
+                        <strong>🍽️ Share a Favorite Recipe</strong> <span class="pv-pts">+5 pts</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">We love to cook and bake — especially homemade or heirloom recipes! Submit a link, paste the recipe, or share a photo. It'll be posted to our #recipes Slack channel. <strong>Claim once only.</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══ COMPETITIONS ═══ -->
+            <div class="pv-section-heading">Competitions</div>
+            <p class="pv-section-desc">Points will be awarded automatically after each event &mdash; no need to submit a request!</p>
+
+            <div class="pv-category">
+                <div class="pv-category-title">🏆 Special Events</div>
+                <div class="pv-items-row">
+                    <div class="pv-item tbd">
+                        <div class="pv-name">Beach Competition Day</div>
+                        <div class="pv-sub">Points based on team performance across races, sand sculpture, and the beach test</div>
+                        <div class="pv-pts pink">Up to 100 pts</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pv-footer">
+                Points are awarded at Zinnia &amp; Andrew's discretion. All decisions are final!
+            </div>
+        </section>
+
+        <!-- Submit Points Request -->
+        <section id="submitSection">
+            <h2>Submit a Request for Points</h2>
+            <p style="color:var(--text-mid); font-size:1rem; margin-bottom:1.5rem; line-height:1.6;">If you think you deserve points for any other reason, submit a request and we'll review! (i.e. you bake us a cake, you help assist in decor, anything you can think of! We will assess its point worthiness!)</p>
+            <form class="submit-form" id="pointsForm">
+                <div id="formStatus" class="form-status"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reqWho">Who</label>
+                        <select id="reqWho" name="who" required>
+                            <option value="">— select your name —</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reqPoints">Points Requested</label>
+                        <input type="number" id="reqPoints" name="points" step="1" required placeholder="e.g. 10 or -5">
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="reqReason">Reason</label>
+                        <textarea id="reqReason" name="reason" required></textarea>
+                    </div>
+                </div>
+                <div class="form-row full">
+                    <button type="submit" class="form-submit">Submit Request</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="activityModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h3 class="modal-title" id="modalActivityName">Activity</h3>
+            <div class="modal-points-display">
+                <span class="modal-points-number" id="modalPoints">100 pts</span>
+            </div>
+            <input type="hidden" id="modalPointsHidden" value="">
+            <input type="hidden" id="modalReason" value="">
+            <div id="modalCustomPointsWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;">Points (10 pts per attendee, not counting yourself)</label>
+                <input type="number" id="modalCustomPoints" min="10" step="10" placeholder="e.g. 30 for 3 people" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+            </div>
+            <!-- Surfing session selector -->
+            <div id="modalSurfingWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which surf session is this today?</label>
+                <select id="modalSurfingSession" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                    <option value="45">1st session — 45 pts</option>
+                    <option value="35">2nd session — 35 pts</option>
+                    <option value="25">3rd session — 25 pts</option>
+                    <option value="15">4th session — 15 pts</option>
+                </select>
+                <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Points decrease with each session per day. Max 4 sessions claimed per day.</div>
+            </div>
+            <!-- Bingo selector -->
+            <div id="modalBingoWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">What did you complete?</label>
+                <select id="modalBingoType" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                    <option value="15">🟩 Row of 5 — +15 pts</option>
+                    <option value="35">⬛ Full Blackout — +35 pts additional (50 pts cumulative)</option>
+                </select>
+                <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Claim each milestone separately! Post your completed card to <strong>Slack</strong> as evidence.</div>
+            </div>
+            <div id="modalBirdingWrap" style="display:none;margin-top:0.75rem;">
+                <div style="margin-bottom:0.75rem;">
+                    <label id="modalSpeciesCountLabel" style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">How many unique bird types did you spot?</label>
+                    <select id="modalBirdingPoints" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                        <option value="5">1 — 5 pts</option>
+                        <option value="10">2 — 10 pts</option>
+                        <option value="15">3 — 15 pts</option>
+                        <option value="20">4 — 20 pts</option>
+                        <option value="25">5 — 25 pts</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="modalSpeciesNamesLabel" style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which birds did you spot?</label>
+                    <input type="text" id="modalBirdNames" placeholder="e.g. Nēnē, Red-footed Booby" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                </div>
+            </div>
+            <div id="modalStatus" class="form-status"></div>
+            <form id="modalForm" onsubmit="submitModalForm(event)">
+                <div class="modal-form-group">
+                    <label for="modalGuest">Who</label>
+                    <select id="modalGuest" name="who" required>
+                        <option value="">— select your name —</option>
+                    </select>
+                </div>
+                <button type="submit" class="modal-submit">Claim Points! 🎉</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Recipe Modal -->
+    <div id="recipeModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeRecipeModal()">×</button>
+            <div class="modal-title">🍽️ Share a Favorite Recipe</div>
+            <div class="modal-points-display"><span class="modal-points-number">+5 pts</span> — posted straight to our #recipes Slack!</div>
+            <div class="modal-points-display" style="margin-top:-1rem; font-size:0.88rem;">Especially love homemade &amp; heirloom recipes 💛</div>
+            <div id="recipeStatus"></div>
+            <form id="recipeForm" onsubmit="submitRecipe(event)">
+                <div class="modal-form-group">
+                    <label for="recipeGuest">Who are you?</label>
+                    <select id="recipeGuest" required>
+                        <option value="">— select your name —</option>
+                    </select>
+                </div>
+                <div class="modal-form-group">
+                    <label for="recipeMessage">Your recipe, link, or message</label>
+                    <textarea class="recipe-textarea" id="recipeMessage" required placeholder="Paste the recipe, drop a link, or just tell us about it — it'll be posted to #recipes!"></textarea>
+                </div>
+                <button type="submit" class="modal-submit" id="recipeSubmitBtn">Share &amp; Claim +5 pts 🎉</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Banana Slug Modal -->
+    <div id="bananaModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeBananaModal()">×</button>
+            <div class="modal-title">🐌 Banana Slug Art</div>
+            <div class="modal-points-display" id="bananaPtsDisplay"><span class="modal-points-number">+30 pts</span></div>
+            <div id="bananaStatus"></div>
+            <form id="bananaForm" onsubmit="submitBanana(event)">
+                <div class="modal-form-group">
+                    <label for="bananaGuest">Who are you?</label>
+                    <select id="bananaGuest" required>
+                        <option value="">— select your name —</option>
+                    </select>
+                </div>
+                <div class="modal-form-group">
+                    <label for="bananaNumber">Which banana slug is this?</label>
+                    <select id="bananaNumber" required onchange="updateBananaPoints()">
+                        <option value="">— select —</option>
+                        <option value="1" data-pts="30">1st slug 🐌 — 30 pts</option>
+                        <option value="2" data-pts="15">2nd slug 🐌🐌 — 15 pts</option>
+                        <option value="3" data-pts="8">3rd slug 🐌🐌🐌 — 8 pts</option>
+                        <option value="4" data-pts="4">4th slug 🐌🐌🐌🐌 — 4 pts</option>
+                        <option value="5" data-pts="2">5th slug 🐌🐌🐌🐌🐌 — 2 pts</option>
+                    </select>
+                </div>
+                <button type="submit" class="modal-submit" id="bananaSubmitBtn">Claim Points! 🎉</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        const API_BASE = '/.netlify/functions';
+        let allGuests = [];
+        let allFeedItems = [];
+        let currentModalType = null;
+
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu on link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Navbar scroll shadow
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 0) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Name randomization for logo and footer
+        function randomizeNames() {
+            const names = ['Zinnia & Andrew', 'Andrew & Zinnia'];
+            const randomName = names[Math.floor(Math.random() * names.length)];
+            document.querySelectorAll('.nav-logo, .footer-names').forEach(el => {
+                el.textContent = randomName;
+            });
+        }
+
+        randomizeNames();
+
+        // Load data from API
+        function loadData() {
+            fetch(API_BASE + '/get-leaderboard')
+                .then(res => res.json())
+                .then(data => {
+                    allGuests = (data.guests || []).map(g => g.name).sort();
+                    allFeedItems = (data.feed || []).slice().reverse();
+                    renderFeed();
+                    populateAllDropdowns();
+                })
+                .catch(err => {
+                    console.error('Failed to load data:', err);
+                    document.getElementById('feedList').innerHTML =
+                        '<li class="feed-empty">Could not load activity feed.</li>';
+                });
+        }
+
+        function populateAllDropdowns() {
+            const options = '<option value="">— select your name —</option>' +
+                allGuests.map(n => `<option value="${n}">${n}</option>`).join('');
+            document.getElementById('reqWho').innerHTML = options;
+            document.getElementById('modalGuest').innerHTML = options;
+            document.getElementById('recipeGuest').innerHTML = options;
+            document.getElementById('bananaGuest').innerHTML = options;
+
+            // Populate feed filter (preserve current selection if possible)
+            const filterEl = document.getElementById('feedPersonFilter');
+            const prev = filterEl.value;
+            filterEl.innerHTML = '<option value="">👥 All guests</option>' +
+                allGuests.map(n => `<option value="${n}">${n}</option>`).join('');
+            if (prev && allGuests.includes(prev)) filterEl.value = prev;
+        }
+
+        let feedFilterPerson = '';
+
+        function applyFeedFilter() {
+            feedFilterPerson = document.getElementById('feedPersonFilter').value;
+            renderFeed();
+        }
+
+        function formatTime(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' at ' +
+                   d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+        }
+
+        function renderFeed() {
+            const feedList = document.getElementById('feedList');
+            const summaryEl = document.getElementById('feedFilterSummary');
+
+            // Filter items by selected person
+            const items = feedFilterPerson
+                ? allFeedItems.filter(item => (item.name || item.who) === feedFilterPerson)
+                : allFeedItems;
+
+            // Summary chips when a person is selected
+            if (feedFilterPerson && items.length > 0) {
+                const earned = items.filter(i => i.status === 'approved' || (!i.status && i.points)).reduce((s, i) => s + (i.points || 0), 0);
+                const pendingCount = items.filter(i => i.status === 'pending').length;
+                const deniedCount = items.filter(i => i.status === 'denied' || i.status === 'rejected').length;
+                let chips = `<span class="feed-summary-chip earned">+${earned} pts earned</span>`;
+                if (pendingCount) chips += `<span class="feed-summary-chip pending">${pendingCount} pending</span>`;
+                if (deniedCount) chips += `<span class="feed-summary-chip denied">${deniedCount} denied</span>`;
+                summaryEl.innerHTML = chips;
+            } else {
+                summaryEl.innerHTML = '';
+            }
+
+            if (items.length === 0) {
+                feedList.innerHTML = feedFilterPerson
+                    ? `<li class="feed-empty">No activity found for ${feedFilterPerson} yet.</li>`
+                    : '<li class="feed-empty">No points have been awarded yet. Be the first to submit a request!</li>';
+                document.getElementById('feedScrollFade').style.opacity = '0';
+                document.getElementById('feedScrollHint').style.opacity = '0';
+                return;
+            }
+
+            feedList.innerHTML = items.map(item => {
+                const isPending = item.status === 'pending';
+                const isDenied = item.status === 'denied';
+                const isRejected = item.status === 'rejected';
+                const name = item.name || item.who;
+                const pendingBadge = isPending ? '<span class="feed-pending-badge">Pending</span>' : '';
+                const deniedBadge = isDenied ? '<span class="feed-pending-badge" style="background:#9a3412;">Denied</span>' : '';
+                const rejectedBadge = isRejected ? '<span class="feed-pending-badge" style="background:#9a3412;">Rejected</span>' : '';
+                const denyReasonText = isDenied && item.denyReason ? `<div style="font-size:0.83rem; color:var(--text-mid); margin-top:0.25rem; font-style:italic;">💬 ${item.denyReason}</div>` : '';
+                const adminCommentText = item.adminComment ? `<div style="font-size:0.83rem; color:var(--text-mid); margin-top:0.25rem; font-style:italic;">💬 ${item.adminComment}</div>` : '';
+                const text = isPending
+                    ? `<strong>${name}</strong> requested <span class="feed-points">${item.points} points</span> for ${item.reason}${pendingBadge}`
+                    : isDenied
+                    ? `<strong>${name}</strong> — <span class="feed-points" style="color:#9a3412;">${item.points} pts</span> request for <em>${item.reason}</em> was denied${deniedBadge}`
+                    : isRejected
+                    ? `<strong>${name}</strong> — <span class="feed-points" style="color:#9a3412;">${item.points} pts</span> request for <em>${item.reason}</em> was removed${rejectedBadge}`
+                    : `<strong>${name}</strong> earned <span class="feed-points">${item.points > 0 ? '+' : ''}${item.points} points</span> for ${item.reason}`;
+                const rowClass = isPending ? ' pending' : (isDenied || isRejected) ? ' denied' : '';
+                const feedIcon = isPending ? item.points + '?' : (isDenied || isRejected) ? '🚫' : item.points;
+                return `
+                <li class="feed-item${rowClass}">
+                    <div class="feed-icon">${feedIcon}</div>
+                    <div class="feed-content">
+                        <div class="feed-text">${text}</div>
+                        ${isDenied ? denyReasonText : adminCommentText}
+                        <div class="feed-time">${formatTime(item.timestamp) || item.timestamp}</div>
+                    </div>
+                </li>`;
+            }).join('');
+
+            updateFeedScrollIndicator();
+        }
+
+        function updateFeedScrollIndicator() {
+            const feedList = document.getElementById('feedList');
+            const fade = document.getElementById('feedScrollFade');
+            const hint = document.getElementById('feedScrollHint');
+            const scrollable = feedList.scrollHeight > feedList.clientHeight;
+            const atBottom = feedList.scrollTop + feedList.clientHeight >= feedList.scrollHeight - 8;
+            const show = scrollable && !atBottom;
+            fade.style.opacity = show ? '1' : '0';
+            hint.style.opacity = show ? '1' : '0';
+        }
+
+        document.getElementById('feedList').addEventListener('scroll', updateFeedScrollIndicator);
+
+        // Modal functions
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing) {
+            document.getElementById('modalActivityName').textContent = activityName;
+            document.getElementById('modalReason').value = activityName;
+            document.getElementById('modalStatus').style.display = 'none';
+            document.getElementById('modalStatus').className = 'form-status';
+            const customWrap = document.getElementById('modalCustomPointsWrap');
+            const customInput = document.getElementById('modalCustomPoints');
+            const birdingWrap = document.getElementById('modalBirdingWrap');
+            const birdNamesInput = document.getElementById('modalBirdNames');
+            const bingoWrap = document.getElementById('modalBingoWrap');
+            const surfingWrap = document.getElementById('modalSurfingWrap');
+            // Reset all special modes
+            customWrap.style.display = 'none';
+            customInput.required = false;
+            birdingWrap.style.display = 'none';
+            birdNamesInput.required = false;
+            bingoWrap.style.display = 'none';
+            surfingWrap.style.display = 'none';
+            if (surfing) {
+                currentModalType = 'surfing';
+                document.getElementById('modalPoints').textContent = '45 → 35 → 25 → 15 pts per session';
+                document.getElementById('modalPointsHidden').value = '';
+                surfingWrap.style.display = 'block';
+                document.getElementById('modalSurfingSession').value = '45';
+            } else if (bingo) {
+                currentModalType = 'bingo';
+                document.getElementById('modalPoints').textContent = 'up to +50 pts (claim each milestone separately)';
+                document.getElementById('modalPointsHidden').value = '';
+                bingoWrap.style.display = 'block';
+                document.getElementById('modalBingoType').value = '15';
+            } else if (birding || fishing) {
+                currentModalType = fishing ? 'fishing' : 'birding';
+                document.getElementById('modalPointsHidden').value = '';
+                birdingWrap.style.display = 'block';
+                birdNamesInput.value = '';
+                birdNamesInput.required = true;
+                document.getElementById('modalBirdingPoints').value = '5';
+                if (fishing) {
+                    document.getElementById('modalPoints').textContent = '5 pts per unique species';
+                    document.getElementById('modalSpeciesCountLabel').textContent = 'How many unique species did you catch?';
+                    document.getElementById('modalSpeciesNamesLabel').textContent = 'What did you catch?';
+                    birdNamesInput.placeholder = 'e.g. Mahi-mahi, Ahi, Blue crab';
+                } else {
+                    document.getElementById('modalPoints').textContent = '5 pts per unique bird type';
+                    document.getElementById('modalSpeciesCountLabel').textContent = 'How many unique bird types did you spot?';
+                    document.getElementById('modalSpeciesNamesLabel').textContent = 'Which birds did you spot?';
+                    birdNamesInput.placeholder = 'e.g. Nēnē, Red-footed Booby';
+                }
+            } else if (customPoints) {
+                currentModalType = null;
+                document.getElementById('modalPoints').textContent = '+10 pts per attendee';
+                document.getElementById('modalPointsHidden').value = '';
+                customWrap.style.display = 'block';
+                customInput.value = '';
+                customInput.required = true;
+            } else {
+                document.getElementById('modalPoints').textContent = points + ' pts';
+                document.getElementById('modalPointsHidden').value = points;
+            }
+            document.getElementById('activityModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('activityModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('activityModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        function submitModalForm(e) {
+            e.preventDefault();
+            const who = document.getElementById('modalGuest').value;
+            const customInput = document.getElementById('modalCustomPoints');
+            const birdingWrap = document.getElementById('modalBirdingWrap');
+            const isBirding = birdingWrap.style.display !== 'none';
+            const statusDiv = document.getElementById('modalStatus');
+
+            const isBingo = currentModalType === 'bingo';
+            const isSurfing = currentModalType === 'surfing';
+            let points, reason;
+            if (isSurfing) {
+                const surfSel = document.getElementById('modalSurfingSession');
+                points = parseInt(surfSel.value);
+                const sessionLabel = { 45: '1st', 35: '2nd', 25: '3rd', 15: '4th' }[points] || '';
+                reason = `Surfing — ${sessionLabel} session (${points} pts)`;
+            } else if (isBingo) {
+                const bingoSel = document.getElementById('modalBingoType');
+                points = parseInt(bingoSel.value);
+                reason = points === 35
+                    ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
+                    : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
+            } else if (isBirding) {
+                points = parseInt(document.getElementById('modalBirdingPoints').value);
+                const names = document.getElementById('modalBirdNames').value.trim();
+                if (!names) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = currentModalType === 'fishing' ? 'Please enter what you caught.' : 'Please enter which birds you spotted.';
+                    statusDiv.style.display = 'block';
+                    return;
+                }
+                reason = currentModalType === 'fishing'
+                    ? `Go Fishing — caught: ${names}`
+                    : `Go Birding — spotted: ${names}`;
+            } else {
+                points = customInput.required ? customInput.value : document.getElementById('modalPointsHidden').value;
+                reason = document.getElementById('modalReason').value;
+            }
+
+            if (!who) {
+                statusDiv.className = 'form-status error';
+                statusDiv.textContent = 'Please select your name.';
+                statusDiv.style.display = 'block';
+                return;
+            }
+
+            const payload = { who, points: parseInt(points), reason };
+
+            fetch(API_BASE + '/direct-award', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = data.error;
+                    statusDiv.style.display = 'block';
+                } else {
+                    statusDiv.className = 'form-status success';
+                    statusDiv.innerHTML = '🎉 Points awarded!';
+                    statusDiv.style.display = 'block';
+                    setTimeout(() => {
+                        closeModal();
+                        loadData();
+                    }, 1500);
+                }
+            })
+            .catch(err => {
+                statusDiv.className = 'form-status error';
+                statusDiv.textContent = 'Error claiming points.';
+                statusDiv.style.display = 'block';
+                console.error(err);
+            });
+        }
+
+        // Attach click handlers to activity items
+        document.querySelectorAll('.pv-item:not(.tbd)').forEach(item => {
+            item.addEventListener('click', function() {
+                const name = this.dataset.activity;
+                const points = parseInt(this.dataset.points);
+                const isSurfing = this.classList.contains('surfing-item');
+                openModal(name, points, false, false, false, false, isSurfing);
+            });
+        });
+
+        document.querySelectorAll('.pv-bonus-item:not(.tbd):not(.quiz-direct):not(.recipe-item):not(.banana-item):not(.bingo-item)').forEach(item => {
+            item.addEventListener('click', function() {
+                const name = this.dataset.activity;
+                const points = parseInt(this.dataset.points);
+                const isCustom = name === 'Team Captain';
+                const isBirding = this.classList.contains('birding-item');
+                const isFishing = this.classList.contains('fishing-item');
+                openModal(name, points, isCustom, isBirding, isFishing);
+            });
+        });
+
+        document.querySelectorAll('.bingo-item').forEach(item => {
+            item.addEventListener('click', function() {
+                openModal('Kauai Food Adventure Bingo', 15, false, false, false, true);
+            });
+        });
+
+        // Main form submission
+        document.getElementById('pointsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const who = document.getElementById('reqWho').value;
+            const points = parseInt(document.getElementById('reqPoints').value);
+            const reason = document.getElementById('reqReason').value;
+            const statusDiv = document.getElementById('formStatus');
+
+            if (!who) {
+                statusDiv.className = 'form-status error';
+                statusDiv.textContent = 'Please select your name.';
+                return;
+            }
+            if (isNaN(points) || points === 0) {
+                statusDiv.className = 'form-status error';
+                statusDiv.textContent = 'Please enter a non-zero number of points.';
+                return;
+            }
+
+            const payload = { who, points, reason };
+
+            fetch(API_BASE + '/submit-points', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = data.error;
+                } else {
+                    statusDiv.className = 'form-status success';
+                    statusDiv.textContent = '✓ Request submitted!';
+                    document.getElementById('pointsForm').reset();
+                    setTimeout(() => {
+                        loadData();
+                    }, 1500);
+                }
+            })
+            .catch(err => {
+                statusDiv.className = 'form-status error';
+                statusDiv.textContent = 'Error submitting request.';
+                console.error(err);
+            });
+        });
+
+        // Load data on page load
+        loadData();
+
+        // ── RECIPE MODAL ──────────────────────────────────────
+        function openRecipeModal() {
+            // Reset fields without touching the dropdown (it's pre-populated on load)
+            document.getElementById('recipeGuest').selectedIndex = 0;
+            document.getElementById('recipeMessage').value = '';
+            document.getElementById('recipeStatus').className = '';
+            document.getElementById('recipeStatus').style.display = 'none';
+            document.getElementById('recipeSubmitBtn').disabled = false;
+            document.getElementById('recipeSubmitBtn').textContent = 'Share & Claim +5 pts 🎉';
+            document.getElementById('recipeModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeRecipeModal() {
+            document.getElementById('recipeModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('recipeModal').addEventListener('click', function(e) {
+            if (e.target === this) closeRecipeModal();
+        });
+
+        document.getElementById('recipeItem').addEventListener('click', openRecipeModal);
+
+        async function submitRecipe(e) {
+            e.preventDefault();
+            const who = document.getElementById('recipeGuest').value;
+            const message = document.getElementById('recipeMessage').value.trim();
+            const status = document.getElementById('recipeStatus');
+            const btn = document.getElementById('recipeSubmitBtn');
+
+            if (!who || !message) {
+                status.className = 'error';
+                status.style.display = 'block';
+                status.textContent = 'Please select your name and enter a message.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Sharing...';
+
+            try {
+                const res = await fetch(API_BASE + '/submit-recipe', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ who, message })
+                });
+                const data = await res.json();
+                if (data.error) {
+                    status.className = 'error';
+                    status.style.display = 'block';
+                    status.textContent = data.error;
+                    btn.disabled = false;
+                    btn.textContent = 'Share & Claim +5 pts 🎉';
+                } else {
+                    status.className = 'success';
+                    status.style.display = 'block';
+                    status.textContent = '🎉 Posted to #recipes & 5 points claimed!';
+                    setTimeout(() => { closeRecipeModal(); loadData(); }, 1600);
+                }
+            } catch(err) {
+                status.className = 'error';
+                status.style.display = 'block';
+                status.textContent = 'Something went wrong. Please try again.';
+                btn.disabled = false;
+                btn.textContent = 'Share Recipe & Claim Points';
+            }
+        }
+
+        // ── BANANA SLUG MODAL ─────────────────────────────────
+        const BANANA_PTS = { '1': 30, '2': 15, '3': 8, '4': 4, '5': 2 };
+
+        function openBananaModal() {
+            document.getElementById('bananaGuest').selectedIndex = 0;
+            document.getElementById('bananaNumber').selectedIndex = 0;
+            document.getElementById('bananaPtsDisplay').innerHTML = '<span class="modal-points-number">+? pts</span> — select which slug below';
+            document.getElementById('bananaStatus').className = '';
+            document.getElementById('bananaStatus').style.display = 'none';
+            document.getElementById('bananaSubmitBtn').disabled = false;
+            document.getElementById('bananaSubmitBtn').textContent = 'Claim Points! 🎉';
+            // Populate guest dropdown
+            document.getElementById('bananaGuest').innerHTML =
+                '<option value="">— select your name —</option>' +
+                allGuests.map(n => `<option value="${n}">${n}</option>`).join('');
+            document.getElementById('bananaModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBananaModal() {
+            document.getElementById('bananaModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function updateBananaPoints() {
+            const sel = document.getElementById('bananaNumber');
+            const num = sel.value;
+            const pts = BANANA_PTS[num];
+            const display = document.getElementById('bananaPtsDisplay');
+            if (pts) {
+                display.innerHTML = `<span class="modal-points-number">+${pts} pts</span>`;
+            } else {
+                display.innerHTML = '<span class="modal-points-number">+? pts</span> — select which slug below';
+            }
+        }
+
+        document.getElementById('bananaModal').addEventListener('click', function(e) {
+            if (e.target === this) closeBananaModal();
+        });
+
+        document.getElementById('bananaItem').addEventListener('click', openBananaModal);
+
+        async function submitBanana(e) {
+            e.preventDefault();
+            const who = document.getElementById('bananaGuest').value;
+            const num = document.getElementById('bananaNumber').value;
+            const pts = BANANA_PTS[num];
+            const status = document.getElementById('bananaStatus');
+            const btn = document.getElementById('bananaSubmitBtn');
+
+            if (!who || !num) {
+                status.className = 'error';
+                status.style.display = 'block';
+                status.textContent = 'Please select your name and which slug this is.';
+                return;
+            }
+
+            const ordinals = { '1': '1st', '2': '2nd', '3': '3rd', '4': '4th', '5': '5th' };
+            const reason = `${ordinals[num]} Banana Slug Art for themed bathroom`;
+
+            btn.disabled = true;
+            btn.textContent = 'Claiming...';
+
+            try {
+                const res = await fetch(API_BASE + '/direct-award', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ who, points: pts, reason })
+                });
+                const data = await res.json();
+                if (data.error) {
+                    status.className = 'error';
+                    status.style.display = 'block';
+                    status.textContent = data.error;
+                    btn.disabled = false;
+                    btn.textContent = 'Claim Points! 🎉';
+                } else {
+                    status.className = 'success';
+                    status.style.display = 'block';
+                    status.textContent = `🎉 +${pts} pts claimed for your ${ordinals[num]} banana slug art!`;
+                    setTimeout(() => { closeBananaModal(); loadData(); }, 1800);
+                }
+            } catch(err) {
+                status.className = 'error';
+                status.style.display = 'block';
+                status.textContent = 'Something went wrong. Please try again.';
+                btn.disabled = false;
+                btn.textContent = 'Claim Points! 🎉';
+            }
+        }
+    </script>
+</body>
+</html>

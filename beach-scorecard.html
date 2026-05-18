@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Competition Scorecard — Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --orange: #E8823C;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+            --green-cell: #D6F0DC;
+            --green-cell-dark: #2E7245;
+            --blue-cell: #D6E8F8;
+            --blue-cell-dark: #1A5C9E;
+            --teal-cell: #D0F0F0;
+            --teal-cell-dark: #0E7070;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--cream); min-height: 100vh; }
+
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26,60,42,0.97); backdrop-filter: blur(12px);
+        }
+        .nav-inner {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 64px;
+        }
+        .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); text-decoration: none; }
+        .nav-badge { background: var(--hot-pink); color: white; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 20px; }
+
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.75), rgba(10,30,18,0.75)), url('View.jpeg') center / cover no-repeat;
+            padding: 7rem 2rem 3rem; text-align: center;
+        }
+        .page-hero h1 { font-family: 'DM Serif Display', serif; font-size: 2.8rem; color: var(--white); margin-bottom: 0.5rem; }
+        .page-hero p { color: rgba(255,255,255,0.7); font-size: 1rem; }
+
+        .main { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        .section-card { background: var(--white); border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 2rem; overflow: hidden; }
+        .section-header { background: var(--jungle); color: var(--white); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
+        .section-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; font-weight: 400; }
+        .section-header .subtitle { font-size: 0.8rem; color: rgba(255,255,255,0.65); margin-top: 0.1rem; }
+        .section-body { padding: 1.5rem; }
+
+        /* COMPETITION DATA PANEL */
+        .comp-panel { background: #EEF7F1; border: 1.5px solid #B8DFC4; border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+        .comp-panel-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+        .comp-panel-title { font-weight: 700; font-size: 0.95rem; color: var(--jungle); display: flex; align-items: center; gap: 0.5rem; }
+        .comp-status { font-size: 0.78rem; color: var(--text-light); }
+        .comp-status.loading { color: var(--jungle-light); }
+        .comp-status.error { color: var(--hot-pink); }
+        .comp-status.ok { color: var(--jungle-mid); font-weight: 600; }
+
+        .comp-teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 1rem; }
+        .comp-team-chip {
+            background: white; border: 1.5px solid #C8E8D4; border-radius: 8px;
+            padding: 0.5rem 0.75rem; font-size: 0.8rem;
+        }
+        .comp-team-chip .chip-name { font-weight: 700; color: var(--jungle); margin-bottom: 0.15rem; }
+        .comp-team-chip .chip-scores { color: var(--text-light); font-size: 0.72rem; }
+        .comp-team-chip .chip-total { font-weight: 700; color: var(--jungle-mid); }
+        .comp-team-chip.rank-1 { border-color: #D4A800; background: #FFFAEB; }
+        .comp-team-chip.rank-2 { border-color: #A0A0A0; background: #F8F8F8; }
+        .comp-team-chip.rank-3 { border-color: #CD7F32; background: #FFF4EC; }
+
+        .comp-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .comp-note { font-size: 0.75rem; color: var(--text-light); font-style: italic; }
+
+        /* LEGEND */
+        .legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.25rem; font-size: 0.78rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.4rem; }
+        .legend-box { width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0; }
+        .leg-yellow { background: #FFF9C4; border: 1.5px solid #E6C900; }
+        .leg-orange { background: #FFE8CC; border: 1.5px solid #E8823C; }
+        .leg-green  { background: var(--green-cell); border: 1.5px solid var(--green-cell-dark); }
+        .leg-teal   { background: var(--teal-cell); border: 1.5px solid var(--teal-cell-dark); }
+        .leg-blue   { background: var(--blue-cell); border: 1.5px solid var(--blue-cell-dark); }
+
+        /* TABLE */
+        .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table.score-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 1020px; }
+        .score-table th, .score-table td { border: 1px solid #E0E0E0; padding: 0.35rem 0.45rem; text-align: center; vertical-align: middle; }
+        .score-table thead tr.header-group th { background: var(--jungle-mid); color: white; font-weight: 600; font-size: 0.75rem; letter-spacing: 0.04em; white-space: nowrap; }
+        .score-table thead tr.header-sub th { background: #E8F2EC; color: var(--jungle); font-weight: 600; font-size: 0.72rem; white-space: nowrap; }
+        .score-table tbody tr:hover td { background: rgba(46,114,69,0.04); }
+        .score-table tbody tr td:first-child { text-align: left; min-width: 140px; }
+
+        .team-name-input { border: none; background: transparent; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.82rem; color: var(--text); width: 100%; min-width: 120px; padding: 0.15rem 0.25rem; border-radius: 4px; transition: background 0.15s; }
+        .team-name-input:focus { outline: none; background: #EEF7F1; }
+        .team-name-input::placeholder { color: #C0C0C0; font-weight: 400; }
+        .team-name-input.imported { color: var(--jungle); }
+
+        .place-select { border: 1.5px solid #E6C900; background: #FFF9C4; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; padding: 0.2rem 0.25rem; border-radius: 5px; width: 48px; text-align: center; cursor: pointer; color: var(--text); -webkit-appearance: none; -moz-appearance: none; }
+        .place-select:focus { outline: 2px solid var(--jungle-light); }
+        .place-select.from-comp { border-color: var(--teal-cell-dark); background: var(--teal-cell); }
+
+        .sand-input { border: 1.5px solid var(--orange); background: #FFE8CC; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; padding: 0.2rem 0.25rem; border-radius: 5px; width: 44px; text-align: center; color: var(--text); }
+        .sand-input:focus { outline: 2px solid var(--orange); }
+
+        .secs-input { border: 1.5px solid var(--blue-cell-dark); background: var(--blue-cell); font-family: 'DM Sans', sans-serif; font-size: 0.8rem; padding: 0.2rem 0.25rem; border-radius: 5px; width: 54px; text-align: center; color: var(--text); }
+        .secs-input:focus { outline: 2px solid var(--blue-cell-dark); }
+        .place-select.auto-rank { border-color: var(--blue-cell-dark); background: #C4DCEE; }
+
+        .pts-cell { background: var(--green-cell); color: var(--green-cell-dark); font-weight: 700; font-size: 0.82rem; }
+        .trivia-pts-cell { background: var(--teal-cell); color: var(--teal-cell-dark); font-weight: 700; font-size: 0.72rem; }
+        .total-cell { background: #C8EDD4; color: #1A5C32; font-weight: 800; font-size: 0.88rem; }
+        .rank-cell { background: var(--blue-cell); color: var(--blue-cell-dark); font-weight: 700; font-size: 0.88rem; }
+        .trivia-raw { font-size: 0.68rem; color: var(--teal-cell-dark); display: block; margin-top: 0.1rem; font-weight: 400; }
+
+        /* LEADERBOARD */
+        .leaderboard-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .lb-row { display: flex; align-items: center; gap: 1rem; padding: 0.75rem 1.25rem; border-radius: 10px; background: var(--cream); border: 2px solid transparent; transition: all 0.2s; }
+        .lb-row.rank-1 { background: #FFFAEB; border-color: #D4A800; }
+        .lb-row.rank-2 { background: #F5F5F5; border-color: #A0A0A0; }
+        .lb-row.rank-3 { background: #FFF2EC; border-color: #CD7F32; }
+        .lb-medal { font-size: 1.5rem; width: 2rem; text-align: center; flex-shrink: 0; }
+        .lb-rank-num { font-size: 0.9rem; font-weight: 700; color: var(--text-light); width: 1.5rem; text-align: center; flex-shrink: 0; }
+        .lb-team { flex: 1; font-weight: 700; font-size: 1rem; }
+        .lb-pts { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--jungle); font-weight: 400; }
+        .lb-pts-label { font-size: 0.72rem; color: var(--text-light); margin-left: 0.2rem; }
+        .lb-bar-wrap { flex: 1; max-width: 200px; }
+        .lb-bar-bg { background: #E8F0E9; border-radius: 10px; height: 8px; }
+        .lb-bar-fill { background: var(--jungle-light); border-radius: 10px; height: 8px; transition: width 0.4s ease; }
+
+        /* REF */
+        .ref-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .ref-card { background: var(--cream); border: 1.5px solid var(--cream-dark); border-radius: 10px; padding: 1rem; }
+        .ref-card h4 { font-size: 0.82rem; font-weight: 700; color: var(--jungle); margin-bottom: 0.5rem; letter-spacing: 0.04em; text-transform: uppercase; }
+        .ref-table { width: 100%; font-size: 0.78rem; border-collapse: collapse; }
+        .ref-table td { padding: 0.15rem 0.3rem; }
+        .ref-table td:last-child { font-weight: 700; text-align: right; color: var(--jungle-light); }
+
+        /* TOOLBAR */
+        .toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+        .btn { font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; padding: 0.5rem 1.1rem; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; letter-spacing: 0.02em; }
+        .btn-primary { background: var(--jungle); color: white; }
+        .btn-primary:hover { background: var(--jungle-mid); }
+        .btn-teal { background: var(--teal-cell); color: var(--teal-cell-dark); border: 1.5px solid var(--teal-cell-dark); }
+        .btn-teal:hover { background: #B8E8E8; }
+        .btn-danger { background: #FEE2E2; color: #B91C1C; border: 1px solid #FECACA; }
+        .btn-danger:hover { background: #FECACA; }
+        .btn-outline { background: white; color: var(--jungle); border: 1.5px solid var(--jungle); }
+        .btn-outline:hover { background: #EEF7F1; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .save-badge { font-size: 0.75rem; color: var(--jungle-light); font-weight: 600; display: none; align-items: center; gap: 0.3rem; }
+        .save-badge.visible { display: flex; }
+        .btn-dark { background: #1A1A2E; color: #E8E8FF; border: 1.5px solid #444; }
+        .btn-dark:hover { background: #0D0D1A; }
+        .btn-live { background: #F5C842; color: #3A2A00; border: 1.5px solid #D4A800; }
+        .btn-live:hover { background: #FFDD55; }
+        .btn-publish { background: var(--hot-pink); color: white; }
+        .btn-publish:hover { background: #C83558; }
+
+        /* ── ADMIN PANEL ── */
+        .admin-panel { background: #0D1117; border: 1.5px solid #30363D; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+        .admin-panel-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8B949E; white-space: nowrap; }
+        .admin-key-input {
+            font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+            border: 1.5px solid #30363D; border-radius: 8px; background: #161B22;
+            color: #E6EDF3; padding: 0.45rem 0.75rem; width: 200px;
+        }
+        .admin-key-input:focus { outline: 2px solid var(--jungle-light); border-color: transparent; }
+        .admin-status { font-size: 0.78rem; color: #8B949E; }
+        .admin-status.ok { color: #3FB950; }
+        .admin-status.err { color: #F85149; }
+
+        /* ── RANDOMIZER ── */
+        .rand-unlock { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+        .rand-key-input {
+            font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 500;
+            border: 1.5px solid var(--cream-dark); border-radius: 8px;
+            padding: 0.45rem 0.75rem; background: var(--cream); color: var(--text);
+            width: 180px;
+        }
+        .rand-key-input:focus { outline: 2px solid var(--jungle-light); border-color: transparent; }
+        .rand-status { font-size: 0.78rem; }
+        .rand-status.ok    { color: var(--jungle-mid); font-weight: 600; }
+        .rand-status.error { color: var(--hot-pink); }
+        .rand-status.info  { color: var(--text-light); }
+
+        .guest-controls { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; }
+        .guest-controls span { font-size: 0.78rem; color: var(--text-light); }
+
+        .guest-grid { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.25rem; }
+        .guest-chip {
+            display: flex; align-items: center; gap: 0.35rem;
+            background: var(--cream); border: 1.5px solid var(--cream-dark);
+            border-radius: 20px; padding: 0.25rem 0.75rem;
+            font-size: 0.8rem; font-weight: 500; cursor: pointer;
+            user-select: none; transition: all 0.15s;
+        }
+        .guest-chip input[type=checkbox] { width: 13px; height: 13px; cursor: pointer; accent-color: var(--jungle); }
+        .guest-chip:has(input:checked) { background: #EEF7F1; border-color: var(--jungle-light); color: var(--jungle); font-weight: 600; }
+
+        .extra-guests-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; margin-bottom: 1.25rem; }
+        .extra-guest-input {
+            font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+            border: 1.5px dashed #C8C8C8; border-radius: 8px;
+            padding: 0.35rem 0.65rem; background: white; color: var(--text);
+            width: 100%;
+        }
+        .extra-guest-input:focus { outline: 2px solid var(--jungle-light); border-color: transparent; border-style: solid; }
+        .extra-guest-input::placeholder { color: #C0C0C0; }
+
+        .rand-settings { display: flex; gap: 1rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; }
+        .rand-settings label { font-size: 0.82rem; font-weight: 600; color: var(--text-mid); display: flex; align-items: center; gap: 0.5rem; }
+        .rand-size-input {
+            width: 52px; border: 1.5px solid var(--cream-dark); border-radius: 6px;
+            padding: 0.3rem 0.4rem; font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem; text-align: center; background: white;
+        }
+        .rand-size-input:focus { outline: 2px solid var(--jungle-light); border-color: transparent; }
+
+        .rand-teams-output { display: none; margin-top: 1.25rem; }
+        .rand-teams-output.visible { display: block; }
+        .rand-teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem; }
+        .rand-team-card {
+            background: white; border: 2px solid var(--cream-dark); border-radius: 12px;
+            padding: 0.85rem 1rem;
+        }
+        .rand-team-card-title {
+            font-weight: 700; font-size: 0.85rem; color: var(--jungle);
+            margin-bottom: 0.5rem; padding-bottom: 0.4rem;
+            border-bottom: 1.5px solid var(--cream-dark);
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .rand-team-card-members { font-size: 0.8rem; color: var(--text-mid); line-height: 1.8; }
+        .rand-team-card-members span { display: block; }
+        .rand-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+        .rand-count-badge {
+            font-size: 0.75rem; color: var(--text-light);
+            background: var(--cream); border: 1px solid var(--cream-dark);
+            border-radius: 20px; padding: 0.2rem 0.65rem;
+        }
+
+        @media (max-width: 600px) {
+            .page-hero h1 { font-size: 2rem; }
+            .main { padding: 1.5rem 1rem 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="leaderboard.html" class="nav-logo">Zinnia &amp; Andrew</a>
+        <span class="nav-badge">🏖️ Admin · Beach Competition</span>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <h1>🏖️ Beach Competition Scorecard</h1>
+    <p>Admin-only · All changes auto-saved to this browser</p>
+</div>
+
+<div class="main">
+
+    <!-- ADMIN CONTROL PANEL -->
+    <div class="admin-panel">
+        <button class="btn btn-dark" id="godarkBtn" onclick="toggleVisibility()" title="Toggle public visibility of the beach leaderboard">🌑 Go Dark</button>
+        <button class="btn btn-publish" onclick="publishStandings()" title="Push live standings to the public leaderboard">📡 Publish Live Scores</button>
+        <button class="btn btn-danger" id="resetTeamsBtn" onclick="resetTeams()" title="Clear published teams and unlock the randomizer" style="display:none;font-size:0.78rem;padding:0.45rem 0.9rem;">🔓 Reset Teams</button>
+        <button class="btn btn-danger" onclick="clearBeachScores()" title="Delete all beach competition test submissions" style="font-size:0.78rem;padding:0.45rem 0.9rem;">🗑️ Clear Test Submissions</button>
+        <span class="admin-status" id="publishStatus"></span>
+    </div>
+
+    <!-- RANDOMIZER -->
+    <div class="section-card" id="randomizerSection">
+        <div class="section-header">
+            <div>
+                <h2>🎲 Team Randomizer</h2>
+                <div class="subtitle">Select who's participating, then randomize into balanced teams</div>
+            </div>
+        </div>
+        <div class="section-body">
+
+            <!-- Guest list loader -->
+            <div class="rand-unlock">
+                <button class="btn btn-primary" onclick="loadGuestList()">📋 Load Guest List</button>
+                <span class="rand-status info" id="randStatus">Click to load the guest list from the server</span>
+            </div>
+
+            <!-- Guest checkboxes (hidden until loaded) -->
+            <div id="randGuestSection" style="display:none;">
+                <div class="guest-controls">
+                    <strong style="font-size:0.85rem;">Select participants:</strong>
+                    <button class="btn btn-outline" style="padding:0.3rem 0.75rem;font-size:0.75rem;" onclick="selectAllGuests(true)">Select All</button>
+                    <button class="btn btn-outline" style="padding:0.3rem 0.75rem;font-size:0.75rem;" onclick="selectAllGuests(false)">Select None</button>
+                    <span id="selectedCount">0 selected</span>
+                </div>
+                <div class="guest-grid" id="guestGrid"></div>
+
+                <div style="font-weight:700;font-size:0.85rem;margin-bottom:0.5rem;color:var(--text-mid);">Add extra guests not on the list:</div>
+                <div class="extra-guests-grid" id="extraGuestsGrid"></div>
+
+                <div class="rand-settings">
+                    <label>Guests per team: <input type="number" class="rand-size-input" id="teamSizeInput" value="6" min="2" max="20"></label>
+                    <button class="btn btn-primary" onclick="randomizeTeams()" id="randBtn">🎲 Randomize Teams</button>
+                </div>
+
+                <!-- Output -->
+                <div class="rand-teams-output" id="randOutput">
+                    <div style="border-top:1.5px solid var(--cream-dark);padding-top:1.25rem;">
+                        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+                            <strong style="font-size:0.95rem;color:var(--jungle);">Teams</strong>
+                            <span class="rand-count-badge" id="randSummary"></span>
+                        </div>
+                        <div class="rand-teams-grid" id="randTeamsGrid"></div>
+                        <div class="rand-actions">
+                            <button class="btn btn-outline" onclick="randomizeTeams()">🔀 Re-randomize</button>
+                            <button class="btn btn-teal" onclick="applyTeamsToScorecard()">📋 Apply Teams to Scorecard &amp; Publish</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEAMS LOCKED PANEL (shown instead of randomizer when teams are set) -->
+    <div class="section-card" id="teamsLockedPanel" style="display:none;">
+        <div class="section-header">
+            <div>
+                <h2>🏖️ Teams</h2>
+                <div class="subtitle" id="teamsLockedSubtitle">Teams are locked · edit names in the scoring table below</div>
+            </div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <button class="btn btn-teal" onclick="publishTeamNames()" style="font-size:0.78rem;padding:0.45rem 0.9rem;">📋 Publish Name Changes</button>
+                <button class="btn btn-danger" onclick="resetTeams()" style="font-size:0.78rem;padding:0.45rem 0.9rem;">🔓 Reset &amp; Re-randomize</button>
+            </div>
+        </div>
+        <div class="section-body">
+            <div class="rand-teams-grid" id="currentTeamsGrid"></div>
+        </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <button class="btn btn-outline" onclick="resetAllScores()">🔄 Reset All Scores</button>
+        <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear Everything</button>
+        <span class="save-badge" id="saveBadge">✓ Saved</span>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="legend">
+        <div class="legend-item"><div class="legend-box leg-yellow"></div> Place input (1–10)</div>
+        <div class="legend-item"><div class="legend-box leg-orange"></div> Sand sculpture score (0–15)</div>
+        <div class="legend-item"><div class="legend-box leg-green"></div> Auto-calculated points</div>
+        <div class="legend-item"><div class="legend-box leg-teal"></div> Trivia score from competition (0–15)</div>
+        <div class="legend-item"><div class="legend-box leg-blue"></div> Auto rank</div>
+    </div>
+
+    <!-- SCORECARD TABLE -->
+    <div class="section-card">
+        <div class="section-header">
+            <div>
+                <h2>Scoring Table</h2>
+                <div class="subtitle">Trivia score pulls from the competition test · all other events are manually entered</div>
+            </div>
+            <span class="admin-status" id="autoPublishStatus" style="font-size:0.72rem;"></span>
+        </div>
+        <div class="section-body" style="padding:1rem;">
+            <div class="table-scroll">
+                <table class="score-table" id="scoreTable">
+                    <thead>
+                        <tr class="header-group">
+                            <th rowspan="2" style="text-align:left;min-width:130px;">Team</th>
+                            <th colspan="2">Wheelbarrow Race</th>
+                            <th colspan="2">3-Legged Race</th>
+                            <th colspan="3">Water Bucket Balance</th>
+                            <th colspan="2">Sponge Bucket Fill</th>
+                            <th colspan="4">Sand Sculpture</th>
+                            <th rowspan="2" style="background:#0E5050;color:white;">🏖️ Beach Test</th>
+                            <th rowspan="2" style="background:var(--jungle);color:white;">Total</th>
+                            <th rowspan="2" style="background:var(--jungle);color:white;">Rank</th>
+                        </tr>
+                        <tr class="header-sub">
+                            <th>Place</th><th>Pts</th>
+                            <th>Place</th><th>Pts</th>
+                            <th>Secs</th><th>Place</th><th>Pts</th>
+                            <th>Place</th><th>Pts</th>
+                            <th>Size<br><span style="font-weight:400;font-size:0.68rem;">/15</span></th>
+                            <th>Cre.<br><span style="font-weight:400;font-size:0.68rem;">/15</span></th>
+                            <th>Craft.<br><span style="font-weight:400;font-size:0.68rem;">/15</span></th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoreBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD -->
+    <div class="section-card">
+        <div class="section-header">
+            <div>
+                <h2>🏆 Leaderboard</h2>
+                <div class="subtitle">Auto-sorted by total points · updates live</div>
+            </div>
+        </div>
+        <div class="section-body">
+            <div class="leaderboard-list" id="leaderboard"></div>
+        </div>
+    </div>
+
+    <!-- COMPETITION DATA PANEL -->
+    <div class="section-card">
+        <div class="section-header">
+            <div>
+                <h2>📱 Beach Competition Test — Live Data</h2>
+                <div class="subtitle">Event 3 (Z&amp;A Trivia) scores are pulled directly from the beach competition test</div>
+            </div>
+            <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.4);color:white;font-size:0.75rem;" onclick="fetchCompData()">🔄 Refresh</button>
+        </div>
+        <div class="section-body">
+            <div class="comp-panel">
+                <div class="comp-panel-header">
+                    <div class="comp-panel-title">🏖️ Beach Test Submissions</div>
+                    <div class="comp-status loading" id="compStatus">Loading…</div>
+                </div>
+                <div class="comp-teams-grid" id="compTeamsGrid">
+                    <div style="color:var(--text-light);font-size:0.85rem;">Fetching competition data…</div>
+                </div>
+                <div class="comp-actions">
+                    <span class="comp-note">Beach test scores automatically sync to the scorecard when a team name matches. Race &amp; sculpture scores are never overwritten.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POINTS REFERENCE -->
+    <div class="section-card">
+        <div class="section-header">
+            <div><h2>Points Reference</h2></div>
+        </div>
+        <div class="section-body">
+            <div class="ref-grid">
+                <div class="ref-card">
+                    <h4>Races (per event)</h4>
+                    <table class="ref-table">
+                        <tr><td>1st place</td><td>10 pts</td></tr>
+                        <tr><td>2nd place</td><td>9 pts</td></tr>
+                        <tr><td>3rd place</td><td>8 pts</td></tr>
+                        <tr><td>4th place</td><td>7 pts</td></tr>
+                        <tr><td>5th place</td><td>6 pts</td></tr>
+                        <tr><td>6th place</td><td>5 pts</td></tr>
+                        <tr><td>7th place</td><td>4 pts</td></tr>
+                        <tr><td>8th place</td><td>3 pts</td></tr>
+                        <tr><td>9th place</td><td>2 pts</td></tr>
+                        <tr><td>10th place</td><td>1 pt</td></tr>
+                    </table>
+                </div>
+                <div class="ref-card">
+                    <h4>Event 2 · Sand Sculpture</h4>
+                    <table class="ref-table">
+                        <tr><td>Size</td><td>0–15 pts</td></tr>
+                        <tr><td>Creativity</td><td>0–15 pts</td></tr>
+                        <tr><td>Craftsmanship</td><td>0–15 pts</td></tr>
+                        <tr><td><strong>Max total</strong></td><td><strong>45 pts</strong></td></tr>
+                    </table>
+                </div>
+                <div class="ref-card">
+                    <h4>🏖️ Beach Test Results</h4>
+                    <table class="ref-table">
+                        <tr><td colspan="2" style="color:var(--teal-cell-dark);font-weight:600;padding-top:0.3rem;">Trivia (max 15)</td></tr>
+                        <tr><td>S1 trivia (Q1–5)</td><td>1 pt each</td></tr>
+                        <tr><td>S3 trivia (Q6–10)</td><td>1 pt each</td></tr>
+                        <tr><td>S5 trivia (Q11–15)</td><td>1 pt each</td></tr>
+                        <tr><td colspan="2" style="color:var(--teal-cell-dark);font-weight:600;padding-top:0.5rem;">Strands, Wordle &amp; Connections (max 5 each)</td></tr>
+                        <tr><td>1st place</td><td>5 pts</td></tr>
+                        <tr><td>2nd place</td><td>4 pts</td></tr>
+                        <tr><td>3rd place</td><td>3 pts</td></tr>
+                        <tr><td>4th place</td><td>2 pts</td></tr>
+                        <tr><td>5th place +</td><td>1 pt</td></tr>
+                    </table>
+                </div>
+                <div class="ref-card">
+                    <h4>Max Possible Scores</h4>
+                    <table class="ref-table">
+                        <tr><td>Event 1a</td><td>10 pts</td></tr>
+                        <tr><td>Event 1b</td><td>10 pts</td></tr>
+                        <tr><td>Event 1c</td><td>10 pts</td></tr>
+                        <tr><td>Event 1d</td><td>10 pts</td></tr>
+                        <tr><td>Event 2</td><td>45 pts</td></tr>
+                        <tr><td>Trivia</td><td>15 pts</td></tr>
+                        <tr><td>Strands</td><td>5 pts</td></tr>
+                        <tr><td>Wordle</td><td>5 pts</td></tr>
+                        <tr><td>Connections</td><td>5 pts</td></tr>
+                        <tr><td><strong>Grand Max</strong></td><td><strong>115 pts</strong></td></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+const RACE_PTS  = [0, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]; // index = place
+const RANK_PTS  = [5, 4, 3, 2]; // 1st=5 … 4th=2, 5th+=1
+const NUM_TEAMS = 10;
+const STORAGE_KEY = 'beach_olympics_scorecard_v2';
+
+function getRankPts(rank) { return RANK_PTS[rank - 1] ?? 1; }
+
+// ─── STATE ───────────────────────────────────────────────────
+let state = loadState();
+let compRankings = []; // [{teamName, triviaTotal, s1, s3, s5, s2Pts, s4Pts, s6Pts}]
+
+function defaultTeam(i) {
+    return { name: '', members: [], e1a: 0, e1b: 0, e1c: 0, e1d: 0, wbSecs: '',
+             sand_size: '', sand_cre: '', sand_craft: '',
+             e3Score: 0, s2Score: 0, s4Score: 0, s6Score: 0, fromComp: false };
+}
+function defaultState() {
+    return { teams: Array.from({length: NUM_TEAMS}, (_, i) => defaultTeam(i)), teamsLocked: false };
+}
+function loadState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+            const p = JSON.parse(raw);
+            if (p && Array.isArray(p.teams) && p.teams.length > 0) {
+                // Migrate missing fields
+                p.teams.forEach(t => {
+                    if (t.e3Score === undefined) { t.e3Score = 0; delete t.e3; delete t.triviaRaw; }
+                    if (t.s2Score === undefined) t.s2Score = 0;
+                    if (t.s4Score === undefined) t.s4Score = 0;
+                    if (t.s6Score === undefined) t.s6Score = 0;
+                    if (t.fromComp === undefined) { t.fromComp = t.e3FromComp || false; delete t.e3FromComp; }
+                    if (t.wbSecs === undefined) t.wbSecs = '';
+                    if (!Array.isArray(t.members)) t.members = [];
+                });
+                if (p.teamsLocked === undefined) p.teamsLocked = false;
+                return p;
+            }
+        }
+    } catch(e) {}
+    return defaultState();
+}
+function saveState() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        const badge = document.getElementById('saveBadge');
+        badge.classList.add('visible');
+        clearTimeout(badge._t);
+        badge._t = setTimeout(() => badge.classList.remove('visible'), 1800);
+    } catch(e) {}
+}
+
+// ─── COMPUTED ─────────────────────────────────────────────────
+function computeTeam(t) {
+    const pts1a = RACE_PTS[t.e1a] || 0;
+    const pts1b = RACE_PTS[t.e1b] || 0;
+    const pts1c = RACE_PTS[t.e1c] || 0;
+    const pts1d = RACE_PTS[t.e1d] || 0;
+    const sandTotal = Math.min(45, (parseInt(t.sand_size)||0) + (parseInt(t.sand_cre)||0) + (parseInt(t.sand_craft)||0));
+    const sandHasVal = t.sand_size !== '' || t.sand_cre !== '' || t.sand_craft !== '';
+    const ptsS  = sandHasVal ? sandTotal : 0;
+    const pts3  = Math.min(15, parseInt(t.e3Score) || 0);
+    const ptsS2 = Math.min(5,  parseInt(t.s2Score) || 0);
+    const ptsS4 = Math.min(5,  parseInt(t.s4Score) || 0);
+    const ptsS6 = Math.min(5,  parseInt(t.s6Score) || 0);
+    const total = pts1a + pts1b + pts1c + pts1d + ptsS + pts3 + ptsS2 + ptsS4 + ptsS6;
+    return { pts1a, pts1b, pts1c, pts1d, ptsS, sandHasVal, sandTotal, pts3, ptsS2, ptsS4, ptsS6, total };
+}
+
+// ─── FETCH COMPETITION DATA ───────────────────────────────────
+async function fetchCompData() {
+    const statusEl = document.getElementById('compStatus');
+    const gridEl   = document.getElementById('compTeamsGrid');
+    statusEl.className = 'comp-status loading';
+    statusEl.textContent = 'Loading…';
+    gridEl.innerHTML = '<div style="color:var(--text-light);font-size:0.85rem;">Fetching…</div>';
+
+    try {
+        const res = await fetch('/.netlify/functions/get-beach-scores');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const scores = data.scores || [];
+
+        // Deduplicate by teamName — per field, keep best value across submissions
+        const bestByTeam = {};
+        for (const s of scores) {
+            const key = (s.teamName || '').trim().toLowerCase();
+            if (!key) continue;
+            if (!bestByTeam[key]) bestByTeam[key] = {
+                teamName: (s.teamName || '').trim(),
+                s1: 0, s3: 0, s5: 0, triviaTotal: 0,
+                spagramElapsedSec: null, spagramHints: 0,
+                wordleElapsedSec: null, connElapsedSec: null
+            };
+            const t = bestByTeam[key];
+            // Trivia: keep best total
+            const trivia = (s.triviaScore||0) + (s.section3Score||0) + (s.section5Score||0);
+            if (trivia > t.triviaTotal) { t.s1 = s.triviaScore||0; t.s3 = s.section3Score||0; t.s5 = s.section5Score||0; t.triviaTotal = trivia; }
+            // Times: keep fastest (lowest)
+            if (s.spagramElapsedSec != null && (t.spagramElapsedSec === null || s.spagramElapsedSec < t.spagramElapsedSec))
+                { t.spagramElapsedSec = s.spagramElapsedSec; t.spagramHints = s.spagramHints || 0; }
+            if (s.wordleElapsedSec != null && (t.wordleElapsedSec === null || s.wordleElapsedSec < t.wordleElapsedSec))
+                t.wordleElapsedSec = s.wordleElapsedSec;
+            if (s.connElapsedSec != null && (t.connElapsedSec === null || s.connElapsedSec < t.connElapsedSec))
+                t.connElapsedSec = s.connElapsedSec;
+        }
+
+        // Compute rank pts for timed events (same formula as beach leaderboard)
+        const teamsArr = Object.values(bestByTeam);
+        function rankField(arr, timeKey, hintsKey) {
+            const done = arr.map((t, i) => ({i, time: t[timeKey]})).filter(x => x.time != null).sort((a,b) => a.time - b.time);
+            const out = {};
+            done.forEach((x, r0) => {
+                const hp = hintsKey ? Math.floor((arr[x.i][hintsKey]||0) / 2) : 0;
+                out[arr[x.i].teamName.toLowerCase()] = Math.max(1, getRankPts(r0+1) - hp);
+            });
+            return out;
+        }
+        const s2Map = rankField(teamsArr, 'spagramElapsedSec', 'spagramHints');
+        const s4Map = rankField(teamsArr, 'wordleElapsedSec', null);
+        const s6Map = rankField(teamsArr, 'connElapsedSec', null);
+
+        // Attach rank pts to each team
+        compRankings = teamsArr.map(t => ({
+            ...t,
+            s2Pts: s2Map[t.teamName.toLowerCase()] || 0,
+            s4Pts: s4Map[t.teamName.toLowerCase()] || 0,
+            s6Pts: s6Map[t.teamName.toLowerCase()] || 0,
+        })).sort((a, b) => b.triviaTotal - a.triviaTotal || a.teamName.localeCompare(b.teamName));
+
+        if (compRankings.length === 0) {
+            statusEl.className = 'comp-status';
+            statusEl.textContent = 'No submissions yet.';
+            gridEl.innerHTML = '<div style="color:var(--text-light);font-size:0.85rem;">No team data found. Teams need to submit the beach competition test first.</div>';
+            return;
+        }
+
+        statusEl.className = 'comp-status ok';
+        statusEl.textContent = `${compRankings.length} team${compRankings.length !== 1 ? 's' : ''} found`;
+
+        // Submission tracker: which scorecard teams still haven't submitted
+        const submittedNames = new Set(compRankings.map(t => t.teamName.trim().toLowerCase()));
+        const totalTeams = state.teams.filter(t => t.name && t.name.trim()).length;
+        const submittedCount = state.teams.filter(t => t.name && submittedNames.has(t.name.trim().toLowerCase())).length;
+        const missingTeams = state.teams.filter(t => t.name && t.name.trim() && !submittedNames.has(t.name.trim().toLowerCase())).map(t => t.name.trim());
+        statusEl.className = submittedCount === totalTeams && totalTeams > 0 ? 'comp-status ok' : 'comp-status';
+        statusEl.textContent = totalTeams > 0
+            ? `${submittedCount}/${totalTeams} teams submitted${missingTeams.length ? ' · missing: ' + missingTeams.join(', ') : ' ✓'}`
+            : `${compRankings.length} submission${compRankings.length !== 1 ? 's' : ''} found`;
+
+        // Render chips
+        const fmtRk = pts => pts > 0 ? `${pts}pt` : '—';
+        gridEl.innerHTML = compRankings.map((t, idx) => {
+            const rankClass = idx === 0 ? 'rank-1' : idx === 1 ? 'rank-2' : idx === 2 ? 'rank-3' : '';
+            const medal = idx === 0 ? '🥇 ' : idx === 1 ? '🥈 ' : idx === 2 ? '🥉 ' : '';
+            const total = t.triviaTotal + t.s2Pts + t.s4Pts + t.s6Pts;
+            return `<div class="comp-team-chip ${rankClass}">
+                <div class="chip-name">${medal}${escHtml(t.teamName)}</div>
+                <div class="chip-scores">Trivia: <span class="chip-total">${t.triviaTotal}/15</span> · Strands: ${fmtRk(t.s2Pts)} · Wordle: ${fmtRk(t.s4Pts)} · Conn: ${fmtRk(t.s6Pts)} · <strong>Total: ${total}pts</strong></div>
+            </div>`;
+        }).join('');
+
+        // Auto-apply beach test scores to matching teams in scorecard (match by name, case-insensitive)
+        // Only updates test score fields — never touches race/sculpture scores or team names
+        autoApplyTestScores();
+
+    } catch (err) {
+        statusEl.className = 'comp-status error';
+        statusEl.textContent = 'Error loading data — are you on the live site?';
+        gridEl.innerHTML = '<div style="color:var(--hot-pink);font-size:0.85rem;">Could not reach the competition API. This page works fully when deployed to Netlify.</div>';
+    }
+}
+
+// ─── AUTO-APPLY TEST SCORES ───────────────────────────────────
+// Silently updates e3Score/s2Score/s4Score/s6Score for any scorecard team whose
+// name matches a competition submission. Never overwrites race or sculpture scores.
+function autoApplyTestScores() {
+    if (compRankings.length === 0) return;
+    // Build a lookup map: lowercase name → comp entry
+    const compMap = {};
+    for (const cr of compRankings) {
+        compMap[cr.teamName.trim().toLowerCase()] = cr;
+    }
+    let changed = false;
+    state.teams.forEach(t => {
+        const key = (t.name || '').trim().toLowerCase();
+        if (!key) return;
+        const cr = compMap[key];
+        if (!cr) return;
+        // Only update if the comp value is better or the field hasn't been set manually
+        if (t.e3Score !== cr.triviaTotal || t.s2Score !== cr.s2Pts || t.s4Score !== cr.s4Pts || t.s6Score !== cr.s6Pts) {
+            t.e3Score  = cr.triviaTotal;
+            t.s2Score  = cr.s2Pts;
+            t.s4Score  = cr.s4Pts;
+            t.s6Score  = cr.s6Pts;
+            t.fromComp = true;
+            changed = true;
+        }
+    });
+    if (changed) {
+        saveState();
+        buildTable();
+        document.getElementById('compStatus').textContent += ' · scores synced ✓';
+        scheduleAutoPublish();
+    }
+}
+
+// ─── BUILD TABLE ──────────────────────────────────────────────
+function buildTable() {
+    const tbody = document.getElementById('scoreBody');
+    tbody.innerHTML = '';
+
+    state.teams.forEach((team, i) => {
+        const tr = document.createElement('tr');
+
+        // ── Team name ──
+        const tdName = document.createElement('td');
+        tdName.style.textAlign = 'left';
+        const inp = document.createElement('input');
+        inp.type = 'text';
+        inp.className = 'team-name-input' + (team.fromComp ? ' imported' : '');
+        inp.placeholder = `Team ${i + 1}`;
+        inp.value = team.name;
+        inp.dataset.idx = i;
+        inp.dataset.field = 'name';
+        // Name inputs remain editable even when locked — lock only blocks re-randomizing
+        inp.addEventListener('input', onInput);
+        tdName.appendChild(inp);
+        tr.appendChild(tdName);
+
+        // ── Race events 1a–1d (Water Bucket = e1c gets an extra Secs input) ──
+        ['e1a','e1b','e1c','e1d'].forEach(ev => {
+            // Water Bucket: insert Secs cell first
+            if (ev === 'e1c') {
+                const tdSecs = document.createElement('td');
+                const secsInp = document.createElement('input');
+                secsInp.type = 'number';
+                secsInp.className = 'secs-input';
+                secsInp.min = 0; secsInp.step = 0.1;
+                secsInp.value = team.wbSecs !== '' ? team.wbSecs : '';
+                secsInp.placeholder = '—';
+                secsInp.dataset.idx = i;
+                secsInp.dataset.field = 'wbSecs';
+                secsInp.addEventListener('input', onInput);
+                tdSecs.appendChild(secsInp);
+                tr.appendChild(tdSecs);
+            }
+            const tdP = document.createElement('td');
+            const sel = buildPlaceSelect(i, ev, team[ev], false);
+            // Water Bucket place is auto-ranked when secs are entered
+            if (ev === 'e1c' && team.wbSecs !== '' && parseFloat(team.wbSecs) > 0) {
+                sel.classList.add('auto-rank');
+            }
+            tdP.appendChild(sel);
+            tr.appendChild(tdP);
+            const tdPts = document.createElement('td');
+            tdPts.className = 'pts-cell';
+            tdPts.textContent = (RACE_PTS[team[ev]] || 0) > 0 ? RACE_PTS[team[ev]] : '—';
+            tr.appendChild(tdPts);
+        });
+
+        // ── Sand sculpture ──
+        ['sand_size','sand_cre','sand_craft'].forEach(f => {
+            const tdS = document.createElement('td');
+            const inp2 = document.createElement('input');
+            inp2.type = 'number';
+            inp2.className = 'sand-input';
+            inp2.min = 0; inp2.max = 15;
+            inp2.value = team[f] !== '' ? team[f] : '';
+            inp2.placeholder = '—';
+            inp2.dataset.idx = i;
+            inp2.dataset.field = f;
+            inp2.addEventListener('input', onInput);
+            tdS.appendChild(inp2);
+            tr.appendChild(tdS);
+        });
+        const c = computeTeam(team);
+        const tdST = document.createElement('td');
+        tdST.className = 'pts-cell';
+        tdST.id = `sandTot_${i}`;
+        tdST.textContent = c.sandHasVal ? c.sandTotal : '—';
+        tr.appendChild(tdST);
+
+        // ── Beach test total (auto-populated; breakdown stored in state for publishing) ──
+        const tdBT = document.createElement('td');
+        tdBT.className = 'trivia-pts-cell';
+        tdBT.id = `beachTest_${i}`;
+        const btTotal = c.pts3 + c.ptsS2 + c.ptsS4 + c.ptsS6;
+        tdBT.textContent = btTotal > 0 ? btTotal : '—';
+        tr.appendChild(tdBT);
+
+        // ── Total ──
+        const tdTotal = document.createElement('td');
+        tdTotal.className = 'total-cell';
+        tdTotal.id = `total_${i}`;
+        tdTotal.textContent = c.total > 0 ? c.total : '—';
+        tr.appendChild(tdTotal);
+
+        // ── Rank ──
+        const tdRank = document.createElement('td');
+        tdRank.className = 'rank-cell';
+        tdRank.id = `rank_${i}`;
+        tr.appendChild(tdRank);
+
+        tbody.appendChild(tr);
+    });
+
+    updateRanks();
+    renderLeaderboard();
+    if (state.teamsLocked) renderCurrentTeams();
+}
+
+function buildPlaceSelect(idx, field, val, fromComp) {
+    const sel = document.createElement('select');
+    sel.className = 'place-select' + (fromComp ? ' from-comp' : '');
+    sel.dataset.idx = idx;
+    sel.dataset.field = field;
+    const opt0 = document.createElement('option');
+    opt0.value = '0'; opt0.textContent = '—';
+    sel.appendChild(opt0);
+    for (let p = 1; p <= 10; p++) {
+        const opt = document.createElement('option');
+        opt.value = p; opt.textContent = p;
+        if (val == p) opt.selected = true;
+        sel.appendChild(opt);
+    }
+    sel.addEventListener('change', onInput);
+    return sel;
+}
+
+// ─── NAME SYNC TO SERVER (debounced) ─────────────────────────
+const _namePushTimer = {};
+function pushNameToServer(index, name) {
+    clearTimeout(_namePushTimer[index]);
+    _namePushTimer[index] = setTimeout(async () => {
+        if (!name.trim()) return;
+        try {
+            await fetch('/.netlify/functions/update-team-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index, newName: name.trim() })
+            });
+        } catch(e) {} // best-effort silent sync
+    }, 800);
+}
+
+// ─── INPUT HANDLER ────────────────────────────────────────────
+function onInput(e) {
+    const idx   = parseInt(e.target.dataset.idx);
+    const field = e.target.dataset.field;
+    const val   = e.target.value;
+
+    if (field === 'name') {
+        state.teams[idx].name = val;
+        pushNameToServer(idx, val); // keep server in sync as you type
+    } else if (['e1a','e1b','e1c','e1d'].includes(field)) {
+        state.teams[idx][field] = parseInt(val) || 0;
+    } else if (field === 'wbSecs') {
+        const n = val === '' ? '' : Math.max(0, parseFloat(val) || 0);
+        state.teams[idx].wbSecs = n;
+        // Auto-rank water bucket places based on seconds; also rebuilds DOM
+        recalcWaterBucketPlaces();
+        saveState();
+        updateRanks();
+        renderLeaderboard();
+        scheduleAutoPublish();
+        return; // recalcWaterBucketPlaces already does a full table refresh
+    } else if (['sand_size','sand_cre','sand_craft'].includes(field)) {
+        let n = parseInt(val);
+        if (isNaN(n)) n = '';
+        else n = Math.max(0, Math.min(15, n));
+        if (!isNaN(n)) e.target.value = n;
+        state.teams[idx][field] = n;
+    }
+
+    saveState();
+    refreshRow(idx);
+    updateRanks();
+    renderLeaderboard();
+    scheduleAutoPublish();
+}
+
+// ─── WATER BUCKET AUTO-RANK ───────────────────────────────────
+// Ranks all teams by seconds held (longest = 1st). Teams with no secs keep their manual place.
+function recalcWaterBucketPlaces() {
+    // Collect teams that have seconds entered
+    const withSecs = state.teams
+        .map((t, i) => ({ i, secs: t.wbSecs !== '' ? parseFloat(t.wbSecs) : null }))
+        .filter(x => x.secs !== null && !isNaN(x.secs));
+
+    if (withSecs.length > 0) {
+        // Sort descending: most seconds = best place
+        withSecs.sort((a, b) => b.secs - a.secs);
+        // Assign places with tie handling
+        let assignedPlace = 1;
+        withSecs.forEach((x, r) => {
+            if (r > 0 && x.secs === withSecs[r - 1].secs) {
+                state.teams[x.i].e1c = state.teams[withSecs[r - 1].i].e1c;
+            } else {
+                state.teams[x.i].e1c = assignedPlace;
+            }
+            assignedPlace++;
+        });
+    }
+
+    // Update DOM: refresh place selects and pts cells
+    const tbody = document.getElementById('scoreBody');
+    state.teams.forEach((t, i) => {
+        const row = tbody.rows[i];
+        if (!row) return;
+        // New column layout with secs: 0=name, 1=e1a-pl, 2=e1a-pts, 3=e1b-pl, 4=e1b-pts,
+        //   5=wbSecs, 6=e1c-pl, 7=e1c-pts, 8=e1d-pl, 9=e1d-pts, ...
+        const secsCell = row.cells[5];
+        const placeCell = row.cells[6];
+        const ptsCell = row.cells[7];
+        if (placeCell) {
+            const sel = placeCell.querySelector('select');
+            if (sel) {
+                sel.value = t.e1c || 0;
+                if (t.wbSecs !== '' && parseFloat(t.wbSecs) > 0) {
+                    sel.classList.add('auto-rank');
+                } else {
+                    sel.classList.remove('auto-rank');
+                }
+            }
+        }
+        if (ptsCell) {
+            ptsCell.textContent = (RACE_PTS[t.e1c] || 0) > 0 ? RACE_PTS[t.e1c] : '—';
+        }
+        refreshRow(i);
+    });
+}
+
+function refreshRow(idx) {
+    const t = state.teams[idx];
+    const c = computeTeam(t);
+    const tbody = document.getElementById('scoreBody');
+    const row   = tbody.rows[idx];
+    if (!row) return;
+    const cells = row.cells;
+    // Cols: 0=name, 1=e1a-pl, 2=e1a-pts, 3=e1b-pl, 4=e1b-pts,
+    //       5=wbSecs, 6=e1c-pl, 7=e1c-pts, 8=e1d-pl, 9=e1d-pts,
+    //       10=sand_size, 11=sand_cre, 12=sand_craft, 13=sand-pts, 14=beach-test-total, 15=total, 16=rank
+    cells[2].textContent  = c.pts1a > 0 ? c.pts1a : '—';
+    cells[4].textContent  = c.pts1b > 0 ? c.pts1b : '—';
+    // cells[5] = secs input (don't overwrite)
+    // cells[6] = e1c place select (updated by recalcWaterBucketPlaces when needed)
+    cells[7].textContent  = c.pts1c > 0 ? c.pts1c : '—';
+    cells[9].textContent  = c.pts1d > 0 ? c.pts1d : '—';
+    cells[13].textContent = c.sandHasVal ? c.sandTotal : '—';
+    const bt = c.pts3 + c.ptsS2 + c.ptsS4 + c.ptsS6;
+    cells[14].textContent = bt > 0 ? bt : '—';
+    cells[15].textContent = c.total > 0 ? c.total : '—';
+}
+
+function updateRanks() {
+    const totals = state.teams.map((t, i) => ({ i, total: computeTeam(t).total }));
+    const sorted = [...totals].sort((a, b) => b.total - a.total);
+    const rankMap = {};
+    let r = 1;
+    for (let j = 0; j < sorted.length; j++) {
+        if (j > 0 && sorted[j].total === sorted[j-1].total) {
+            rankMap[sorted[j].i] = rankMap[sorted[j-1].i];
+        } else {
+            rankMap[sorted[j].i] = r;
+        }
+        r++;
+    }
+    totals.forEach(({ i, total }) => {
+        const cell = document.getElementById(`rank_${i}`);
+        if (!cell) return;
+        if (total > 0) {
+            const rk = rankMap[i];
+            cell.textContent = rk === 1 ? '🥇' : rk === 2 ? '🥈' : rk === 3 ? '🥉' : '#' + rk;
+        } else {
+            cell.textContent = '—';
+        }
+    });
+}
+
+function renderLeaderboard() {
+    const lb = document.getElementById('leaderboard');
+    const entries = state.teams
+        .map((t, i) => ({ name: t.name || ('Team ' + (i+1)), total: computeTeam(t).total }))
+        .filter(e => e.total > 0)
+        .sort((a, b) => b.total - a.total);
+
+    if (entries.length === 0) {
+        lb.innerHTML = '<p style="color:var(--text-light);font-size:0.9rem;text-align:center;padding:1rem;">No scores entered yet.</p>';
+        return;
+    }
+    const maxPts = entries[0].total || 1;
+    const ranks = [];
+    let r = 1;
+    for (let j = 0; j < entries.length; j++) {
+        if (j > 0 && entries[j].total === entries[j-1].total) ranks.push(ranks[j-1]);
+        else ranks.push(r);
+        r++;
+    }
+    lb.innerHTML = entries.map((e, j) => {
+        const rk = ranks[j];
+        const medal = rk === 1 ? '🥇' : rk === 2 ? '🥈' : rk === 3 ? '🥉' : '';
+        const rc = rk === 1 ? 'rank-1' : rk === 2 ? 'rank-2' : rk === 3 ? 'rank-3' : '';
+        return `<div class="lb-row ${rc}">
+            <div class="lb-medal">${medal}</div>
+            <div class="lb-rank-num">${medal ? '' : '#'+rk}</div>
+            <div class="lb-team">${escHtml(e.name)}</div>
+            <div class="lb-bar-wrap"><div class="lb-bar-bg"><div class="lb-bar-fill" style="width:${Math.round(e.total/maxPts*100)}%"></div></div></div>
+            <div class="lb-pts">${e.total}<span class="lb-pts-label">pts</span></div>
+        </div>`;
+    }).join('');
+}
+
+function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── RESET / CLEAR ────────────────────────────────────────────
+function resetAllScores() {
+    if (!confirm('Reset all scores to zero? Team names will be kept.')) return;
+    state.teams.forEach(t => {
+        t.e1a = 0; t.e1b = 0; t.e1c = 0; t.e1d = 0; t.wbSecs = '';
+        t.sand_size = ''; t.sand_cre = ''; t.sand_craft = '';
+        t.e3Score = 0; t.s2Score = 0; t.s4Score = 0; t.s6Score = 0; t.fromComp = false;
+    });
+    saveState();
+    buildTable();
+}
+function clearAllData() {
+    if (!confirm('Clear ALL data including team names? This cannot be undone.')) return;
+    state = defaultState();
+    saveState();
+    buildTable();
+}
+
+// ─── ADMIN KEY (shared) ───────────────────────────────────────
+// Key is stored in sessionStorage; prompted once on first action if missing.
+function getAdminKey() {
+    let key = sessionStorage.getItem('beach_admin_key') || '';
+    if (!key) {
+        key = (prompt('Enter admin key:') || '').trim();
+        if (key) {
+            sessionStorage.setItem('beach_admin_key', key);
+            sessionStorage.setItem('beach_rand_admin_key', key); // compat
+        }
+    }
+    return key;
+}
+async function fetchVisibility() {
+    try {
+        const res = await fetch('/.netlify/functions/get-beach-scores');
+        if (!res.ok) return;
+        const data = await res.json();
+        updateGoDarkBtn(!!data.hidden);
+
+        // Sync team names + members from server into local state
+        // Server is authoritative for names (public renames flow through server)
+        if (Array.isArray(data.teams) && data.teams.length > 0) {
+            let changed = false;
+            // Grow local state if server has more teams
+            while (state.teams.length < data.teams.length) {
+                state.teams.push(defaultTeam(state.teams.length));
+                changed = true;
+            }
+            data.teams.forEach((t, i) => {
+                const serverTeam = typeof t === 'string' ? { name: t, members: [] } : t;
+                const serverName = serverTeam.name || '';
+                if (serverName && serverName !== state.teams[i].name) {
+                    state.teams[i].name = serverName;
+                    changed = true;
+                }
+                // Sync members if server has them and local doesn't
+                if (Array.isArray(serverTeam.members) && serverTeam.members.length > 0
+                        && (!Array.isArray(state.teams[i].members) || state.teams[i].members.length === 0)) {
+                    state.teams[i].members = serverTeam.members;
+                    changed = true;
+                }
+            });
+            if (changed) saveState();
+        }
+
+        // Sync lock state from server (server is authoritative)
+        if (typeof data.teamsLocked === 'boolean') {
+            updateLockUI(data.teamsLocked);
+        }
+        buildTable(); // re-render with latest names + lock state
+    } catch(e) {}
+}
+function updateGoDarkBtn(hidden) {
+    const btn = document.getElementById('godarkBtn');
+    if (hidden) {
+        btn.textContent = '🌕 Go Live';
+        btn.className = 'btn btn-live';
+        btn.title = 'Scores are currently hidden — click to show publicly';
+    } else {
+        btn.textContent = '🌑 Go Dark';
+        btn.className = 'btn btn-dark';
+        btn.title = 'Click to hide scores from the public leaderboard';
+    }
+}
+async function toggleVisibility() {
+    const key = getAdminKey();
+    if (!key) { alert('Enter admin key first.'); return; }
+    const btn = document.getElementById('godarkBtn');
+    const currentlyDark = btn.textContent.includes('Go Live');
+    const newHidden = !currentlyDark;
+    btn.disabled = true;
+    try {
+        const res = await fetch('/.netlify/functions/beach-visibility', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ hidden: newHidden })
+        });
+        if (!res.ok) { alert('Failed — check admin key.'); btn.disabled = false; return; }
+        const { hidden } = await res.json();
+        updateGoDarkBtn(hidden);
+    } catch(e) { alert('Network error.'); }
+    btn.disabled = false;
+}
+// ─── LOCK UI ─────────────────────────────────────────────────
+function updateLockUI(locked) {
+    state.teamsLocked = locked;
+    saveState();
+
+    // Toggle randomizer vs. teams-locked panel
+    const randSection  = document.getElementById('randomizerSection');
+    const lockedPanel  = document.getElementById('teamsLockedPanel');
+    const resetBtn     = document.getElementById('resetTeamsBtn');
+    if (randSection)  randSection.style.display  = locked ? 'none' : '';
+    if (lockedPanel)  lockedPanel.style.display   = locked ? '' : 'none';
+    if (resetBtn)     resetBtn.style.display      = locked ? 'inline-flex' : 'none';
+
+    if (locked) renderCurrentTeams();
+
+    // Keep Apply / Re-randomize buttons disabled when locked (they may still exist if panel was just built)
+    const applyBtn = document.querySelector('[onclick="applyTeamsToScorecard()"]');
+    if (applyBtn) {
+        applyBtn.disabled = locked;
+        applyBtn.title = locked ? 'Teams are locked — Reset Teams first' : 'Apply randomized teams to the scorecard';
+    }
+    const randBtn = document.getElementById('randBtn');
+    if (randBtn) {
+        randBtn.disabled = locked;
+        randBtn.title = locked ? 'Team assignments are locked — use 🔓 Reset Teams to re-randomize' : '';
+    }
+}
+
+// ─── RENDER CURRENT TEAMS (locked view) ──────────────────────
+function renderCurrentTeams() {
+    const grid = document.getElementById('currentTeamsGrid');
+    if (!grid) return;
+    const namedTeams = state.teams.filter(t => t.name && t.name.trim());
+    const subtitle = document.getElementById('teamsLockedSubtitle');
+    if (subtitle) subtitle.textContent = `${namedTeams.length} team${namedTeams.length !== 1 ? 's' : ''} · edit names in the scoring table below`;
+
+    grid.innerHTML = state.teams.map((t, i) => {
+        if (!t.name && !t.members?.length) return '';
+        const bg  = TEAM_COLORS[i % TEAM_COLORS.length];
+        const bd  = TEAM_BORDERS[i % TEAM_BORDERS.length];
+        const members = Array.isArray(t.members) ? t.members : [];
+        return `<div class="rand-team-card" style="background:${bg};border-color:${bd};">
+            <div class="rand-team-card-title">
+                <span style="background:${bd};color:#444;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0;">${i+1}</span>
+                ${escHtml(t.name || `Team ${i+1}`)}
+                ${members.length ? `<span style="margin-left:auto;font-size:0.7rem;font-weight:400;color:var(--text-light);">${members.length} people</span>` : ''}
+            </div>
+            ${members.length ? `<div class="rand-team-card-members">${members.map(n => `<span>• ${escHtml(n)}</span>`).join('')}</div>` : ''}
+        </div>`;
+    }).join('');
+}
+
+async function resetTeams() {
+    if (!confirm('Reset all published teams? This will remove team names + members from the public page and unlock the randomizer. Scorecard race/sculpture scores are preserved.')) return;
+    const key = getAdminKey();
+    if (!key) { alert('Enter admin key first.'); return; }
+    const statusEl = document.getElementById('publishStatus');
+    statusEl.textContent = 'Resetting…';
+    try {
+        const res = await fetch('/.netlify/functions/reset-beach-teams', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key }
+        });
+        if (!res.ok) { statusEl.textContent = '❌ Failed — check admin key.'; return; }
+        updateLockUI(false);
+        statusEl.textContent = '✅ Teams reset — randomizer unlocked!';
+        setTimeout(() => { statusEl.textContent = ''; }, 4000);
+        buildTable(); // re-render to unlock name inputs
+    } catch(e) { statusEl.textContent = '❌ Network error'; }
+}
+
+async function clearBeachScores() {
+    if (!confirm('Delete ALL beach competition test submissions? This cannot be undone.\n\nThis clears the submissions database — scorecard scores are unaffected.')) return;
+    const key = getAdminKey();
+    if (!key) { alert('Enter admin key first.'); return; }
+    const statusEl = document.getElementById('publishStatus');
+    statusEl.textContent = 'Clearing…';
+    try {
+        const res = await fetch('/.netlify/functions/clear-beach-scores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key }
+        });
+        if (!res.ok) { statusEl.textContent = '❌ Failed — check admin key.'; return; }
+        compRankings = [];
+        document.getElementById('compTeamsGrid').innerHTML = '<div style="color:var(--text-light);font-size:0.85rem;">No submissions yet.</div>';
+        document.getElementById('compStatus').className = 'comp-status';
+        document.getElementById('compStatus').textContent = 'Cleared';
+        statusEl.textContent = '✅ Test submissions cleared!';
+        setTimeout(() => { statusEl.textContent = ''; }, 4000);
+    } catch(e) { statusEl.textContent = '❌ Network error'; }
+}
+
+// ─── PUBLISH STANDINGS ───────────────────────────────────────
+function buildStandingsPayload() {
+    return state.teams
+        .map((t, i) => {
+            const c = computeTeam(t);
+            if (!t.name?.trim() && c.total === 0) return null;
+            return {
+                team:        t.name?.trim() || `Team ${i+1}`,
+                wheelbarrow: c.pts1a,
+                threeLeg:    c.pts1b,
+                waterBucket: c.pts1c,
+                spongeFill:  c.pts1d,
+                sand:        c.ptsS,
+                trivia:      c.pts3,
+                strands:     c.ptsS2,
+                wordle:      c.ptsS4,
+                connections: c.ptsS6,
+                total:       c.total,
+                rank:        0,
+            };
+        })
+        .filter(Boolean)
+        .filter(t => t.team.trim())
+        .sort((a, b) => b.total - a.total)
+        .map((t, i) => ({ ...t, rank: i + 1 }));
+}
+
+async function _doPublish(key, silent) {
+    const rawStandings = buildStandingsPayload();
+    if (rawStandings.length === 0) return;
+    const statusEl  = document.getElementById('publishStatus');
+    const autoEl    = document.getElementById('autoPublishStatus');
+    if (silent && autoEl) { autoEl.textContent = '🔄 syncing…'; }
+    try {
+        const res = await fetch('/.netlify/functions/set-beach-standings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ standings: rawStandings })
+        });
+        if (silent) {
+            if (autoEl) {
+                autoEl.textContent = res.ok ? '✓ live' : '⚠️ sync failed';
+                clearTimeout(autoEl._t);
+                autoEl._t = setTimeout(() => { autoEl.textContent = ''; }, 3000);
+            }
+        } else {
+            if (!res.ok) { statusEl.textContent = '❌ Failed — check admin key.'; return; }
+            statusEl.textContent = `✅ ${rawStandings.length} teams published!`;
+            setTimeout(() => { statusEl.textContent = ''; }, 3000);
+        }
+    } catch(e) {
+        if (!silent) { statusEl.textContent = '❌ Network error'; }
+        else if (autoEl) { autoEl.textContent = '⚠️ sync failed'; }
+    }
+}
+
+// Manual publish (triggered by button — prompts for key if needed)
+async function publishStandings() {
+    const key = getAdminKey();
+    if (!key) { alert('Enter admin key first.'); return; }
+    await _doPublish(key, false);
+}
+
+// Auto-publish: fires 1.5s after any score change, silently, only if key already cached
+let _autoPublishHandle = null;
+function scheduleAutoPublish() {
+    clearTimeout(_autoPublishHandle);
+    _autoPublishHandle = setTimeout(async () => {
+        const key = sessionStorage.getItem('beach_admin_key') || '';
+        if (!key) return; // don't prompt — user hasn't authenticated yet
+        await _doPublish(key, true);
+    }, 1500);
+}
+
+// ─── RANDOMIZER ───────────────────────────────────────────────
+const NUM_EXTRA_INPUTS = 8;
+let guestNames    = []; // fetched from admin-update
+let randomizedTeams = []; // current team assignments [[name,...], ...]
+
+// On load: fetch visibility/teams/lock state from server (no key needed — public GET)
+window.addEventListener('DOMContentLoaded', () => { fetchVisibility(); });
+
+async function loadGuestList() {
+    const statusEl = document.getElementById('randStatus');
+    const key      = getAdminKey();
+    if (!key) { statusEl.textContent = 'Enter admin key above first.'; statusEl.className = 'rand-status error'; return; }
+
+    statusEl.textContent = 'Loading…'; statusEl.className = 'rand-status info';
+
+    try {
+        const res = await fetch('/.netlify/functions/admin-update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ action: 'get' })
+        });
+        if (!res.ok) { statusEl.textContent = 'Wrong admin key — check key above.'; statusEl.className = 'rand-status error'; return; }
+
+        const data = await res.json();
+        guestNames = (data.guests || []).map(g => g.name).sort((a, b) => a.localeCompare(b));
+
+        statusEl.textContent = `${guestNames.length} guests loaded`;
+        statusEl.className = 'rand-status ok';
+        renderGuestCheckboxes();
+        document.getElementById('randGuestSection').style.display = 'block';
+    } catch (e) {
+        statusEl.textContent = 'Error connecting — are you on the live site?';
+        statusEl.className = 'rand-status error';
+    }
+}
+
+function renderGuestCheckboxes() {
+    const grid = document.getElementById('guestGrid');
+    grid.innerHTML = guestNames.map((name, i) => `
+        <label class="guest-chip">
+            <input type="checkbox" checked onchange="updateSelectedCount()" value="${escHtml(name)}">
+            ${escHtml(name)}
+        </label>`).join('');
+    updateSelectedCount();
+
+    // Extra guest inputs
+    const extra = document.getElementById('extraGuestsGrid');
+    extra.innerHTML = Array.from({length: NUM_EXTRA_INPUTS}, (_, i) =>
+        `<input type="text" class="extra-guest-input" placeholder="Extra guest ${i+1}" oninput="updateSelectedCount()">`
+    ).join('');
+}
+
+function selectAllGuests(checked) {
+    document.querySelectorAll('#guestGrid input[type=checkbox]').forEach(cb => cb.checked = checked);
+    updateSelectedCount();
+}
+
+function updateSelectedCount() {
+    const checked = [...document.querySelectorAll('#guestGrid input:checked')].length;
+    const extras  = [...document.querySelectorAll('#extraGuestsGrid input')].filter(i => i.value.trim()).length;
+    document.getElementById('selectedCount').textContent = `${checked + extras} selected`;
+}
+
+function getParticipants() {
+    const from = [...document.querySelectorAll('#guestGrid input:checked')].map(cb => cb.value.trim()).filter(Boolean);
+    const extra = [...document.querySelectorAll('#extraGuestsGrid input')].map(i => i.value.trim()).filter(Boolean);
+    return [...from, ...extra];
+}
+
+function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function randomizeTeams() {
+    const people = getParticipants();
+    if (people.length === 0) { alert('No participants selected!'); return; }
+
+    const size    = Math.max(2, parseInt(document.getElementById('teamSizeInput').value) || 6);
+    const shuffled = shuffle(people);
+    const numTeams = Math.ceil(shuffled.length / size);
+
+    // Distribute evenly: fill teams round-robin so sizes differ by at most 1
+    const teams = Array.from({length: numTeams}, () => []);
+    shuffled.forEach((p, i) => teams[i % numTeams].push(p));
+    randomizedTeams = teams;
+
+    renderRandomizedTeams();
+}
+
+const TEAM_COLORS = ['#EEF7F1','#FFF8EC','#F0EEFF','#FFF0F5','#E8F4FF','#FFFBEC','#F0FFF4','#FFF0EC','#EAF0FF','#FFF5F0'];
+const TEAM_BORDERS = ['#B8DFC4','#F0C070','#C8B8F0','#F0B8C8','#B8D8F0','#F0E0B8','#B8E8C8','#F0C8B8','#B8C8F0','#F0C8B8'];
+
+function renderRandomizedTeams() {
+    const output = document.getElementById('randOutput');
+    const grid   = document.getElementById('randTeamsGrid');
+    const summary = document.getElementById('randSummary');
+
+    const totalPeople = randomizedTeams.reduce((s, t) => s + t.length, 0);
+    summary.textContent = `${randomizedTeams.length} teams · ${totalPeople} people`;
+
+    grid.innerHTML = randomizedTeams.map((team, i) => {
+        const bg  = TEAM_COLORS[i % TEAM_COLORS.length];
+        const bd  = TEAM_BORDERS[i % TEAM_BORDERS.length];
+        return `<div class="rand-team-card" style="background:${bg};border-color:${bd};">
+            <div class="rand-team-card-title">
+                <span style="background:${bd};color:#444;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:800;flex-shrink:0;">${i+1}</span>
+                Team ${i + 1}
+                <span style="margin-left:auto;font-size:0.7rem;font-weight:400;color:var(--text-light);">${team.length} people</span>
+            </div>
+            <div class="rand-team-card-members">
+                ${team.map(n => `<span>• ${escHtml(n)}</span>`).join('')}
+            </div>
+        </div>`;
+    }).join('');
+
+    output.classList.add('visible');
+}
+
+async function applyTeamsToScorecard() {
+    if (randomizedTeams.length === 0) return;
+    const n = randomizedTeams.length;
+    if (!confirm(`Apply all ${n} teams to the scorecard and publish (with member lists) to the public leaderboard?\n\nThis will replace the current scorecard with ${n} rows.`)) return;
+
+    // Resize state.teams to exactly n entries (grow or shrink)
+    while (state.teams.length < n) state.teams.push(defaultTeam(state.teams.length));
+    if (state.teams.length > n) state.teams = state.teams.slice(0, n);
+
+    // Build team objects with names + members from randomizer
+    const teamObjects = [];
+    for (let i = 0; i < n; i++) {
+        state.teams[i].name = `Team ${i + 1}`;
+        state.teams[i].members = randomizedTeams[i] || [];
+        state.teams[i].fromComp = false;
+        teamObjects.push({ name: `Team ${i + 1}`, members: randomizedTeams[i] || [] });
+    }
+    saveState();
+    buildTable();
+
+    // Publish teams (with members) to server
+    const key = getAdminKey();
+    if (key) {
+        try {
+            const res = await fetch('/.netlify/functions/set-beach-teams', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+                body: JSON.stringify({ teams: teamObjects })
+            });
+            if (res.ok) {
+                document.getElementById('publishStatus').textContent = `✅ ${teamObjects.length} teams + members published! Teams are now locked.`;
+                setTimeout(() => { document.getElementById('publishStatus').textContent = ''; }, 5000);
+                updateLockUI(true);
+                buildTable(); // re-render with locked name inputs
+            }
+        } catch(e) { /* silent fail */ }
+    }
+
+    document.getElementById('scoreTable').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Publish just the current team names from the scorecard (preserves existing members)
+async function publishTeamNames() {
+    const key = getAdminKey();
+    if (!key) { alert('Enter admin key first.'); return; }
+    const statusEl = document.getElementById('publishStatus');
+    const teamObjects = state.teams
+        .filter(t => t.name && t.name.trim())
+        .map(t => ({ name: t.name.trim() })); // no members — server preserves existing
+    if (teamObjects.length === 0) { statusEl.textContent = '⚠️ No team names set in scorecard.'; return; }
+    statusEl.textContent = 'Publishing names…';
+    try {
+        const res = await fetch('/.netlify/functions/set-beach-teams', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+            body: JSON.stringify({ teams: teamObjects })
+        });
+        if (!res.ok) { statusEl.textContent = '❌ Failed — check admin key.'; return; }
+        statusEl.textContent = `✅ ${teamObjects.length} team names published!`;
+        setTimeout(() => { statusEl.textContent = ''; }, 4000);
+    } catch(e) { statusEl.textContent = '❌ Network error'; }
+}
+
+// ─── INIT ─────────────────────────────────────────────────────
+buildTable();
+fetchCompData();
+// Apply stored lock state immediately so UI reflects it without needing key
+updateLockUI(state.teamsLocked || false);
+</script>
+</body>
+</html>

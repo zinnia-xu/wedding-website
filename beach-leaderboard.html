@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beach Competition — Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --orange: #E8823C;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; color: var(--text); background: var(--cream); min-height: 100vh; }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26,60,42,0.97); backdrop-filter: blur(12px);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 64px;
+        }
+        .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.4rem; color: var(--white); text-decoration: none; }
+        .nav-links { display: flex; gap: 0.1rem; list-style: none; flex-wrap: wrap; }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+            padding: 0.45rem 0.8rem; border-radius: 6px; transition: all 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--white); background: rgba(255,255,255,0.12); }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 0.5rem; }
+        .hamburger span { width: 24px; height: 2px; background: white; border-radius: 2px; transition: all 0.3s; }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: rgba(26,60,42,0.98); padding: 0.5rem 0 1rem; }
+            .nav-links.open a { padding: 0.75rem 1.5rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+        }
+
+        /* ─── HIDDEN OVERLAY ─── */
+        .hidden-overlay {
+            display: none;
+            min-height: calc(100vh - 64px);
+            margin-top: 64px;
+            background: linear-gradient(135deg, #0D1F14 0%, #1A3C2A 50%, #0D1F14 100%);
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 2rem;
+        }
+        .hidden-msg { max-width: 480px; }
+        .hidden-msg .big-emoji { font-size: 5rem; margin-bottom: 1.5rem; display: block; }
+        .hidden-msg h2 { font-family: 'DM Serif Display', serif; font-size: 2.5rem; color: var(--white); font-weight: 400; margin-bottom: 1rem; }
+        .hidden-msg p { color: rgba(255,255,255,0.65); font-size: 1.1rem; line-height: 1.6; }
+        .hidden-msg .cta { display: inline-block; margin-top: 2rem; padding: 0.9rem 2rem; background: var(--hot-pink); color: white; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 0.95rem; }
+
+        /* ─── HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.65), rgba(10,30,18,0.65)), url('kayak.jpeg') center 45%/cover no-repeat;
+            padding: 8rem 2rem 4rem; text-align: center;
+        }
+        .page-hero h1 { font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.2rem); color: var(--white); font-weight: 400; margin-bottom: 0.6rem; }
+        .page-hero p { color: rgba(255,255,255,0.75); font-size: 1.05rem; font-style: italic; }
+
+        /* ─── MAIN ─── */
+        main { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+        /* ─── SECTION TITLES ─── */
+        .section-title {
+            font-family: 'DM Serif Display', serif; font-size: 1.6rem; font-weight: 400;
+            color: var(--jungle); margin-bottom: 0.5rem;
+        }
+        .section-subtitle { font-size: 0.88rem; color: var(--text-light); margin-bottom: 1.5rem; }
+
+        /* ─── TEAMS SECTION ─── */
+        .teams-section { margin-bottom: 3rem; }
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.5rem; }
+        @media (max-width: 480px) { .teams-grid { grid-template-columns: repeat(2, 1fr); gap: 0.4rem; } }
+        .team-card {
+            background: var(--white); border: 2px solid var(--cream-dark); border-radius: 10px;
+            padding: 0.6rem 0.75rem; position: relative;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .team-card:hover { border-color: #B8DFC4; box-shadow: 0 3px 12px rgba(0,0,0,0.07); }
+        .team-card-header { display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.35rem; }
+        .team-num-badge {
+            background: var(--jungle); color: white; font-size: 0.62rem; font-weight: 800;
+            width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .team-display-name { font-weight: 700; font-size: 0.88rem; color: var(--jungle); flex: 1; line-height: 1.2; }
+        .team-members { list-style: none; margin-bottom: 0.4rem; padding: 0; columns: 2; column-gap: 0.4rem; }
+        .team-members li { font-size: 0.8rem; color: var(--text-mid); padding: 0.1rem 0; line-height: 1.35; break-inside: avoid; }
+        .team-members li::before { content: '• '; color: var(--jungle-light); }
+        @media (max-width: 480px) { .team-members { columns: 1; } }
+        .team-card-footer { display: flex; align-items: center; justify-content: flex-end; margin-top: 0.3rem; }
+        .rename-btn {
+            background: none; border: 1px solid var(--cream-dark); border-radius: 4px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.62rem; font-weight: 600;
+            color: var(--text-light); cursor: pointer; padding: 0.15rem 0.4rem;
+            transition: all 0.15s; white-space: nowrap;
+        }
+        .rename-btn:hover { border-color: var(--jungle-light); color: var(--jungle); background: #EEF7F1; }
+        .rename-form { display: none; flex-direction: column; gap: 0.35rem; margin-top: 0.4rem; }
+        .rename-form.visible { display: flex; }
+        .rename-input {
+            font-family: 'DM Sans', sans-serif; font-size: 0.78rem; border: 1.5px solid var(--jungle-light);
+            border-radius: 5px; padding: 0.25rem 0.45rem; background: #EEF7F1; width: 100%;
+        }
+        .rename-input:focus { outline: 2px solid var(--jungle-light); }
+        .rename-submit {
+            background: var(--jungle); color: white; border: none; border-radius: 5px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.72rem; font-weight: 700;
+            padding: 0.25rem 0.5rem; cursor: pointer;
+        }
+        .rename-msg { font-size: 0.65rem; color: var(--jungle-mid); font-weight: 600; text-align: center; }
+
+        .teams-empty { text-align: center; color: var(--text-light); padding: 2rem; background: var(--white); border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .teams-empty .empty-emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+
+        /* ─── STANDINGS SECTION ─── */
+        .standings-section { margin-bottom: 3rem; }
+        .standings-card {
+            background: var(--white); border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07); overflow: hidden;
+        }
+        .standings-header {
+            background: linear-gradient(135deg, var(--jungle) 0%, var(--jungle-mid) 100%);
+            color: var(--white); padding: 1.2rem 1.6rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .standings-header h2 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; font-weight: 400; }
+        .standings-header .updated { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+        /* ── Public Leaderboard (medals view) ── */
+        .pub-lb-list { display: flex; flex-direction: column; gap: 0.6rem; }
+        .pub-lb-row {
+            display: flex; align-items: center; gap: 1rem;
+            padding: 0.85rem 1.4rem; border-radius: 12px;
+            background: var(--cream); border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .pub-lb-row.rank-1 { background: #FFFAEB; border-color: #D4A800; }
+        .pub-lb-row.rank-2 { background: #F5F5F5; border-color: #A0A0A0; }
+        .pub-lb-row.rank-3 { background: #FFF2EC; border-color: #CD7F32; }
+        .pub-lb-medal { font-size: 1.6rem; width: 2.2rem; text-align: center; flex-shrink: 0; }
+        .pub-lb-num   { font-size: 0.95rem; font-weight: 800; color: var(--text-light); width: 1.8rem; text-align: center; flex-shrink: 0; }
+        .pub-lb-team  { flex: 1; font-weight: 700; font-size: 1.05rem; }
+        .pub-lb-pts   { font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: var(--jungle); font-weight: 400; flex-shrink: 0; }
+        .pub-lb-pts small { font-family: 'DM Sans', sans-serif; font-size: 0.7rem; color: var(--text-light); margin-left: 0.2rem; }
+        .pub-lb-bar-wrap { flex: 1; max-width: 180px; display: none; }
+        @media (min-width: 520px) { .pub-lb-bar-wrap { display: block; } }
+        .pub-lb-bar-bg   { background: #E8F0E9; border-radius: 10px; height: 7px; }
+        .pub-lb-bar-fill { background: var(--jungle-light); border-radius: 10px; height: 7px; transition: width 0.5s ease; }
+
+        /* Standings table (mirrors private scorecard) */
+        .standings-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .standings-table {
+            width: 100%; border-collapse: collapse; font-size: 0.82rem; min-width: 820px;
+        }
+        .standings-table th {
+            background: #EEF7F1; color: var(--jungle); font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em; padding: 0.45rem 0.5rem;
+            text-align: center; border: 1px solid var(--cream-dark); white-space: nowrap;
+        }
+        .standings-table th.col-team { text-align: left; min-width: 120px; }
+        .standings-table th.grp-races  { background: #FFF9C4; color: #7A6000; }
+        .standings-table th.grp-sand   { background: #FFE8CC; color: #8A4000; }
+        .standings-table th.grp-test   { background: #D0F0F0; color: #0E5050; }
+        .standings-table th.grp-total  { background: var(--jungle); color: white; }
+        .standings-table td { border: 1px solid var(--cream-dark); padding: 0.5rem 0.5rem; text-align: center; vertical-align: middle; }
+        .standings-table td.cell-rank { font-size: 1.05rem; font-weight: 800; width: 40px; }
+        .standings-table td.cell-rank.r1 { color: #c9a227; }
+        .standings-table td.cell-rank.r2 { color: #8a8a8a; }
+        .standings-table td.cell-rank.r3 { color: #a0673a; }
+        .standings-table td.cell-team { text-align: left; font-weight: 700; font-size: 0.9rem; color: var(--text); min-width: 120px; }
+        .standings-table td.cell-pts { font-weight: 700; font-size: 0.82rem; }
+        .standings-table td.cell-race    { background: #FFFEF0; color: #7A6000; }
+        .standings-table td.cell-sand    { background: #FFF4EC; color: #8A4000; }
+        .standings-table td.cell-trivia  { background: #F0FAF2; color: var(--jungle); }
+        .standings-table td.cell-game    { background: #F0FAFA; color: #0E7070; }
+        .standings-table td.cell-total   { background: #C8EDD4; color: #1A5C32; font-weight: 800; font-size: 0.95rem; }
+        .standings-table tbody tr:hover td { filter: brightness(0.96); }
+        .standings-pending { padding: 2.5rem; text-align: center; color: var(--text-light); }
+        .standings-pending .pending-icon { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+
+        /* ─── TEST LEADERBOARD (smaller, bottom) ─── */
+        .test-section { margin-bottom: 2rem; }
+        .board-card { background: var(--white); border-radius: 16px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 1rem; }
+        .board-header {
+            background: #2E4A3A; color: var(--white);
+            padding: 0.9rem 1.4rem;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .board-header h3 { font-family: 'DM Serif Display', serif; font-size: 1.1rem; font-weight: 400; }
+        .refresh-btn {
+            background: rgba(255,255,255,0.15); border: none; color: white;
+            border-radius: 6px; padding: 0.35rem 0.8rem;
+            font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700;
+            cursor: pointer; transition: background 0.2s;
+        }
+        .refresh-btn:hover { background: rgba(255,255,255,0.25); }
+
+        /* Horizontal scroll wrapper so table never squishes on small screens */
+        .board-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+        /* Column groups */
+        .col-groups {
+            display: grid; grid-template-columns: 44px minmax(110px,1fr) 60px 60px 60px 60px 60px 60px 60px;
+            padding: 0.35rem 1.2rem 0; background: var(--cream); font-size: 0.57rem;
+            text-transform: uppercase; letter-spacing: 0.09em; font-weight: 700; color: var(--text-light); gap: 0.2rem;
+            min-width: 520px;
+        }
+        .col-group-trivia { color: var(--jungle-light); }
+        .col-group-game { color: var(--orange); }
+        .col-labels {
+            display: grid; grid-template-columns: 44px minmax(110px,1fr) 60px 60px 60px 60px 60px 60px 60px;
+            padding: 0.4rem 1.2rem; background: var(--cream);
+            border-bottom: 2px solid var(--cream-dark); font-size: 0.58rem;
+            text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-light); font-weight: 700; gap: 0.2rem; align-items: end;
+            min-width: 520px;
+        }
+        .col-labels span { text-align: center; }
+        .col-labels span:nth-child(2) { text-align: left; }
+        .board-row {
+            display: grid; grid-template-columns: 44px minmax(110px,1fr) 60px 60px 60px 60px 60px 60px 60px;
+            padding: 0.7rem 1.2rem; border-bottom: 1px solid var(--cream-dark);
+            align-items: center; transition: background 0.15s; gap: 0.2rem;
+            min-width: 520px;
+        }
+        .board-row:last-child { border-bottom: none; }
+        .board-row:hover { background: rgba(26,60,42,0.03); }
+        .board-row.top-1 { background: linear-gradient(90deg, rgba(245,208,62,0.08) 0%, transparent 60%); }
+        .board-row.top-2 { background: linear-gradient(90deg, rgba(192,192,192,0.07) 0%, transparent 60%); }
+        .board-row.top-3 { background: linear-gradient(90deg, rgba(205,127,50,0.07) 0%, transparent 60%); }
+        .rank-cell { font-size: 0.95rem; font-weight: 800; }
+        .rank-cell.r1 { color: #c9a227; }
+        .rank-cell.r2 { color: #8a8a8a; }
+        .rank-cell.r3 { color: #a0673a; }
+        .team-name { font-weight: 700; font-size: 0.88rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0.5rem; }
+        .score-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 1px; }
+        .sc-pts { font-size: 0.82rem; font-weight: 700; color: var(--text); line-height: 1.2; }
+        .sc-pts.trivia { color: var(--jungle-light); }
+        .sc-time { font-size: 0.62rem; font-weight: 500; color: var(--text-light); line-height: 1.2; }
+        .sc-dash { font-size: 0.8rem; color: #C8C8C8; font-weight: 600; }
+        .total-cell { text-align: center; font-size: 0.95rem; font-weight: 800; color: var(--hot-pink); }
+        .empty-state { padding: 2.5rem 2rem; text-align: center; color: var(--text-light); }
+        .empty-state .empty-icon { font-size: 2rem; margin-bottom: 0.6rem; }
+        .loading-msg { padding: 1.5rem; text-align: center; color: var(--text-light); font-size: 0.9rem; }
+
+        /* CTA */
+        .cta-section { display: flex; flex-wrap: wrap; gap: 0.75rem; justify-content: center; margin-top: 1.5rem; }
+        .cta-btn {
+            display: inline-block; padding: 0.85rem 1.75rem; background: var(--hot-pink); color: var(--white);
+            border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 700;
+            text-decoration: none; transition: all 0.2s; white-space: nowrap; border: none; cursor: pointer;
+        }
+        .cta-btn:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+        .cta-btn.secondary { background: var(--jungle); }
+        .last-updated { text-align: center; font-size: 0.75rem; color: var(--text-light); margin-top: 0.6rem; }
+
+        @media (max-width: 640px) {
+            main { padding: 2rem 0.75rem 4rem; }
+            .col-groups { display: none; }
+            .col-labels, .board-row {
+                grid-template-columns: 36px minmax(100px,1fr) 46px 46px 46px 46px 46px 46px 46px;
+                padding: 0.55rem 0.6rem; gap: 0.1rem;
+                min-width: 480px;
+            }
+            .col-labels { font-size: 0.5rem; }
+            .sc-pts { font-size: 0.7rem; }
+            .sc-time { font-size: 0.54rem; }
+            .team-name { font-size: 0.8rem; }
+            .standings-pts { font-size: 1.6rem; }
+        }
+
+        footer { background: var(--jungle); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.85rem; }
+        footer span { color: var(--hot-pink); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="nav-logo">Z & A</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="our-story.html">Our Story</a></li>
+            <li><a href="photos.html">Photos</a></li>
+            <li><a href="schedule.html">Schedule</a></li>
+            <li><a href="things-to-do.html">Activities</a></li>
+            <li><a href="leaderboard.html">Leaderboard</a></li>
+            <li><a href="points.html">Points</a></li>
+            <li><a href="beach-leaderboard.html" class="active">Beach 🏖️</a></li>
+            <li><a href="faq.html">FAQ</a></li>
+        </ul>
+        <div class="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+</nav>
+
+<!-- Hidden overlay (shown when hidden=true) -->
+<div id="hiddenOverlay" class="hidden-overlay" style="display:none;">
+    <div class="hidden-msg">
+        <span class="big-emoji">🏖️</span>
+        <h2>Beach Competition</h2>
+        <p>The Beach Competition has yet to start and will open on <strong style="color:var(--white);">Saturday, May 23</strong>. Check back then!</p>
+    </div>
+</div>
+
+<!-- Main visible content -->
+<div id="mainContent">
+
+<section class="page-hero">
+    <h1>🏖️ Beach Competition</h1>
+    <p>Saturday, May 23 · Hanalei Beach Pier · Team Rankings</p>
+</section>
+
+<main>
+
+    <!-- ── TEAMS ── -->
+    <section class="teams-section">
+        <h2 class="section-title">🏄 Teams</h2>
+        <p class="section-subtitle" id="teamsSubtitle">Loading teams…</p>
+        <div id="teamsGrid">
+            <div class="teams-empty"><span class="empty-emoji">⏳</span><p>Loading teams…</p></div>
+        </div>
+    </section>
+
+    <!-- ── LIVE STANDINGS ── -->
+    <section class="standings-section">
+        <h2 class="section-title">🏆 Live Standings</h2>
+        <p class="section-subtitle">Overall competition results · Updated by the scorekeepers</p>
+        <div class="standings-card">
+            <div class="standings-header">
+                <h2>Current Standings</h2>
+                <span class="updated" id="standingsUpdated"></span>
+            </div>
+            <div id="standingsBody">
+                <div class="standings-pending">
+                    <span class="pending-icon">🏁</span>
+                    <p>Standings will appear here once the competition begins!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ── BEACH TEST RESULTS (smaller) ── -->
+    <section class="test-section">
+        <h2 class="section-title" style="font-size:1.3rem;">📝 Competition Test Results</h2>
+        <p class="section-subtitle">Section-by-section breakdown · Trivia + timed games</p>
+        <div class="board-card">
+            <div class="board-header">
+                <h3>Test Leaderboard</h3>
+                <button class="refresh-btn" onclick="loadScores()">↻ Refresh</button>
+            </div>
+            <div class="board-scroll">
+                <div class="col-groups">
+                    <span></span>
+                    <span></span>
+                    <span class="col-group-trivia" style="grid-column:span 3;text-align:center;border-bottom:2px solid var(--jungle-light);padding-bottom:2px;">── Trivia ──</span>
+                    <span class="col-group-game" style="grid-column:span 3;text-align:center;border-bottom:2px solid var(--orange);padding-bottom:2px;">── Timed Games ──</span>
+                    <span></span>
+                </div>
+                <div class="col-labels">
+                    <span>#</span>
+                    <span>Team</span>
+                    <span>S1</span>
+                    <span>S3</span>
+                    <span>S5</span>
+                    <span>Strands</span>
+                    <span>Wordle</span>
+                    <span>Conn.</span>
+                    <span>Total</span>
+                </div>
+                <div id="boardBody">
+                    <div class="loading-msg">Loading scores…</div>
+                </div>
+            </div>
+        </div>
+        <div class="last-updated" id="lastUpdated"></div>
+    </section>
+
+    <div class="cta-section">
+        <a href="beach-competition-test.html" class="cta-btn">Take the Beach Test 📝</a>
+    </div>
+
+</main>
+
+<footer>
+    <p>Made with 🌺 for <span>Zinnia & Andrew</span> · May 24, 2026 · Common Ground Kauai</p>
+</footer>
+
+</div><!-- end #mainContent -->
+
+<script>
+    const RANK_MEDALS = ['🥇','🥈','🥉'];
+    const RANK_PTS = [5, 4, 3, 2];
+    const SCORECARD_KEY = 'beach_olympics_scorecard_v2';
+    let computedEntries = [];
+    let teamsData = [];
+
+    function getRankPts(rank) { return RANK_PTS[rank - 1] ?? 1; }
+    function fmtTime(sec) {
+        if (sec === null || sec === undefined) return '—';
+        const m = Math.floor(sec / 60), s = sec % 60;
+        return m > 0 ? `${m}m${s.toString().padStart(2,'0')}s` : `${sec}s`;
+    }
+    function escapeHtml(str) {
+        return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function computeRanks(scores, timeField, hintsField) {
+        const completed = scores
+            .map((s, i) => ({ i, time: s[timeField] }))
+            .filter(x => x.time !== null && x.time !== undefined)
+            .sort((a, b) => a.time - b.time);
+        const rankMap = {};
+        completed.forEach((x, rank0) => {
+            const rank = rank0 + 1;
+            const entry = scores[x.i];
+            const hintPenalty = hintsField ? Math.floor((entry[hintsField] ?? 0) / 2) : 0;
+            rankMap[x.i] = Math.max(1, getRankPts(rank) - hintPenalty);
+        });
+        return rankMap;
+    }
+
+    // ── RENDER TEAMS ──────────────────────────────────────────
+    // Normalise entry: handle both legacy string format and new { name, members } format
+    function teamEntry(t) {
+        if (typeof t === 'string') return { name: t, members: [] };
+        return { name: t.name || '', members: Array.isArray(t.members) ? t.members : [] };
+    }
+
+    function renderTeams(teams) {
+        teamsData = teams;
+        const grid = document.getElementById('teamsGrid');
+        const sub  = document.getElementById('teamsSubtitle');
+        if (!teams || teams.length === 0) {
+            grid.innerHTML = `<div class="teams-empty"><span class="empty-emoji">🏖️</span><p>Teams will appear here once they've been set up!</p></div>`;
+            sub.textContent = 'Teams not yet announced';
+            return;
+        }
+        sub.textContent = `${teams.length} team${teams.length !== 1 ? 's' : ''} competing`;
+        grid.innerHTML = teams.map((t, i) => {
+            const { name, members } = teamEntry(t);
+            const membersHtml = members.length > 0
+                ? `<ul class="team-members">${members.map(m => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`
+                : '';
+            return `
+            <div class="team-card" id="teamCard${i}">
+                <div class="team-card-header">
+                    <span class="team-num-badge">${i + 1}</span>
+                    <span class="team-display-name" id="teamName${i}">${escapeHtml(name)}</span>
+                </div>
+                ${membersHtml}
+                <div class="team-card-footer">
+                    <button class="rename-btn" onclick="showRenameForm(${i})">✏️ rename</button>
+                </div>
+                <div class="rename-form" id="renameForm${i}">
+                    <input class="rename-input" id="renameInput${i}" type="text" maxlength="60"
+                           placeholder="New team name…" value="${escapeHtml(name)}"
+                           onkeydown="if(event.key==='Enter')submitRename(${i})">
+                    <button class="rename-submit" onclick="submitRename(${i})">✓ Save</button>
+                    <span class="rename-msg" id="renameMsg${i}"></span>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function showRenameForm(i) {
+        document.querySelectorAll('.rename-form').forEach(f => f.classList.remove('visible'));
+        document.getElementById(`renameForm${i}`).classList.add('visible');
+        document.getElementById(`renameInput${i}`).focus();
+    }
+
+    async function submitRename(i) {
+        const input = document.getElementById(`renameInput${i}`);
+        const msgEl = document.getElementById(`renameMsg${i}`);
+        const newName = input.value.trim();
+        if (!newName) { msgEl.textContent = 'Name cannot be empty'; return; }
+        msgEl.textContent = 'Saving…';
+        try {
+            const res = await fetch('/.netlify/functions/update-team-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index: i, newName })
+            });
+            const data = await res.json();
+            if (!res.ok) { msgEl.textContent = data.error || 'Error'; return; }
+            // Update display
+            teamsData = data.teams;
+            document.getElementById(`teamName${i}`).textContent = newName;
+            document.getElementById(`renameForm${i}`).classList.remove('visible');
+            msgEl.textContent = '';
+        } catch(e) {
+            msgEl.textContent = 'Network error — try again';
+        }
+    }
+
+    // ── RENDER STANDINGS ──────────────────────────────────────
+    // Check if standings have per-race breakdown data (new format uses wheelbarrow field)
+    function hasBreakdown(standings) {
+        return standings.length > 0 && standings[0].wheelbarrow !== undefined;
+    }
+
+    function renderStandings(standings, updatedAt) {
+        const body = document.getElementById('standingsBody');
+        const updEl = document.getElementById('standingsUpdated');
+        if (!standings || standings.length === 0) {
+            body.innerHTML = `<div class="standings-pending"><span class="pending-icon">🏁</span><p>Standings will appear here once the competition begins!</p></div>`;
+            updEl.textContent = '';
+            return;
+        }
+        if (updatedAt) {
+            const d = new Date(updatedAt);
+            updEl.textContent = 'Updated ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        const rankDisp     = (rank) => rank <= 3 ? RANK_MEDALS[rank - 1] : rank;
+        const rankClass    = (rank) => rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : '';
+        const rankRowClass = (rank) => rank === 1 ? 'rank-1' : rank === 2 ? 'rank-2' : rank === 3 ? 'rank-3' : '';
+        const pt = v => (v != null && v !== '') ? v : '—';
+
+        // ── Medals leaderboard (always shown) ──
+        const maxPts = Math.max(...standings.map(s => s.total || 0), 1);
+        const medalsHtml = `
+        <div class="pub-lb-list" style="padding:1.2rem 1.6rem 1rem;">
+            ${standings.map(s => `
+            <div class="pub-lb-row ${rankRowClass(s.rank)}">
+                <span class="pub-lb-medal">${s.rank <= 3 ? RANK_MEDALS[s.rank - 1] : ''}</span>
+                <span class="pub-lb-num">${s.rank <= 3 ? '' : '#' + s.rank}</span>
+                <span class="pub-lb-team">${escapeHtml(s.team)}</span>
+                <div class="pub-lb-bar-wrap"><div class="pub-lb-bar-bg"><div class="pub-lb-bar-fill" style="width:${Math.round((s.total || 0) / maxPts * 100)}%"></div></div></div>
+                <span class="pub-lb-pts">${s.total}<small>pts</small></span>
+            </div>`).join('')}
+        </div>`;
+
+        if (hasBreakdown(standings)) {
+            // Full table with grouped two-row headers mirroring the private scorecard
+            body.innerHTML = medalsHtml + `
+            <div class="standings-table-wrap">
+            <table class="standings-table">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="width:44px;">#</th>
+                        <th rowspan="2" class="col-team">Team</th>
+                        <th colspan="4" class="grp-races">🏊 Races</th>
+                        <th class="grp-sand">🏖️ Sand</th>
+                        <th class="grp-test">🧠 Trivia</th>
+                        <th colspan="3" class="grp-test">⏱️ Beach Test</th>
+                        <th class="grp-total">Total</th>
+                    </tr>
+                    <tr>
+                        <th class="grp-races">Wheelbarrow</th>
+                        <th class="grp-races">3-Legged</th>
+                        <th class="grp-races">Water Bucket</th>
+                        <th class="grp-races">Sponge Fill</th>
+                        <th class="grp-sand">Score</th>
+                        <th class="grp-test">Score</th>
+                        <th class="grp-test">Strands</th>
+                        <th class="grp-test">Wordle</th>
+                        <th class="grp-test">Conn.</th>
+                        <th class="grp-total"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                ${standings.map(s => `
+                    <tr>
+                        <td class="cell-rank ${rankClass(s.rank)}">${rankDisp(s.rank)}</td>
+                        <td class="cell-team">${escapeHtml(s.team)}</td>
+                        <td class="cell-pts cell-race">${pt(s.wheelbarrow)}</td>
+                        <td class="cell-pts cell-race">${pt(s.threeLeg)}</td>
+                        <td class="cell-pts cell-race">${pt(s.waterBucket)}</td>
+                        <td class="cell-pts cell-race">${pt(s.spongeFill)}</td>
+                        <td class="cell-pts cell-sand">${pt(s.sand)}</td>
+                        <td class="cell-pts cell-trivia">${pt(s.trivia)}</td>
+                        <td class="cell-pts cell-game">${pt(s.strands)}</td>
+                        <td class="cell-pts cell-game">${pt(s.wordle)}</td>
+                        <td class="cell-pts cell-game">${pt(s.connections)}</td>
+                        <td class="cell-total">${pt(s.total)}</td>
+                    </tr>`).join('')}
+                </tbody>
+            </table>
+            </div>`;
+        } else {
+            // Simple fallback (legacy data — just rank + total): medals + list rows
+            body.innerHTML = medalsHtml + standings.map(s => `
+                <div style="display:grid;grid-template-columns:56px 1fr auto;padding:0.9rem 1.4rem;border-bottom:1px solid var(--cream-dark);align-items:center;gap:1rem;">
+                    <span style="font-size:1.3rem;font-weight:800;" class="${rankClass(s.rank)}">${rankDisp(s.rank)}</span>
+                    <span style="font-weight:700;font-size:1rem;">${escapeHtml(s.team)}</span>
+                    <span style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--jungle);">${s.total} <small style="font-family:'DM Sans',sans-serif;font-size:0.7rem;color:var(--text-light);">pts</small></span>
+                </div>`).join('');
+        }
+    }
+
+    // ── LOAD SCORES ───────────────────────────────────────────
+    async function loadScores() {
+        const body = document.getElementById('boardBody');
+        body.innerHTML = '<div class="loading-msg">Loading…</div>';
+
+        try {
+            const res = await fetch('/.netlify/functions/get-beach-scores');
+            if (!res.ok) throw new Error('fetch failed');
+            const data = await res.json();
+            const { scores: raw, hidden, teams, standings, standingsUpdated } = data;
+
+            // Handle hidden flag
+            if (hidden) {
+                document.getElementById('hiddenOverlay').style.display = 'flex';
+                document.getElementById('mainContent').style.display = 'none';
+                return;
+            } else {
+                document.getElementById('hiddenOverlay').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+            }
+
+            // Render teams
+            renderTeams(teams || []);
+
+            // Render standings
+            renderStandings(standings, standingsUpdated);
+
+            if (!raw || raw.length === 0) {
+                body.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🏖️</div>
+                        <p>No test scores yet — be the first to take the test!</p>
+                    </div>`;
+                return;
+            }
+
+            // Compute rank pts
+            const s2Ranks = computeRanks(raw, 'spagramElapsedSec', 'spagramHints');
+            const s4Ranks = computeRanks(raw, 'wordleElapsedSec', null);
+            const s6Ranks = computeRanks(raw, 'connElapsedSec', null);
+
+            const entries = raw.map((e, i) => ({
+                ...e,
+                s1Pts: (e.triviaScore   ?? 0),
+                s2Pts: s2Ranks[i]       ?? 0,
+                s3Pts: (e.section3Score ?? 0),
+                s4Pts: s4Ranks[i]       ?? 0,
+                s5Pts: (e.section5Score ?? 0),
+                s6Pts: s6Ranks[i]       ?? 0,
+                total: (e.triviaScore ?? 0) + (s2Ranks[i] ?? 0) + (e.section3Score ?? 0) + (s4Ranks[i] ?? 0) + (e.section5Score ?? 0) + (s6Ranks[i] ?? 0),
+            }));
+            entries.sort((a, b) => {
+                if (b.total !== a.total) return b.total - a.total;
+                return new Date(a.timestamp) - new Date(b.timestamp);
+            });
+            computedEntries = entries;
+
+            // Rows
+            body.innerHTML = entries.map((entry, i) => {
+                const rank = i + 1;
+                const rankDisplay = rank <= 3 ? RANK_MEDALS[rank-1] : rank;
+                const rowClass = rank <= 3 ? ` top-${rank}` : '';
+                const rankClass = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : '';
+                function triviaCell(pts) {
+                    return `<span class="score-cell"><span class="sc-pts trivia">${pts}pt</span></span>`;
+                }
+                function timedCell(pts, time) {
+                    if (time == null) return `<span class="score-cell"><span class="sc-dash">—</span></span>`;
+                    return `<span class="score-cell"><span class="sc-pts">${pts}pt</span><span class="sc-time">${fmtTime(time)}</span></span>`;
+                }
+                return `
+                <div class="board-row${rowClass}">
+                    <span class="rank-cell ${rankClass}">${rankDisplay}</span>
+                    <span class="team-name">${escapeHtml(entry.teamName)}</span>
+                    ${triviaCell(entry.s1Pts)}
+                    ${triviaCell(entry.s3Pts)}
+                    ${triviaCell(entry.s5Pts)}
+                    ${timedCell(entry.s2Pts, entry.spagramElapsedSec)}
+                    ${timedCell(entry.s4Pts, entry.wordleElapsedSec)}
+                    ${timedCell(entry.s6Pts, entry.connElapsedSec)}
+                    <span class="total-cell">${entry.total}</span>
+                </div>`;
+            }).join('');
+
+            document.getElementById('lastUpdated').textContent = 'Updated ' + new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+        } catch (e) {
+            body.innerHTML = `<div class="empty-state"><p>Could not load scores. Please refresh.</p></div>`;
+        }
+    }
+
+    // ── Export to Scorecard ─────────────────────────────────
+    function exportToScorecard() {
+        const statusEl = document.getElementById('exportStatus');
+        if (computedEntries.length === 0) {
+            statusEl.textContent = '⚠️ No scores loaded yet — click Refresh first.';
+            statusEl.style.color = 'var(--hot-pink)';
+            statusEl.style.display = 'block';
+            return;
+        }
+        const NUM_TEAMS = 10;
+        let sc;
+        try { sc = JSON.parse(localStorage.getItem(SCORECARD_KEY)); } catch(e) { sc = null; }
+        if (!sc || !Array.isArray(sc.teams) || sc.teams.length !== NUM_TEAMS) {
+            sc = { teams: Array.from({length: NUM_TEAMS}, () => ({
+                name: '', e1a: 0, e1b: 0, e1c: 0, e1d: 0,
+                sand_size: '', sand_cre: '', sand_craft: '',
+                e3Score: 0, s2Score: 0, s4Score: 0, s6Score: 0, fromComp: false
+            })) };
+        }
+        const seen = new Set();
+        const unique = [];
+        for (const e of computedEntries) {
+            const key = (e.teamName || '').trim().toLowerCase();
+            if (!key || seen.has(key)) continue;
+            seen.add(key);
+            unique.push(e);
+        }
+        const toFill = unique.slice(0, NUM_TEAMS);
+        for (let i = 0; i < toFill.length; i++) {
+            const e = toFill[i];
+            sc.teams[i].name     = e.teamName;
+            sc.teams[i].e3Score  = (e.s1Pts || 0) + (e.s3Pts || 0) + (e.s5Pts || 0);
+            sc.teams[i].s2Score  = e.s2Pts || 0;
+            sc.teams[i].s4Score  = e.s4Pts || 0;
+            sc.teams[i].s6Score  = e.s6Pts || 0;
+            sc.teams[i].fromComp = true;
+        }
+        try {
+            localStorage.setItem(SCORECARD_KEY, JSON.stringify(sc));
+            statusEl.innerHTML = `✅ ${toFill.length} team${toFill.length !== 1 ? 's' : ''} sent! <a href="beach-scorecard.html" style="color:var(--jungle);font-weight:700;">Open Scorecard →</a>`;
+            statusEl.style.color = 'var(--jungle-mid)';
+        } catch(e) {
+            statusEl.textContent = '❌ Could not save — localStorage unavailable.';
+            statusEl.style.color = 'var(--hot-pink)';
+        }
+        statusEl.style.display = 'block';
+    }
+
+    loadScores();
+</script>
+</body>
+</html>

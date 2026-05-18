@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.60), rgba(10,30,18,0.60)), url('View.jpeg') center center / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before { content: none; }
+        .page-hero::after { content: none; }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            position: relative;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 5rem;
+        }
+
+        .section-heading {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.8rem;
+            color: var(--jungle);
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ─── LEADERBOARD TABLE ─── */
+        .leaderboard-section { margin-bottom: 3.5rem; }
+
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table thead tr {
+            background: var(--jungle);
+        }
+        .leaderboard-table th {
+            padding: 0.85rem 1.2rem;
+            color: var(--white);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-align: left;
+        }
+        .leaderboard-table th:last-child { text-align: right; }
+
+        .leaderboard-table td {
+            padding: 0.85rem 1.2rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+        .leaderboard-table td:last-child {
+            text-align: right;
+            font-weight: 700;
+            color: var(--jungle);
+            font-size: 1.1rem;
+        }
+
+        .leaderboard-table tbody tr {
+            background: var(--white);
+            transition: background 0.2s;
+        }
+        .leaderboard-table tbody tr:hover { background: var(--pink-soft); }
+
+        .rank { font-weight: 700; color: var(--text-light); width: 50px; }
+
+        /* Top 3 — medium green */
+        .rank-1 .rank { color: #1a7a3a; font-size: 1.1rem; }
+        .rank-2 .rank { color: #2e8f50; }
+        .rank-3 .rank { color: #3da864; }
+        .rank-1 td, .rank-2 td, .rank-3 td { background: #c8ecd4 !important; }
+
+        /* Has points — light green */
+        .has-points td { background: #e8f7ed !important; }
+
+        /* Zero points — light red */
+        .no-points td { background: #fde8e8 !important; }
+        .no-points .rank { color: #c0392b; }
+
+        .guest-name { font-weight: 600; color: var(--text); }
+
+        .trophy { margin-right: 0.3rem; }
+
+        .loading-msg {
+            text-align: center; padding: 3rem;
+            color: var(--text-light); font-style: italic;
+        }
+
+        /* ─── ADMIN PANEL ─── */
+        .admin-toggle-wrap {
+            text-align: center;
+            margin: 2rem 0 0;
+        }
+        .admin-toggle-btn {
+            background: none;
+            border: 1.5px solid var(--cream-dark);
+            color: var(--text-light);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.45rem 1.1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .admin-toggle-btn:hover { color: var(--jungle); border-color: var(--jungle); }
+
+        .admin-panel {
+            display: none;
+            background: var(--white);
+            border: 2px solid var(--cream-dark);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 1.2rem;
+        }
+        .admin-panel.open { display: block; }
+
+        .admin-unlock {
+            display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .admin-unlock input {
+            flex: 1; min-width: 160px;
+            border: 2px solid var(--cream-dark); border-radius: 8px;
+            padding: 0.55rem 0.85rem; font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
+        }
+        .admin-unlock input:focus { outline: none; border-color: var(--jungle); }
+        .admin-unlock button {
+            background: var(--jungle); color: var(--white);
+            border: none; border-radius: 8px; padding: 0.55rem 1.2rem;
+            font-size: 0.9rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+        }
+        .admin-unlock button:hover { background: var(--jungle-mid); }
+
+        .admin-content { display: none; }
+        .admin-content.unlocked { display: block; }
+
+        .admin-section-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.25rem;
+            color: var(--jungle);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .admin-award-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .admin-award-form .form-group { display: flex; flex-direction: column; gap: 0.35rem; }
+        .admin-award-form label { font-size: 0.82rem; font-weight: 700; color: var(--text); letter-spacing: 0.04em; text-transform: uppercase; }
+        .admin-award-form select,
+        .admin-award-form input,
+        .admin-award-form textarea {
+            border: 2px solid var(--cream-dark); border-radius: 8px;
+            padding: 0.6rem 0.85rem; font-size: 0.9rem; font-family: 'DM Sans', sans-serif;
+            color: var(--text); background: var(--cream);
+        }
+        .admin-award-form select:focus,
+        .admin-award-form input:focus,
+        .admin-award-form textarea:focus { outline: none; border-color: var(--jungle); }
+        .admin-award-form textarea { resize: vertical; min-height: 60px; }
+
+        .admin-btn {
+            background: var(--jungle); color: var(--white);
+            border: none; border-radius: 8px; padding: 0.7rem 1.5rem;
+            font-size: 0.9rem; font-weight: 700; cursor: pointer;
+            transition: background 0.2s ease; margin-top: 0.75rem;
+        }
+        .admin-btn:hover { background: var(--jungle-mid); }
+        .admin-btn.danger { background: #c0392b; }
+        .admin-btn.danger:hover { background: #a93226; }
+
+        .admin-divider {
+            border: none; border-top: 2px solid var(--cream-dark);
+            margin: 1.75rem 0;
+        }
+
+        .admin-reset-box {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+            background: #fff5f5; border: 2px solid #fecaca; border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+        }
+        .admin-reset-info { font-size: 0.9rem; color: #7f1d1d; font-weight: 500; }
+        .admin-reset-info strong { display: block; font-size: 1rem; margin-bottom: 0.2rem; }
+
+        .admin-status {
+            font-size: 0.88rem; font-weight: 600;
+            padding: 0.5rem 0.85rem; border-radius: 6px;
+            margin-top: 0.6rem; display: none;
+        }
+        .admin-status.success { background: #f0fdf4; color: #166534; display: block; }
+        .admin-status.error { background: #fef2f2; color: #991b1b; display: block; }
+
+        /* ─── LEADERBOARD HIDDEN MESSAGE ─── */
+        .leaderboard-hidden-msg {
+            display: none;
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            border: 2px solid var(--cream-dark);
+            margin-bottom: 2rem;
+        }
+        .leaderboard-hidden-msg .hidden-emoji { font-size: 3.5rem; margin-bottom: 0.75rem; }
+        .leaderboard-hidden-msg h3 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.7rem; color: var(--jungle); font-weight: 400; margin-bottom: 0.6rem;
+        }
+        .leaderboard-hidden-msg p { color: var(--text-mid); font-size: 1rem; line-height: 1.6; }
+
+        /* ─── PENDING REQUESTS ─── */
+        .pending-requests-section { margin-bottom: 0.5rem; }
+        .pending-empty { color: var(--text-light); font-size: 0.9rem; font-style: italic; padding: 0.5rem 0; }
+        .pending-request-item {
+            background: #faf5ff; border: 2px solid #d8b4fe; border-radius: 10px;
+            padding: 1rem 1.25rem; margin-bottom: 0.75rem;
+        }
+        .pending-request-meta {
+            font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem;
+        }
+        .pending-request-reason {
+            font-size: 0.88rem; color: var(--text-mid); margin-bottom: 0.75rem;
+        }
+        .pending-request-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+        .pending-approve-btn {
+            background: #2e7d32; color: #fff; border: none; padding: 0.45rem 1rem;
+            border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+        }
+        .pending-approve-btn:hover { background: #1b5e20; }
+        .pending-deny-btn {
+            background: #c62828; color: #fff; border: none; padding: 0.45rem 1rem;
+            border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+        }
+        .pending-deny-btn:hover { background: #b71c1c; }
+        .pending-deny-reason, .pending-adjust-pts {
+            display: none; margin-top: 0.6rem; width: 100%;
+        }
+        .pending-deny-reason input, .pending-adjust-pts input {
+            padding: 0.5rem 0.75rem; border: 1px solid #ddd; border-radius: 6px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.88rem; width: 100%; margin-bottom: 0.4rem;
+            box-sizing: border-box;
+        }
+        .pending-deny-confirm {
+            background: #c62828; color: #fff; border: none; padding: 0.4rem 0.9rem;
+            border-radius: 6px; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+        }
+        .pending-adjust-confirm {
+            background: #2e7d32; color: #fff; border: none; padding: 0.4rem 0.9rem;
+            border-radius: 6px; font-size: 0.83rem; font-weight: 600; cursor: pointer;
+        }
+        .pending-adjust-btn {
+            background: #b45309; color: #fff; border: none; padding: 0.45rem 1rem;
+            border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+        }
+        .pending-adjust-btn:hover { background: #92400e; }
+        .pending-request-status { font-size: 0.85rem; margin-top: 0.4rem; }
+        .pending-request-status.success { color: #2e7d32; }
+        .pending-request-status.error { color: #c62828; }
+
+        /* ─── VISIBILITY TOGGLE BOX ─── */
+        .admin-visibility-box {
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+            background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+        }
+        .admin-visibility-box .admin-reset-info { color: #1e3a8a; }
+        .admin-btn.hide-lb { background: #1565c0; }
+        .admin-btn.hide-lb:hover { background: #0d47a1; }
+        .admin-btn.show-lb { background: #2e7d32; }
+        .admin-btn.show-lb:hover { background: #1b5e20; }
+
+        /* Feed management */
+        .feed-mgmt-toggle {
+            background: none; border: none; font-size: 0.82rem; font-weight: 700;
+            color: var(--jungle); cursor: pointer; padding: 0; letter-spacing: 0.04em;
+            text-transform: uppercase; display: flex; align-items: center; gap: 0.4rem;
+        }
+        .feed-mgmt-toggle:hover { text-decoration: underline; }
+        .feed-mgmt-list { margin-top: 0.75rem; display: none; }
+        .feed-mgmt-list.open { display: block; }
+        .feed-entry-item {
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 0.75rem;
+            padding: 0.55rem 0.75rem; border-radius: 8px; margin-bottom: 0.4rem;
+            background: #f9fafb; border: 1px solid #e5e7eb; font-size: 0.85rem;
+        }
+        .feed-entry-item.is-pending { background: #fefce8; border-color: #fbbf24; }
+        .feed-entry-item.is-denied { background: #fff1f2; border-color: #fca5a5; opacity: 0.75; }
+        .feed-entry-info { flex: 1; min-width: 0; }
+        .feed-entry-meta { font-weight: 700; color: var(--text); }
+        .feed-entry-reason { color: var(--text-mid); margin-top: 0.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 340px; }
+        .feed-entry-ts { color: var(--text-light); font-size: 0.78rem; margin-top: 0.1rem; }
+        .feed-entry-buttons { display: flex; flex-direction: column; gap: 0.3rem; flex-shrink: 0; }
+        .feed-entry-delete, .feed-entry-delete-public, .feed-entry-comment-btn {
+            background: none; border-radius: 6px; padding: 0.25rem 0.6rem; font-size: 0.8rem;
+            cursor: pointer; font-weight: 600; white-space: nowrap; border: 1px solid;
+        }
+        .feed-entry-delete { border-color: #fca5a5; color: #c62828; }
+        .feed-entry-delete:hover { background: #fef2f2; }
+        .feed-entry-delete-public { border-color: #f97316; color: #c2410c; }
+        .feed-entry-delete-public:hover { background: #fff7ed; }
+        .feed-entry-comment-btn { border-color: #6366f1; color: #4338ca; }
+        .feed-entry-comment-btn:hover { background: #eef2ff; }
+        .feed-inline-form { margin-top: 0.4rem; }
+        .feed-inline-form input {
+            width: 100%; padding: 0.45rem 0.65rem; border: 1px solid #d1d5db;
+            border-radius: 6px; font-size: 0.85rem; font-family: inherit; box-sizing: border-box;
+        }
+        .feed-inline-form input:focus { outline: none; border-color: var(--jungle); }
+        .feed-inline-actions { display: flex; gap: 0.4rem; margin-top: 0.35rem; }
+        .feed-inline-confirm { flex: 1; padding: 0.4rem 0.5rem; border: none; border-radius: 6px; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #fff; }
+        .feed-inline-confirm.danger { background: #c2410c; }
+        .feed-inline-confirm.danger:hover { background: #9a3412; }
+        .feed-inline-confirm.save { background: #4338ca; }
+        .feed-inline-confirm.save:hover { background: #3730a3; }
+        .feed-inline-cancel { padding: 0.4rem 0.7rem; border: 1px solid #d1d5db; border-radius: 6px; background: #fff; font-size: 0.82rem; cursor: pointer; }
+        .feed-entry-admin-comment { font-size: 0.8rem; color: #4338ca; margin-top: 0.2rem; font-style: italic; }
+        .feed-entry-status { font-size: 0.82rem; margin-top: 0.3rem; padding: 0.3rem 0.5rem; border-radius: 5px; display: none; }
+        .feed-entry-status.success { background: #f0fdf4; color: #166534; display: block; }
+        .feed-entry-status.error { background: #fef2f2; color: #991b1b; display: block; }
+        .feed-note { font-size: 0.82rem; color: var(--text-light); font-style: italic; margin-bottom: 0.5rem; }
+
+        /* ─── LOTTERY WHEEL ─── */
+        .lottery-section { }
+        .lottery-wheel-wrap {
+            display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+        }
+        .lottery-canvas-container {
+            position: relative; display: inline-block;
+        }
+        #lotteryWheel {
+            display: block; border-radius: 50%;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.18);
+            max-width: 100%;
+        }
+        .wheel-pointer {
+            position: absolute; top: -18px; left: 50%;
+            transform: translateX(-50%);
+            width: 0; height: 0;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-top: 28px solid var(--hot-pink);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));
+        }
+        .lottery-spin-btn {
+            background: linear-gradient(135deg, var(--hot-pink), var(--orange));
+            color: var(--white); border: none; border-radius: 40px;
+            padding: 0.85rem 2.5rem; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; letter-spacing: 0.04em;
+            box-shadow: 0 4px 16px rgba(232,69,107,0.35);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .lottery-spin-btn:hover:not(:disabled) {
+            transform: translateY(-2px); box-shadow: 0 6px 22px rgba(232,69,107,0.45);
+        }
+        .lottery-spin-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+        .lottery-winner-banner {
+            display: none; text-align: center;
+            background: linear-gradient(135deg, #fff0f3, #fff8f0);
+            border: 2px solid var(--pink-light); border-radius: 16px;
+            padding: 1.25rem 2rem; width: 100%; max-width: 420px;
+        }
+        .lottery-winner-banner.show { display: block; animation: pop-in 0.45s cubic-bezier(0.34,1.56,0.64,1); }
+        @keyframes pop-in {
+            from { opacity: 0; transform: scale(0.7); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        .lottery-winner-banner .winner-emoji { font-size: 2.5rem; }
+        .lottery-winner-banner .winner-name {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; color: var(--jungle); font-weight: 400; margin: 0.2rem 0 0.1rem;
+        }
+        .lottery-winner-banner .winner-pts { font-size: 0.9rem; color: var(--text-mid); }
+        .lottery-note { font-size: 0.82rem; color: var(--text-light); font-style: italic; text-align: center; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2.5rem 1rem 4rem; }
+            .form-row { grid-template-columns: 1fr; }
+            .leaderboard-table th,
+            .leaderboard-table td { padding: 0.65rem 0.8rem; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html" class="active">Leaderboard</a></li>
+                <li><a href="points.html">Points</a></li>
+                <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Leaderboard</h1>
+        <p class="subtitle">Compete, earn points, and WIN our wedding!</p>
+    </section>
+
+    <main>
+
+        <!-- Competition Start Notice -->
+        <div style="background: var(--pink-soft); border: 2px solid var(--pink-light); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; text-align: center;">
+            <span style="font-size: 1.05rem; font-weight: 600; color: var(--jungle);">🎉 The competition has started on <strong>May 1st</strong>! Get your points now!</span>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="leaderboard-section">
+            <h2 class="section-heading">Guest Rankings</h2>
+
+            <!-- Hidden message (shown when leaderboard is dark) -->
+            <div class="leaderboard-hidden-msg" id="leaderboardHiddenMsg">
+                <div class="hidden-emoji">🌙</div>
+                <h3>The leaderboard has gone dark!</h3>
+                <p>The leaderboard is now hidden until the results are released<br>during the wedding reception. Stay tuned — all will be revealed soon! 🏆</p>
+            </div>
+
+            <table class="leaderboard-table" id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Guest</th>
+                        <th style="text-align:right;">Points</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <tr><td colspan="3" class="loading-msg">Loading leaderboard...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Admin Panel -->
+        <div class="admin-toggle-wrap">
+            <button class="admin-toggle-btn" onclick="document.getElementById('adminPanel').classList.toggle('open')">⚙ Admin</button>
+        </div>
+        <div class="admin-panel" id="adminPanel">
+            <div class="admin-unlock" id="adminUnlock">
+                <input type="password" id="adminKeyInput" placeholder="Admin key" autocomplete="off">
+                <button onclick="unlockAdmin()">Unlock</button>
+                <span id="adminUnlockStatus" style="font-size:0.85rem;color:#c0392b;display:none;">Wrong key — try again</span>
+            </div>
+            <div class="admin-content" id="adminContent">
+
+                <!-- Pending Requests -->
+                <p class="admin-section-title">Pending Requests</p>
+                <div class="pending-requests-section" id="pendingRequestsList">
+                    <p class="pending-empty">No pending requests.</p>
+                </div>
+
+                <hr class="admin-divider">
+
+                <!-- Direct Award -->
+                <p class="admin-section-title">Award Points Directly</p>
+                <form class="admin-award-form" id="adminAwardForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Guest</label>
+                            <select id="adminGuest" onchange="toggleNewGuestInput()">
+                                <option value="">— select a guest —</option>
+                                <option value="__new__">+ New Guest</option>
+                            </select>
+                            <input type="text" id="adminNewGuest" placeholder="Enter new guest name" style="margin-top:0.4rem; display:none;">
+                        </div>
+                        <div class="form-group">
+                            <label>Points</label>
+                            <input type="number" id="adminPoints" placeholder="e.g. 50" required>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top:0.75rem;">
+                        <label>Reason</label>
+                        <textarea id="adminReason" placeholder="e.g. Won the sandcastle competition" required></textarea>
+                    </div>
+                    <button type="submit" class="admin-btn">Award Points</button>
+                    <div class="admin-status" id="awardStatus"></div>
+                </form>
+
+                <hr class="admin-divider">
+
+                <!-- Remove Guest -->
+                <p class="admin-section-title">Remove Guest</p>
+                <div class="form-row" style="align-items: flex-end; gap: 0.75rem;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Guest to Remove</label>
+                        <select id="removeGuest" class="admin-award-form" style="width:100%; border:2px solid var(--cream-dark); border-radius:8px; padding:0.6rem 0.85rem; font-size:0.9rem; font-family:'DM Sans',sans-serif;">
+                            <option value="">— select a guest —</option>
+                        </select>
+                    </div>
+                    <button class="admin-btn danger" style="white-space:nowrap;" onclick="removeGuest()">Remove</button>
+                </div>
+                <div class="admin-status" id="removeGuestStatus"></div>
+
+                <hr class="admin-divider">
+
+                <!-- Reset All Points -->
+                <div class="admin-reset-box">
+                    <div class="admin-reset-info">
+                        <strong>Reset All Points to Zero</strong>
+                        Wipes everyone's score — use this before the competition starts.
+                    </div>
+                    <button class="admin-btn danger" id="resetBtn" onclick="resetAllPoints()">Reset All Points</button>
+                </div>
+                <div class="admin-status" id="resetStatus"></div>
+
+                <hr class="admin-divider">
+
+                <!-- Reset Activity Feed -->
+                <div class="admin-reset-box">
+                    <div class="admin-reset-info">
+                        <strong>Reset Activity Feed</strong>
+                        Clears the entire activity feed — removes all feed entries.
+                    </div>
+                    <button class="admin-btn danger" id="resetFeedBtn" onclick="resetFeed()">Reset Feed</button>
+                </div>
+                <div class="admin-status" id="resetFeedStatus"></div>
+
+                <hr class="admin-divider">
+
+                <!-- Manage Activity Feed Entries -->
+                <p class="admin-section-title">Manage Activity Feed</p>
+                <p class="feed-note">Delete individual entries from the feed log. Points from <strong>approved</strong> entries will be automatically deducted from the guest's total. Pending and denied entries have no effect on points.</p>
+                <button class="feed-mgmt-toggle" onclick="toggleFeedMgmt()">▶ Show Feed Entries</button>
+                <div class="feed-mgmt-list" id="feedMgmtList"></div>
+                <div class="admin-status" id="feedDeleteStatus"></div>
+
+                <hr class="admin-divider">
+
+                <!-- Lottery Winner Wheel -->
+                <p class="admin-section-title">🎰 Lottery Winner Selector</p>
+                <p class="feed-note">Everyone with points (except 1st, 2nd &amp; 3rd place) is entered into the lottery, weighted by their points. Spin the wheel to pick a winner!</p>
+                <div class="lottery-wheel-wrap">
+                    <div class="lottery-canvas-container">
+                        <div class="wheel-pointer"></div>
+                        <canvas id="lotteryWheel" width="420" height="420"></canvas>
+                    </div>
+                    <button class="lottery-spin-btn" id="lotterySpinBtn" onclick="spinLotteryWheel()">🎰 Spin the Wheel!</button>
+                    <div class="lottery-winner-banner" id="lotteryWinnerBanner">
+                        <div class="winner-emoji">🎉</div>
+                        <div class="winner-name" id="lotteryWinnerName">—</div>
+                        <div class="winner-pts" id="lotteryWinnerPts"></div>
+                    </div>
+                    <p class="lottery-note" id="lotteryNote"></p>
+                </div>
+
+                <hr class="admin-divider">
+
+                <!-- Beach Competition Links -->
+                <p class="admin-section-title">🏖️ Beach Competition</p>
+                <p class="feed-note">Links for the Saturday beach competition test and leaderboard.</p>
+                <div style="display:flex;gap:0.75rem;flex-wrap:wrap;margin-bottom:1rem;">
+                    <a href="beach-competition-test.html" target="_blank" class="admin-btn" style="text-decoration:none;display:inline-block;">📝 Take the Test</a>
+                    <a href="beach-leaderboard.html" target="_blank" class="admin-btn" style="text-decoration:none;display:inline-block;">🏆 Beach Leaderboard</a>
+                    <a href="beach-scorecard.html" target="_blank" class="admin-btn" style="text-decoration:none;display:inline-block;">🏅 Beach Competition Scorecard</a>
+                </div>
+                <div class="admin-reset-box">
+                    <div class="admin-reset-info">
+                        <strong>Clear Beach Leaderboard</strong>
+                        Wipes all beach competition scores — use this to reset before the real competition.
+                    </div>
+                    <button class="admin-btn danger" onclick="clearBeachScores()">Clear Beach Scores</button>
+                </div>
+                <div class="admin-status" id="clearBeachStatus"></div>
+
+                <hr class="admin-divider">
+
+                <!-- Leaderboard Visibility Toggle -->
+                <div class="admin-visibility-box" id="visibilityBox">
+                    <div class="admin-reset-info">
+                        <strong id="visibilityTitle">Hide Leaderboard</strong>
+                        <span id="visibilityDesc">Guests can currently see the scores. Click to hide the leaderboard until the reception.</span>
+                    </div>
+                    <button class="admin-btn hide-lb" id="visibilityBtn" onclick="toggleVisibility()">🌙 Hide Leaderboard</button>
+                </div>
+                <div class="admin-status" id="visibilityStatus"></div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        // ──────────────────────────────────────────────
+        // CONFIG — Netlify Functions API
+        // ──────────────────────────────────────────────
+
+        const API_BASE = '/.netlify/functions';
+
+        // ──────────────────────────────────────────────
+        // LEADERBOARD
+        // ──────────────────────────────────────────────
+
+        function renderLeaderboard(guests) {
+            const hiddenMsg = document.getElementById('leaderboardHiddenMsg');
+            const table = document.getElementById('leaderboardTable');
+
+            // If hidden and not yet unlocked as admin, show the "going dark" message
+            if (leaderboardHidden && !adminKey) {
+                hiddenMsg.style.display = 'block';
+                table.style.display = 'none';
+                return;
+            }
+            hiddenMsg.style.display = 'none';
+            table.style.display = '';
+
+            // Sort by points descending, then alphabetically for ties
+            guests.sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+
+            const tbody = document.getElementById('leaderboardBody');
+            if (guests.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading-msg">No guests found.</td></tr>';
+                return;
+            }
+
+            // Calculate competition ranks (ties share same rank; next rank skips)
+            const ranks = [];
+            let rank = 1;
+            for (let i = 0; i < guests.length; i++) {
+                if (i > 0 && guests[i].points === guests[i - 1].points) {
+                    ranks.push(ranks[i - 1]); // same rank as previous
+                } else {
+                    rank = i + 1;
+                    ranks.push(rank);
+                }
+            }
+
+            // Determine last-5 threshold (bottom 5 distinct positions)
+            const totalGuests = guests.length;
+            const lastFiveStart = Math.max(0, totalGuests - 5);
+
+            const animalEmojis = ['🐬','🦜','🐢','🦭','🦈','🐙','🦅','🐠','🦀','🐋','🪿','🦎','🐸','🦩','🐡','🦔','🦋','🐳','🦚','🐧','🦁','🐨','🦊','🐻','🦝','🐯','🦌','🐺','🦓','🐘'];
+
+            tbody.innerHTML = guests.map((g, i) => {
+                const r = ranks[i];
+                let classes = '';
+                if (r <= 3 && g.points > 0) classes = ` rank-${r}`;
+                else if (g.points > 0) classes = ' has-points';
+                else classes = ' no-points';
+
+                let trophy = '';
+                if (r === 1) trophy = '<span class="trophy">&#127942;</span>';
+                else if (r === 2) trophy = '<span class="trophy">&#129352;</span>';
+                else if (r === 3) trophy = '<span class="trophy">&#129353;</span>';
+                else if (g.points > 0) {
+                    const emoji = animalEmojis[(r - 4) % animalEmojis.length];
+                    trophy = `<span class="trophy">${emoji}</span>`;
+                }
+
+                return `<tr class="${classes}">
+                    <td class="rank">${r}</td>
+                    <td class="guest-name">${trophy}${g.name}</td>
+                    <td>${g.points}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // ──────────────────────────────────────────────
+        // LOTTERY WHEEL
+        // ──────────────────────────────────────────────
+
+        const WHEEL_COLORS = [
+            '#E8456B','#E8823C','#2E7245','#1565C0','#7B1FA2',
+            '#00838F','#C62828','#4527A0','#2E7D32','#AD1457',
+            '#1565C0','#EF6C00','#00695C','#6A1B9A','#283593',
+        ];
+
+        let lotteryEntrants = []; // [{name, points}] eligible guests
+        let wheelRotation = 0;   // current rotation in radians
+        let isSpinning = false;
+
+        function getLotteryEntrants() {
+            // Sort the same way renderLeaderboard does
+            const sorted = [...allGuestsData].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));
+            // Compute ranks
+            const ranks = [];
+            let rank = 1;
+            for (let i = 0; i < sorted.length; i++) {
+                if (i > 0 && sorted[i].points === sorted[i-1].points) {
+                    ranks.push(ranks[i-1]);
+                } else {
+                    rank = i + 1;
+                    ranks.push(rank);
+                }
+            }
+            // Eligible: points > 0 and not rank 1/2/3
+            return sorted.filter((g, i) => g.points > 0 && ranks[i] > 3);
+        }
+
+        function buildLotteryWheel() {
+            lotteryEntrants = getLotteryEntrants();
+            wheelRotation = 0;
+            const noteEl = document.getElementById('lotteryNote');
+            const banner = document.getElementById('lotteryWinnerBanner');
+            if (banner) { banner.classList.remove('show'); }
+
+            if (lotteryEntrants.length === 0) {
+                if (noteEl) noteEl.textContent = 'No eligible entrants yet — lottery requires guests ranked 4th or lower with points.';
+                drawEmptyWheel();
+                return;
+            }
+            const totalPts = lotteryEntrants.reduce((s, g) => s + g.points, 0);
+            if (noteEl) noteEl.textContent = `${lotteryEntrants.length} entrants · ${totalPts} total entries (weighted by points)`;
+            drawWheel(0);
+        }
+
+        function drawEmptyWheel() {
+            const canvas = document.getElementById('lotteryWheel');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const cx = canvas.width / 2, cy = canvas.height / 2, r = cx - 8;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.fillStyle = '#f0e6d6';
+            ctx.fill();
+            ctx.strokeStyle = '#d0c0a8';
+            ctx.lineWidth = 4;
+            ctx.stroke();
+            ctx.fillStyle = '#7A7A7A';
+            ctx.font = 'bold 16px DM Sans, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('No eligible entrants', cx, cy - 10);
+            ctx.font = '13px DM Sans, sans-serif';
+            ctx.fillText('yet!', cx, cy + 14);
+        }
+
+        function drawWheel(rotation) {
+            const canvas = document.getElementById('lotteryWheel');
+            if (!canvas || lotteryEntrants.length === 0) return;
+            const ctx = canvas.getContext('2d');
+            const cx = canvas.width / 2, cy = canvas.height / 2;
+            const r = cx - 8;
+            const totalPts = lotteryEntrants.reduce((s, g) => s + g.points, 0);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw segments
+            let startAngle = rotation - Math.PI / 2; // pointer at top
+            lotteryEntrants.forEach((g, i) => {
+                const slice = (g.points / totalPts) * Math.PI * 2;
+                const endAngle = startAngle + slice;
+                const color = WHEEL_COLORS[i % WHEEL_COLORS.length];
+
+                // Segment fill
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, r, startAngle, endAngle);
+                ctx.closePath();
+                ctx.fillStyle = color;
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // Label — only if segment is big enough to show text
+                const midAngle = startAngle + slice / 2;
+                const minSliceForLabel = (Math.PI * 2) / 60; // at least 1/60 of wheel
+                if (slice >= minSliceForLabel) {
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(midAngle);
+                    const textR = r * 0.62;
+                    ctx.textAlign = 'right';
+                    ctx.textBaseline = 'middle';
+                    // Font size scales with segment size, capped
+                    const fontSize = Math.max(9, Math.min(14, Math.floor(slice * r * 0.18)));
+                    ctx.font = `600 ${fontSize}px DM Sans, sans-serif`;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.shadowColor = 'rgba(0,0,0,0.4)';
+                    ctx.shadowBlur = 3;
+                    // Truncate long names
+                    let label = g.name;
+                    const maxChars = Math.max(4, Math.floor(slice * 28));
+                    if (label.length > maxChars) label = label.slice(0, maxChars - 1) + '…';
+                    ctx.fillText(label, textR, 0);
+                    ctx.restore();
+                }
+
+                startAngle = endAngle;
+            });
+
+            // Center circle
+            ctx.beginPath();
+            ctx.arc(cx, cy, 22, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff';
+            ctx.fill();
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Outer ring
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(0,0,0,0.12)';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+        }
+
+        function pickWeightedWinner() {
+            const totalPts = lotteryEntrants.reduce((s, g) => s + g.points, 0);
+            let rand = Math.random() * totalPts;
+            for (const g of lotteryEntrants) {
+                rand -= g.points;
+                if (rand <= 0) return g;
+            }
+            return lotteryEntrants[lotteryEntrants.length - 1];
+        }
+
+        function spinLotteryWheel() {
+            if (isSpinning || lotteryEntrants.length === 0) return;
+            isSpinning = true;
+
+            const btn = document.getElementById('lotterySpinBtn');
+            btn.disabled = true;
+            const banner = document.getElementById('lotteryWinnerBanner');
+            banner.classList.remove('show');
+
+            // Phase 1: free-spin for 8s at high speed, winner unknown
+            const freeDuration = 8000;
+            const freeSpeed = 6 * Math.PI; // radians per second (~3 full rotations/s)
+            const freeStart = wheelRotation;
+            const freeStartTime = performance.now();
+
+            function freeFrame(now) {
+                const elapsed = now - freeStartTime;
+                if (elapsed < freeDuration) {
+                    wheelRotation = freeStart + freeSpeed * (elapsed / 1000);
+                    drawWheel(wheelRotation);
+                    requestAnimationFrame(freeFrame);
+                } else {
+                    // Phase 1 done — now pick winner and ease into landing
+                    wheelRotation = freeStart + freeSpeed * (freeDuration / 1000);
+                    const winner = pickWeightedWinner();
+                    animateSettle(wheelRotation, winner);
+                }
+            }
+            requestAnimationFrame(freeFrame);
+        }
+
+        function animateSettle(startRot, winner) {
+            const totalPts = lotteryEntrants.reduce((s, g) => s + g.points, 0);
+
+            // Find the angular midpoint of the winner's segment
+            let segStart = -Math.PI / 2;
+            for (const g of lotteryEntrants) {
+                const slice = (g.points / totalPts) * Math.PI * 2;
+                if (g === winner) {
+                    const midOffset = segStart + slice / 2;
+                    // Land with 1–2 extra full rotations to feel natural
+                    const extraSpins = 1 + Math.floor(Math.random() * 2);
+                    // Target: midOffset + endRot = -π/2  (mod 2π)
+                    // Normalise startRot so target > startRot
+                    let target = -Math.PI / 2 - midOffset + extraSpins * Math.PI * 2;
+                    while (target <= startRot) target += Math.PI * 2;
+                    animateSpin(startRot, target, winner);
+                    break;
+                }
+                segStart += slice;
+            }
+        }
+
+        function animateSpin(startRot, endRot, winner) {
+            const duration = 2000; // 2s ease-out settle
+            const startTime = performance.now();
+
+            function easeOut(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            function frame(now) {
+                const elapsed = now - startTime;
+                const t = Math.min(elapsed / duration, 1);
+                wheelRotation = startRot + (endRot - startRot) * easeOut(t);
+                drawWheel(wheelRotation);
+
+                if (t < 1) {
+                    requestAnimationFrame(frame);
+                } else {
+                    wheelRotation = endRot;
+                    drawWheel(wheelRotation);
+                    isSpinning = false;
+                    showLotteryWinner(winner);
+                    const btn = document.getElementById('lotterySpinBtn');
+                    btn.disabled = false;
+                    btn.textContent = '🎰 Spin Again!';
+                }
+            }
+
+            requestAnimationFrame(frame);
+        }
+
+        function showLotteryWinner(winner) {
+            const banner = document.getElementById('lotteryWinnerBanner');
+            document.getElementById('lotteryWinnerName').textContent = winner.name;
+            document.getElementById('lotteryWinnerPts').textContent =
+                `${winner.points} pts · ${winner.points} lottery ${winner.points === 1 ? 'entry' : 'entries'}`;
+            banner.classList.add('show');
+            banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // ──────────────────────────────────────────────
+        // NAME RANDOMIZATION
+        // ──────────────────────────────────────────────
+
+        (function() {
+            const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+            const pick = names[Math.floor(Math.random() * 2)];
+            document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+            document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+        })();
+
+        // ──────────────────────────────────────────────
+        // INIT
+        // ──────────────────────────────────────────────
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+
+        loadData();
+
+        // ──────────────────────────────────────────────
+        // ADMIN PANEL
+        // ──────────────────────────────────────────────
+
+        let adminKey = null;
+        let allGuests = [];
+        let allGuestsData = []; // full {name, points} objects for lottery
+        let leaderboardHidden = false;
+
+        function loadData() {
+            fetch(API_BASE + '/get-leaderboard')
+                .then(res => res.json())
+                .then(data => {
+                    leaderboardHidden = !!data.hidden;
+                    renderLeaderboard(data.guests || []);
+                    allGuestsData = data.guests || [];
+                    allGuests = allGuestsData.map(g => g.name).sort();
+                    populateGuestDropdown();
+                    buildLotteryWheel();
+                    updateVisibilityUI(leaderboardHidden);
+                    if (adminKey) {
+                        renderPendingRequests(data.feed || []);
+                        renderAdminFeed(data.feed || []);
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load leaderboard data:', err);
+                    document.getElementById('leaderboardBody').innerHTML =
+                        '<tr><td colspan="3" class="loading-msg">Could not load leaderboard data.</td></tr>';
+                });
+        }
+
+        function renderPendingRequests(feed) {
+            const container = document.getElementById('pendingRequestsList');
+            const pending = feed.filter(f => f.status === 'pending');
+            if (pending.length === 0) {
+                container.innerHTML = '<p class="pending-empty">No pending requests.</p>';
+                return;
+            }
+            container.innerHTML = pending.map(item => `
+                <div class="pending-request-item" id="req-${item.requestId}">
+                    <div class="pending-request-meta">
+                        ${item.name} &mdash; <span style="color:#7c3aed;" id="pts-display-${item.requestId}">+${item.points} pts requested</span>
+                    </div>
+                    <div class="pending-request-reason">${item.reason}</div>
+                    <div class="pending-request-actions">
+                        <button class="pending-approve-btn" onclick="adminApproveRequest('${item.requestId}', '${item.name}', ${item.points})">✅ Approve</button>
+                        <button class="pending-adjust-btn" onclick="showAdjustPoints('${item.requestId}', ${item.points})">✏️ Adjust &amp; Approve</button>
+                        <button class="pending-deny-btn" onclick="showDenyReason('${item.requestId}')">❌ Deny</button>
+                    </div>
+                    <div class="pending-adjust-pts" id="adjust-form-${item.requestId}">
+                        <input type="number" id="adjust-pts-${item.requestId}" value="${item.points}" step="1" placeholder="Adjusted points (can be negative)">
+                        <input type="text" id="adjust-comment-${item.requestId}" placeholder="Comment (optional) — shown in Points Activity" style="margin-top:0.4rem;">
+                        <button class="pending-adjust-confirm" onclick="adminApproveRequest('${item.requestId}', '${item.name}', ${item.points}, true)">Approve with Adjusted Points</button>
+                    </div>
+                    <div class="pending-deny-reason" id="deny-form-${item.requestId}">
+                        <input type="text" id="deny-reason-${item.requestId}" placeholder="Reason for denial (required)">
+                        <button class="pending-deny-confirm" onclick="adminDenyRequest('${item.requestId}')">Confirm Denial</button>
+                    </div>
+                    <div class="pending-request-status" id="req-status-${item.requestId}"></div>
+                </div>
+            `).join('');
+        }
+
+        function showDenyReason(requestId) {
+            document.getElementById(`adjust-form-${requestId}`).style.display = 'none';
+            document.getElementById(`deny-form-${requestId}`).style.display = 'block';
+            document.getElementById(`deny-reason-${requestId}`).focus();
+        }
+
+        function showAdjustPoints(requestId, currentPts) {
+            document.getElementById(`deny-form-${requestId}`).style.display = 'none';
+            document.getElementById(`adjust-form-${requestId}`).style.display = 'block';
+            document.getElementById(`adjust-pts-${requestId}`).focus();
+        }
+
+        async function adminApproveRequest(requestId, name, originalPoints, useAdjusted = false) {
+            const statusEl = document.getElementById(`req-status-${requestId}`);
+            let adjustedPoints = undefined;
+            let adminComment = undefined;
+            if (useAdjusted) {
+                adjustedPoints = parseInt(document.getElementById(`adjust-pts-${requestId}`).value, 10);
+                if (isNaN(adjustedPoints) || adjustedPoints === 0) {
+                    statusEl.className = 'pending-request-status error';
+                    statusEl.textContent = 'Please enter a non-zero point value (negative values are OK).';
+                    return;
+                }
+                const commentEl = document.getElementById(`adjust-comment-${requestId}`);
+                if (commentEl && commentEl.value.trim()) adminComment = commentEl.value.trim();
+            }
+            const awardedPts = adjustedPoints !== undefined ? adjustedPoints : originalPoints;
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminKey}` },
+                    body: JSON.stringify({ action: 'approve-request', requestId, adjustedPoints, adminComment })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    statusEl.className = 'pending-request-status success';
+                    statusEl.textContent = `✅ Approved! +${awardedPts} pts awarded to ${name}.`;
+                    document.querySelectorAll(`#req-${requestId} button`).forEach(b => b.disabled = true);
+                    setTimeout(() => loadData(), 1200);
+                } else {
+                    statusEl.className = 'pending-request-status error';
+                    statusEl.textContent = data.error || 'Failed to approve.';
+                }
+            } catch(e) {
+                statusEl.className = 'pending-request-status error';
+                statusEl.textContent = 'Error — please try again.';
+            }
+        }
+
+        async function adminDenyRequest(requestId) {
+            const reason = document.getElementById(`deny-reason-${requestId}`).value.trim();
+            const statusEl = document.getElementById(`req-status-${requestId}`);
+            if (!reason) {
+                statusEl.className = 'pending-request-status error';
+                statusEl.textContent = 'A reason is required to deny a request.';
+                return;
+            }
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminKey}` },
+                    body: JSON.stringify({ action: 'deny-request', requestId, denyReason: reason })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    statusEl.className = 'pending-request-status success';
+                    statusEl.textContent = `❌ Denied — ${reason}.`;
+                    document.querySelectorAll(`#req-${requestId} button`).forEach(b => b.disabled = true);
+                    setTimeout(() => loadData(), 1200);
+                } else {
+                    statusEl.className = 'pending-request-status error';
+                    statusEl.textContent = data.error || 'Failed to deny.';
+                }
+            } catch(e) {
+                statusEl.className = 'pending-request-status error';
+                statusEl.textContent = 'Error — please try again.';
+            }
+        }
+
+        // ── Feed Management ──────────────────────────────────────────────────
+
+        let allFeedEntries = [];
+
+        function toggleFeedMgmt() {
+            const list = document.getElementById('feedMgmtList');
+            const btn = document.querySelector('.feed-mgmt-toggle');
+            const isOpen = list.classList.toggle('open');
+            btn.textContent = (isOpen ? '▼' : '▶') + ' Show Feed Entries';
+        }
+
+        function renderAdminFeed(feed) {
+            allFeedEntries = [...feed].reverse(); // most recent first
+            const list = document.getElementById('feedMgmtList');
+            if (!list) return;
+            if (allFeedEntries.length === 0) {
+                list.innerHTML = '<p class="pending-empty">No feed entries.</p>';
+                return;
+            }
+            list.innerHTML = allFeedEntries.map((item, i) => {
+                const ts = item.timestamp ? new Date(item.timestamp).toLocaleString() : '—';
+                const statusClass = item.status === 'pending' ? 'is-pending' : item.status === 'denied' ? 'is-denied' : '';
+                const badge = item.status === 'pending' ? ' 🕐' : item.status === 'denied' ? ' ✕' : item.status === 'rejected' ? ' 🚫' : '';
+                const pts = item.status === 'pending' ? `${item.points}? pts` : `${item.points} pts`;
+                const safeTs = (item.timestamp || '').replace(/"/g, '&quot;').replace(/'/g, "\\'");
+                const safeName = (item.name || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const adminCommentHtml = item.adminComment
+                    ? `<div class="feed-entry-admin-comment">💬 ${item.adminComment}</div>` : '';
+                return `
+                <div class="feed-entry-item ${statusClass}" id="feed-entry-${i}">
+                    <div class="feed-entry-info">
+                        <div class="feed-entry-meta">${item.name}${badge} — ${pts}</div>
+                        <div class="feed-entry-reason">${item.reason || '—'}</div>
+                        <div class="feed-entry-ts">${ts}</div>
+                        ${adminCommentHtml}
+                        <div class="feed-inline-form" id="feed-form-public-${i}" style="display:none;">
+                            <input type="text" id="feed-comment-public-${i}" placeholder="Comment to show publicly (required)" style="margin-top:0.4rem;">
+                            <div class="feed-inline-actions">
+                                <button class="feed-inline-confirm danger" onclick="confirmPublicDelete('${safeTs}', '${safeName}', ${i})">📢 Delete &amp; Post Rejection</button>
+                                <button class="feed-inline-cancel" onclick="hideFeedForm(${i}, 'public')">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="feed-inline-form" id="feed-form-note-${i}" style="display:none;">
+                            <input type="text" id="feed-comment-note-${i}" placeholder="Note to attach to this entry" style="margin-top:0.4rem;">
+                            <div class="feed-inline-actions">
+                                <button class="feed-inline-confirm save" onclick="saveFeedComment('${safeTs}', '${safeName}', ${i})">💾 Save Note</button>
+                                <button class="feed-inline-cancel" onclick="hideFeedForm(${i}, 'note')">Cancel</button>
+                            </div>
+                        </div>
+                        <div class="feed-entry-status" id="feed-status-${i}"></div>
+                    </div>
+                    <div class="feed-entry-buttons">
+                        <button class="feed-entry-delete" onclick="confirmPrivateDelete('${safeTs}', '${safeName}', ${i})" title="Delete privately — no public notice">🗑 Private</button>
+                        <button class="feed-entry-delete-public" onclick="showFeedForm(${i}, 'public')" title="Delete + post rejection notice to feed">📢 Public</button>
+                        <button class="feed-entry-comment-btn" onclick="showFeedForm(${i}, 'note')" title="Add a note to this entry">💬 Note</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function showFeedForm(idx, type) {
+            // Hide all inline forms first for this entry
+            const pubForm = document.getElementById(`feed-form-public-${idx}`);
+            const noteForm = document.getElementById(`feed-form-note-${idx}`);
+            if (type === 'public') {
+                if (pubForm.style.display !== 'none') { pubForm.style.display = 'none'; return; }
+                if (noteForm) noteForm.style.display = 'none';
+                pubForm.style.display = 'block';
+                document.getElementById(`feed-comment-public-${idx}`).focus();
+            } else if (type === 'note') {
+                if (noteForm.style.display !== 'none') { noteForm.style.display = 'none'; return; }
+                if (pubForm) pubForm.style.display = 'none';
+                noteForm.style.display = 'block';
+                document.getElementById(`feed-comment-note-${idx}`).focus();
+            }
+        }
+
+        function hideFeedForm(idx, type) {
+            const form = document.getElementById(`feed-form-${type}-${idx}`);
+            if (form) form.style.display = 'none';
+        }
+
+        function setFeedStatus(idx, cls, msg) {
+            const el = document.getElementById(`feed-status-${idx}`);
+            if (!el) return;
+            el.className = `feed-entry-status ${cls}`;
+            el.textContent = msg;
+        }
+
+        async function confirmPrivateDelete(timestamp, name, idx) {
+            if (!confirm(`Privately delete this feed entry for "${name}"?\nPoints will be deducted if entry was approved. No public notice will be posted.`)) return;
+            setFeedStatus(idx, '', '');
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'delete-feed-entry', timestamp, name })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const el = document.getElementById(`feed-entry-${idx}`);
+                    if (el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; }
+                    setFeedStatus(idx, 'success', '✅ Deleted privately.');
+                    setTimeout(() => loadData(), 1500);
+                } else {
+                    setFeedStatus(idx, 'error', data.error || 'Failed to delete entry.');
+                }
+            } catch(e) {
+                setFeedStatus(idx, 'error', 'Error — please try again.');
+            }
+        }
+
+        async function confirmPublicDelete(timestamp, name, idx) {
+            const comment = document.getElementById(`feed-comment-public-${idx}`)?.value.trim();
+            if (!comment) {
+                document.getElementById(`feed-comment-public-${idx}`).style.borderColor = '#c2410c';
+                setFeedStatus(idx, 'error', 'Please enter a comment to show publicly.');
+                return;
+            }
+            setFeedStatus(idx, '', '');
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'delete-feed-entry-public', timestamp, name, comment })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const el = document.getElementById(`feed-entry-${idx}`);
+                    if (el) { el.style.opacity = '0.4'; el.style.pointerEvents = 'none'; }
+                    setFeedStatus(idx, 'success', '✅ Deleted & rejection posted to feed.');
+                    setTimeout(() => loadData(), 1500);
+                } else {
+                    setFeedStatus(idx, 'error', data.error || 'Failed.');
+                }
+            } catch(e) {
+                setFeedStatus(idx, 'error', 'Error — please try again.');
+            }
+        }
+
+        async function saveFeedComment(timestamp, name, idx) {
+            const comment = document.getElementById(`feed-comment-note-${idx}`)?.value.trim();
+            if (!comment) {
+                document.getElementById(`feed-comment-note-${idx}`).style.borderColor = '#4338ca';
+                setFeedStatus(idx, 'error', 'Please enter a note.');
+                return;
+            }
+            setFeedStatus(idx, '', '');
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'add-feed-comment', timestamp, name, comment })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    hideFeedForm(idx, 'note');
+                    setFeedStatus(idx, 'success', '✅ Note saved.');
+                    setTimeout(() => loadData(), 1500);
+                } else {
+                    setFeedStatus(idx, 'error', data.error || 'Failed to save note.');
+                }
+            } catch(e) {
+                setFeedStatus(idx, 'error', 'Error — please try again.');
+            }
+        }
+
+        function populateGuestDropdown() {
+            const guestOpts = '<option value="">— select a guest —</option>' +
+                allGuests.map(n => `<option value="${n}">${n}</option>`).join('') +
+                '<option value="__new__">+ New Guest</option>';
+            document.getElementById('adminGuest').innerHTML = guestOpts;
+            const removeOpts = '<option value="">— select a guest —</option>' +
+                allGuests.map(n => `<option value="${n}">${n}</option>`).join('');
+            document.getElementById('removeGuest').innerHTML = removeOpts;
+        }
+
+        function toggleNewGuestInput() {
+            const sel = document.getElementById('adminGuest');
+            const input = document.getElementById('adminNewGuest');
+            if (sel.value === '__new__') {
+                input.style.display = 'block';
+                input.focus();
+            } else {
+                input.style.display = 'none';
+                input.value = '';
+            }
+        }
+
+        async function unlockAdmin() {
+            const key = document.getElementById('adminKeyInput').value.trim();
+            const statusEl = document.getElementById('adminUnlockStatus');
+            statusEl.style.display = 'none';
+
+            // Verify key by making a test API call
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+                    body: JSON.stringify({ action: 'get' }),
+                });
+                if (res.ok) {
+                    adminKey = key;
+                    document.getElementById('adminUnlock').style.display = 'none';
+                    document.getElementById('adminContent').classList.add('unlocked');
+                    populateGuestDropdown();
+                    loadData(); // re-render leaderboard (admins see it even if hidden)
+                } else {
+                    statusEl.style.display = 'inline';
+                }
+            } catch (e) {
+                statusEl.textContent = 'Connection error';
+                statusEl.style.display = 'inline';
+            }
+        }
+
+        document.getElementById('adminAwardForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const dropdownVal = document.getElementById('adminGuest').value;
+            const newGuestName = document.getElementById('adminNewGuest').value.trim();
+            const name = (dropdownVal === '__new__') ? newGuestName : dropdownVal;
+            const pts = parseInt(document.getElementById('adminPoints').value, 10);
+            const reason = document.getElementById('adminReason').value.trim();
+            const statusEl = document.getElementById('awardStatus');
+            statusEl.className = 'admin-status';
+
+            if (!name) {
+                statusEl.textContent = dropdownVal === '__new__' ? 'Please enter the new guest name' : 'Please select a guest';
+                statusEl.style.display = 'inline';
+                return;
+            }
+            if (!reason) return;
+
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'add-points', name, points: pts, reason }),
+                });
+                if (res.ok) {
+                    statusEl.textContent = `✅ Awarded ${pts > 0 ? '+' : ''}${pts} pts to ${name}`;
+                    statusEl.className = 'admin-status success';
+                    this.reset();
+                    loadData();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error awarding points. Check connection.';
+                statusEl.className = 'admin-status error';
+            }
+        });
+
+        async function removeGuest() {
+            const name = document.getElementById('removeGuest').value;
+            const statusEl = document.getElementById('removeGuestStatus');
+            statusEl.className = 'admin-status';
+            if (!name) { statusEl.textContent = 'Please select a guest'; statusEl.style.display = 'inline'; return; }
+            if (!confirm(`Remove "${name}" from the leaderboard? This cannot be undone.`)) return;
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'remove-guest', name }),
+                });
+                if (res.ok) {
+                    statusEl.textContent = `✅ Removed ${name}`;
+                    statusEl.className = 'admin-status success';
+                    loadData();
+                } else {
+                    const err = await res.json();
+                    statusEl.textContent = err.error || 'Failed to remove guest';
+                    statusEl.style.display = 'inline';
+                }
+            } catch (e) {
+                statusEl.textContent = 'Connection error';
+                statusEl.style.display = 'inline';
+            }
+        }
+
+        async function resetAllPoints() {
+            const statusEl = document.getElementById('resetStatus');
+            statusEl.className = 'admin-status';
+
+            if (!confirm('Reset ALL guest points to 0? This cannot be undone.')) return;
+
+            const btn = document.getElementById('resetBtn');
+            btn.disabled = true;
+            btn.textContent = 'Resetting…';
+
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'reset-points' }),
+                });
+                if (res.ok) {
+                    statusEl.textContent = '✅ All points reset to 0!';
+                    statusEl.className = 'admin-status success';
+                    loadData();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error resetting points. Check connection.';
+                statusEl.className = 'admin-status error';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Reset All Points';
+        }
+
+        async function resetFeed() {
+            const statusEl = document.getElementById('resetFeedStatus');
+            statusEl.className = 'admin-status';
+
+            if (!confirm('Clear the entire activity feed? This cannot be undone.')) return;
+
+            const btn = document.getElementById('resetFeedBtn');
+            btn.disabled = true;
+            btn.textContent = 'Resetting…';
+
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'reset-feed' }),
+                });
+                if (res.ok) {
+                    statusEl.textContent = '✅ Activity feed cleared!';
+                    statusEl.className = 'admin-status success';
+                    loadData();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error resetting feed. Check connection.';
+                statusEl.className = 'admin-status error';
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Reset Feed';
+        }
+
+        async function clearBeachScores() {
+            const statusEl = document.getElementById('clearBeachStatus');
+            statusEl.className = 'admin-status';
+
+            if (!confirm('Clear ALL beach competition scores? This cannot be undone.')) return;
+
+            try {
+                const res = await fetch('/.netlify/functions/clear-beach-scores', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                });
+                if (res.ok) {
+                    statusEl.textContent = '✅ Beach leaderboard cleared!';
+                    statusEl.className = 'admin-status success';
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error clearing scores. Check connection.';
+                statusEl.className = 'admin-status error';
+            }
+        }
+
+        // Allow Enter key to unlock admin
+        document.getElementById('adminKeyInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); unlockAdmin(); }
+        });
+
+        function updateVisibilityUI(hidden) {
+            const btn = document.getElementById('visibilityBtn');
+            const title = document.getElementById('visibilityTitle');
+            const desc = document.getElementById('visibilityDesc');
+            if (!btn) return;
+            if (hidden) {
+                btn.textContent = '👁 Show Leaderboard';
+                btn.className = 'admin-btn show-lb';
+                title.textContent = 'Leaderboard is Hidden';
+                desc.textContent = 'Guests see a "going dark" message. Click to reveal scores again.';
+            } else {
+                btn.textContent = '🌙 Hide Leaderboard';
+                btn.className = 'admin-btn hide-lb';
+                title.textContent = 'Hide Leaderboard';
+                desc.textContent = 'Guests can currently see the scores. Click to hide until the reception.';
+            }
+        }
+
+        async function toggleVisibility() {
+            const statusEl = document.getElementById('visibilityStatus');
+            statusEl.className = 'admin-status';
+            const newHidden = !leaderboardHidden;
+
+            const btn = document.getElementById('visibilityBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'toggle-visibility', hidden: newHidden }),
+                });
+                if (res.ok) {
+                    leaderboardHidden = newHidden;
+                    updateVisibilityUI(newHidden);
+                    statusEl.textContent = newHidden
+                        ? '🌙 Leaderboard is now hidden from guests!'
+                        : '👁 Leaderboard is now visible to guests!';
+                    statusEl.className = 'admin-status success';
+                    // Re-render leaderboard (admin still sees it)
+                    loadData();
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error updating visibility. Check connection.';
+                statusEl.className = 'admin-status error';
+            }
+
+            btn.disabled = false;
+            updateVisibilityUI(leaderboardHidden);
+        }
+    </script>
+</body>
+</html>

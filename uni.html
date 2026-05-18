@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uni 🐱 - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --hot-pink: #E8456B;
+            --orange: #E8823C;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0e2318;
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── BOUNCING ARENA ─── */
+        #arena {
+            position: fixed;
+            inset: 0;
+            top: 72px;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            pointer-events: auto;
+            cursor: pointer;
+            border: 4px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 0 rgba(232,69,107,0);
+            transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+            will-change: transform;
+        }
+        .bubble:hover {
+            border-color: rgba(232,69,107,0.8);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(232,69,107,0.4);
+            transform: scale(1.08);
+        }
+        .bubble img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ─── HERO TEXT ─── */
+        .hero-text {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 7rem 2rem 1rem;
+            pointer-events: none;
+        }
+        .hero-text h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 400;
+            line-height: 1.1;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+        }
+        .hero-text .tagline {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.55);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+
+        /* ─── MEOW BUBBLE ─── */
+        .meow-pop {
+            position: fixed;
+            z-index: 2000;
+            background: var(--white);
+            color: var(--text);
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            font-style: italic;
+            padding: 0.55rem 1.1rem;
+            border-radius: 999px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.7) translateY(6px);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+        }
+        .meow-pop.show {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            z-index: 10;
+            padding: 1rem 2rem; text-align: center;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(6px);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.4rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.4rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .hero-text { padding: 6rem 1.5rem 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="our-story.html">Our Story</a></li>
+                <li><a href="photos.html">Photos</a></li>
+                <li><a href="schedule.html">Schedule</a></li>
+                <li><a href="things-to-do.html">Activities</a></li>
+                <li><a href="leaderboard.html">Leaderboard</a></li>
+                <li><a href="points.html">Points</a></li>
+                <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html" class="active">Uni 🐱</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Bouncing photo arena -->
+    <div id="arena"></div>
+
+    <!-- Hero text -->
+    <div class="hero-text">
+        <h1>Meet Uni 🐱</h1>
+        <p class="tagline">Chief of Security · Snack Supervisor · Professional Lap Occupier</p>
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+        // ── NAV RANDOMISER ──
+        (function() {
+            const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+            const pick = names[Math.floor(Math.random() * 2)];
+            document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+            document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+        })();
+
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+
+        // ── BOUNCING PHOTOS ──
+        const photos = [
+            'Uni/IMG_5813.jpeg',   // big eyes close-up face
+            'Uni/IMG_8439.jpeg',   // perched on shoulder, wide-eyed
+            'Uni/IMG_1694.jpeg',   // sniffing churu treat
+            'Uni/IMG_3898.jpeg',   // lounging on lap
+            'Uni/IMG_3945.jpeg',   // judgy face on sweater
+            'Uni/IMG_8918.jpeg',   // eating the plant
+            'Uni/IMG_1440.jpeg',   // Andrew holding Uni
+            'Uni/IMG_1330.jpeg',   // on leopard carpet
+            'Uni/IMG_0062.jpeg',   // with cat figurine
+        ];
+
+        const arena = document.getElementById('arena');
+        const NAV_H = 72;
+        const MIN_SIZE = 120;
+        const MAX_SIZE = 185;
+
+        const bubbles = photos.map((src, i) => {
+            const size = MIN_SIZE + Math.random() * (MAX_SIZE - MIN_SIZE);
+            const div = document.createElement('div');
+            div.className = 'bubble';
+            div.style.width = size + 'px';
+            div.style.height = size + 'px';
+            const img = document.createElement('img');
+            img.src = src;
+            img.alt = 'Uni';
+            div.appendChild(img);
+            arena.appendChild(div);
+
+            // random start position
+            const x = Math.random() * (window.innerWidth - size);
+            const y = Math.random() * (window.innerHeight - NAV_H - size);
+            // random velocity — vary speed a bit
+            const speed = 0.6 + Math.random() * 0.9;
+            const angle = Math.random() * Math.PI * 2;
+            return {
+                el: div,
+                size,
+                x, y,
+                dx: Math.cos(angle) * speed,
+                dy: Math.sin(angle) * speed,
+                wobble: 0,
+                wobbleDir: 1,
+            };
+        });
+
+        function animate() {
+            const W = window.innerWidth;
+            const H = window.innerHeight - NAV_H;
+
+            bubbles.forEach(b => {
+                b.x += b.dx;
+                b.y += b.dy;
+
+                // gentle wobble rotation
+                b.wobble += 0.3 * b.wobbleDir;
+                if (Math.abs(b.wobble) > 4) b.wobbleDir *= -1;
+
+                // bounce off edges
+                if (b.x <= 0) { b.x = 0; b.dx = Math.abs(b.dx); }
+                if (b.x + b.size >= W) { b.x = W - b.size; b.dx = -Math.abs(b.dx); }
+                if (b.y <= 0) { b.y = 0; b.dy = Math.abs(b.dy); }
+                if (b.y + b.size >= H) { b.y = H - b.size; b.dy = -Math.abs(b.dy); }
+
+                b.el.style.left = b.x + 'px';
+                b.el.style.top = b.y + 'px';
+                b.el.style.transform = `rotate(${b.wobble}deg)`;
+            });
+
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // ── MEOW CLICK BUBBLES ──
+        const meows = ['Meow', 'Meow meow', 'Meowwww', 'Meow meowww', 'MEOW', 'meow?', 'Meow meow meow'];
+        const meowEl = document.createElement('div');
+        meowEl.className = 'meow-pop';
+        document.body.appendChild(meowEl);
+        let meowTimer = null;
+
+        // ── MEOW SOUND (mobile-compatible) ──
+        // Pre-generate a few short meow WAV files as data URIs for reliable mobile playback.
+        // On first touch/click anywhere, we unlock audio playback for iOS.
+        let audioUnlocked = false;
+        const meowAudios = [];
+        const MEOW_POOL_SIZE = 4;
+
+        // Generate a tiny WAV from Web Audio API and convert to blob URL
+        function generateMeowBlob(callback) {
+            const offCtx = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 22050, 44100);
+            const duration = 0.4;
+            const startFreq = 700 + Math.random() * 300;
+            const endFreq = 500 + Math.random() * 200;
+            const t = 0;
+
+            const osc = offCtx.createOscillator();
+            const gain = offCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(startFreq, t);
+            osc.frequency.exponentialRampToValueAtTime(endFreq, t + duration * 0.6);
+            osc.frequency.exponentialRampToValueAtTime(startFreq * 0.8, t + duration);
+            gain.gain.setValueAtTime(0.25, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+            osc.connect(gain);
+            gain.connect(offCtx.destination);
+            osc.start(t);
+            osc.stop(t + duration);
+
+            offCtx.startRendering().then(buffer => {
+                const wav = audioBufferToWav(buffer);
+                const blob = new Blob([wav], { type: 'audio/wav' });
+                callback(URL.createObjectURL(blob));
+            });
+        }
+
+        function audioBufferToWav(buffer) {
+            const numChannels = 1;
+            const sampleRate = buffer.sampleRate;
+            const data = buffer.getChannelData(0);
+            const dataLength = data.length * 2;
+            const headerLength = 44;
+            const buf = new ArrayBuffer(headerLength + dataLength);
+            const view = new DataView(buf);
+            function writeString(offset, str) { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); }
+            writeString(0, 'RIFF');
+            view.setUint32(4, 36 + dataLength, true);
+            writeString(8, 'WAVE');
+            writeString(12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, sampleRate * numChannels * 2, true);
+            view.setUint16(32, numChannels * 2, true);
+            view.setUint16(34, 16, true);
+            writeString(36, 'data');
+            view.setUint32(40, dataLength, true);
+            for (let i = 0; i < data.length; i++) {
+                const s = Math.max(-1, Math.min(1, data[i]));
+                view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+            }
+            return buf;
+        }
+
+        // Pre-generate pool of meow audio elements
+        for (let i = 0; i < MEOW_POOL_SIZE; i++) {
+            generateMeowBlob(url => {
+                const audio = new Audio(url);
+                audio.preload = 'auto';
+                audio.load();
+                meowAudios.push(audio);
+            });
+        }
+
+        // Unlock audio on first user interaction (critical for iOS)
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            audioUnlocked = true;
+            // Touch each audio element to unlock it
+            meowAudios.forEach(a => {
+                a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+            });
+            document.removeEventListener('touchstart', unlockAudio, true);
+            document.removeEventListener('click', unlockAudio, true);
+        }
+        document.addEventListener('touchstart', unlockAudio, true);
+        document.addEventListener('click', unlockAudio, true);
+
+        let meowIndex = 0;
+        function playMeow() {
+            if (meowAudios.length === 0) return;
+            const audio = meowAudios[meowIndex % meowAudios.length];
+            meowIndex++;
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+        }
+
+        function handleBubbleTap(b) {
+            const text = meows[Math.floor(Math.random() * meows.length)];
+            meowEl.textContent = text;
+
+            // Play meow sound
+            playMeow();
+
+            // Position above the center of the bubble
+            const rect = b.el.getBoundingClientRect();
+            const elW = meowEl.offsetWidth || 120;
+            let left = rect.left + rect.width / 2 - elW / 2;
+            left = Math.max(8, Math.min(left, window.innerWidth - elW - 8));
+            const top = Math.max(80, rect.top - 52);
+
+            meowEl.style.left = left + 'px';
+            meowEl.style.top = top + 'px';
+            meowEl.classList.remove('show');
+            void meowEl.offsetWidth; // force reflow so transition re-fires
+            meowEl.classList.add('show');
+
+            clearTimeout(meowTimer);
+            meowTimer = setTimeout(() => meowEl.classList.remove('show'), 1400);
+        }
+
+        bubbles.forEach(b => {
+            // Use touchend for mobile (fires reliably on moving elements)
+            // and click for desktop. Prevent double-fire.
+            let touchFired = false;
+            b.el.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                touchFired = true;
+                handleBubbleTap(b);
+                setTimeout(() => { touchFired = false; }, 300);
+            }, { passive: false });
+            b.el.addEventListener('click', () => {
+                if (!touchFired) handleBubbleTap(b);
+            });
+        });
+
+    </script>
+</body>
+</html>

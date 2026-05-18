@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── HERO HEADER ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.55), rgba(10,30,18,0.55)), url('Sunset.jpeg') center 50% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before { content: none; }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            position: relative;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 5rem;
+        }
+
+        /* ─── FAQ ITEMS ─── */
+        .faq-item {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2.5rem;
+            border-bottom: 2px solid var(--cream-dark);
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-question {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.35rem;
+            color: var(--jungle);
+            margin-bottom: 0.75rem;
+            font-weight: 400;
+            line-height: 1.3;
+        }
+
+        .faq-answer {
+            font-size: 1rem;
+            color: var(--text-mid);
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .faq-answer a {
+            color: var(--hot-pink);
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 2px solid var(--pink-light);
+            transition: border-color 0.2s;
+        }
+        .faq-answer a:hover {
+            border-bottom-color: var(--hot-pink);
+        }
+
+        .faq-note {
+            margin-top: 0.75rem;
+            padding: 0.85rem 1.2rem;
+            background: var(--pink-soft);
+            border-left: 4px solid var(--hot-pink);
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+        }
+
+        .outfit-links {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .outfit-links a {
+            display: inline-block;
+            padding: 0.7rem 1.3rem;
+            background: var(--jungle);
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            text-decoration: none;
+            border-bottom: none;
+            transition: all 0.2s;
+        }
+        .outfit-links a:hover {
+            background: var(--jungle-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2.5rem 1.5rem 4rem; }
+            .faq-question { font-size: 1.2rem; }
+            .outfit-links { flex-direction: column; }
+            .outfit-links a { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="our-story.html">Our Story</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="things-to-do.html">Activities</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="points.html">Points</a></li>
+        <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+        <li><a href="faq.html" class="active">FAQ</a></li>
+        <li><a href="uni.html">Uni 🐱</a></li>
+      </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Frequently Asked Questions</h1>
+        <p class="subtitle">You have questions! We may or may not have answers.</p>
+    </section>
+
+    <main>
+
+        <div class="faq-item">
+            <h2 class="faq-question">What will the weather be like?</h2>
+            <p class="faq-answer">Warm, sunny and beautiful.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Where will the ceremony and reception be held?</h2>
+            <p class="faq-answer">The ceremony will be held in a shady outdoor tree grove on the grass — bring mosquito spray, and plan shoes accordingly as there is a longer walk to get there. Stilettos are not recommended! The reception will be in a covered tent on gravel. There will be a pond and stream near the reception site, so be sure to supervise children.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">What if I have a dietary restriction?</h2>
+            <p class="faq-answer">Let us know if you have dietary restrictions so we can let the venue know!</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Will food be served?</h2>
+            <p class="faq-answer">Yes! Our venue Common Ground is a regenerative farm that practices sustainable agriculture and all of the food and drinks will be made from local resources grown on the farm or sourced locally on island or in the waters surrounding the island! We'll have appetizers during cocktail hour, followed by a buffet-style dinner.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">What kind of shoes should/shouldn't I wear?</h2>
+            <p class="faq-answer">The ceremony will be in a grassy outdoor area with a longer walk, so plan accordingly!</p>
+            <div class="faq-note">The ceremony will be on a grassy lawn and the reception will be on gravel in a tent, so wear shoes accordingly.</div>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">What should I wear?</h2>
+            <p class="faq-answer">We are aiming for a tropical beach wedding theme (island formal, tropical wedding, garden party etc.) I.e. bright tropical colors or floral dresses, ideally past knee or longer length. Light or colored pants, light colored dress shirts. Jackets not necessary. No shorts, please.</p>
+            <div class="outfit-images" style="display:flex;gap:1.5rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center;">
+                <div style="text-align:center;">
+                    <p style="font-weight:600;margin-bottom:0.5rem;color:var(--jungle);">Women's Attire</p>
+                    <img src="Womens.jpg" alt="Women's dress code examples" style="max-width:300px;width:100%;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.1);">
+                </div>
+                <div style="text-align:center;">
+                    <p style="font-weight:600;margin-bottom:0.5rem;color:var(--jungle);">Men's Attire</p>
+                    <img src="Mens.png" alt="Men's dress code examples" style="max-width:300px;width:100%;border-radius:12px;box-shadow:0 4px 16px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">What should I wear to the beach competition day?</h2>
+            <p class="faq-answer">Wear your best Hawaiian shirt or a similarly Hawaiian outfit! Casual!</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Are there any colors that guests should avoid wearing?</h2>
+            <p class="faq-answer">The bride will be wearing white and red and the groom will be wearing dark green and red. If possible, we would recommend avoiding white/red dresses and dark green suits.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Is there a gifts registry?</h2>
+            <p class="faq-answer">No gifts necessary! Your presence is our present :) We would rather you spend your money going on adventures with us! That said, if you want to make us a banana slug art for our bathroom, we would absolutely love it — and you get <a href="points.html">points</a> for it!</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Are kids welcome?</h2>
+            <p class="faq-answer">Yes. Kids are welcome. Some people bringing kids are interested in potentially hiring a babysitter &mdash; let us know if you might be interested in this and would like to be connected.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Where should I park?</h2>
+            <p class="faq-answer">There will be plenty of parking at the venue.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Where should I stay?</h2>
+            <p class="faq-answer">Princeville! We recommend booking an Airbnb or hotel earlier than later. We will be staying at 3824 Punalele Rd, if you would like to stay near us. We've seen a handful of Airbnbs on Airbnb/VRBO in the same neighborhood (&lt;5 min walk).</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Will there be dancing?</h2>
+            <p class="faq-answer">Yes! We will have a dance floor.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Will there be any activities happening that I need to know about?</h2>
+            <p class="faq-answer">We will have a farm tour and/or lei making that our guests are invited to participate in. We will send a survey or email out about this for you to choose.</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">How will we communicate during the wedding week? Is there a dedicated chat?</h2>
+            <p class="faq-answer">Yes! Please join our <a href="https://join.slack.com/t/andrewzinniawedding/shared_invite/zt-3vrqzcd0k-eEdojL__cyoq0R0PbZNidA" target="_blank" rel="noopener" style="color: var(--hot-pink); font-weight: 600;">Slack channel</a> for all wedding week communication — activity coordination, schedule updates, photo sharing, and earning bonus points!</p>
+        </div>
+
+        <div class="faq-item">
+            <h2 class="faq-question">Whom should I contact with questions?</h2>
+            <p class="faq-answer">Text either Zinnia or Andrew!</p>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+    // Randomize names
+    (function() {
+        const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+        const pick = names[Math.floor(Math.random() * 2)];
+        document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+        document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+    })();
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

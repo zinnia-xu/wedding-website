@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrew & Zinnia — Kauai Wedding Activities</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #1B3A4B;
+  --teal: #2E8B8B;
+  --gold: #C9A96E;
+  --cream: #FAF6F0;
+  --coral: #E07A5F;
+  --sand: #F2E9DC;
+  --dark: #1A1A2E;
+  --slate: #64748B;
+  --light-teal: #E8F4F4;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; color: var(--dark); background: var(--cream); }
+
+/* ─── HERO ─── */
+.hero {
+  position: relative; height: 90vh; min-height: 600px;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://premierkauai.com/wp-content/uploads/2024/08/jason-weingardt-5ZLDGa6Acug-unsplash.jpg') center/cover no-repeat;
+}
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(26,26,46,0.12) 0%, rgba(27,58,75,0.4) 100%);
+}
+.hero-content { position: relative; z-index: 1; color: #fff; padding: 2rem; }
+.hero-content .overline {
+  font-weight: 600; font-size: 1.1rem;
+  letter-spacing: 5px; text-transform: uppercase; color: var(--gold);
+  margin-bottom: 1rem;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.hero-content h1 {
+  font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700; line-height: 1.15; margin-bottom: 0.75rem;
+}
+.hero-content .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.35rem); font-weight: 300; opacity: 0.9;
+  margin-bottom: 2rem;
+}
+.hero-content .scroll-hint {
+  display: inline-block; margin-top: 2rem;
+  font-size: 0.95rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.9;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.hero-content .scroll-arrow {
+  display: block; margin: 1rem auto 0; font-size: 1.8rem; opacity: 0.9;
+  animation: bounceArrow 1.8s ease-in-out infinite;
+}
+@keyframes bounceArrow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(10px); }
+}
+
+/* ─── LAYOUT ─── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+section { padding: 5rem 0; }
+section:nth-child(even) { background: #fff; }
+
+.section-label {
+  font-size: 0.75rem; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem;
+}
+.section-title {
+  font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700; color: var(--navy); margin-bottom: 1rem;
+}
+.section-intro {
+  font-size: 1.05rem; color: var(--slate); line-height: 1.7; max-width: 720px;
+  margin-bottom: 2.5rem;
+}
+
+/* ─── PHOTO BANNER ─── */
+.photo-section {
+  position: relative; overflow: hidden;
+  border-radius: 16px; margin-bottom: 2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+.photo-section img {
+  width: 100%; height: 420px; object-fit: cover; display: block;
+}
+.photo-section .overlay-text {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 2.5rem 2rem 2rem;
+  background: linear-gradient(transparent, rgba(26,26,46,0.85));
+  color: #fff;
+}
+.photo-section .overlay-text h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem;
+}
+.photo-section .overlay-text p { font-size: 0.95rem; opacity: 0.9; line-height: 1.6; }
+
+/* ─── CARD GRID ─── */
+.card-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;
+}
+.card {
+  background: #fff; border-radius: 14px; overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+.card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+.card-body { padding: 1.5rem; }
+.card-body h4 {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  color: var(--navy); margin-bottom: 0.4rem;
+}
+.card-body .meta {
+  font-size: 0.8rem; color: var(--teal); font-weight: 600;
+  letter-spacing: 0.5px; margin-bottom: 0.6rem;
+}
+.card-body p { font-size: 0.9rem; color: var(--slate); line-height: 1.6; }
+
+/* ─── SCUBA TIERS ─── */
+.tier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+.tier {
+  border-radius: 14px; padding: 2rem 1.75rem; text-align: center;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+}
+.tier.beginner { background: linear-gradient(135deg, #E8F4F4, #d4edec); }
+.tier.certified { background: linear-gradient(135deg, var(--sand), #ede4d4); }
+.tier.advanced { background: linear-gradient(135deg, #1B3A4B, #2a5568); color: #fff; }
+.tier .tier-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.tier.beginner .tier-label { color: var(--teal); }
+.tier.certified .tier-label { color: var(--gold); }
+.tier.advanced .tier-label { color: var(--gold); }
+.tier h4 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 0.5rem; }
+.tier p { font-size: 0.88rem; line-height: 1.6; opacity: 0.9; }
+
+/* ─── WARNING BOX ─── */
+.warning {
+  background: #FEF3E7; border-left: 4px solid var(--coral);
+  border-radius: 0 10px 10px 0; padding: 1.25rem 1.5rem; margin-top: 1.5rem;
+}
+.warning strong { color: var(--coral); }
+.warning p { font-size: 0.9rem; color: #7a4a2a; line-height: 1.6; }
+
+/* ─── CLOSING ─── */
+.closing {
+  position: relative; text-align: center; color: #fff;
+  padding: 6rem 2rem; overflow: hidden;
+}
+.closing-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1765584155119-c933773a5746?w=1920&q=80&fit=crop') center/cover no-repeat;
+}
+.closing-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(27,58,75,0.7);
+}
+.closing-content { position: relative; z-index: 1; }
+.closing-content h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 0.75rem;
+}
+.closing-content p { font-size: 1.1rem; opacity: 0.9; max-width: 550px; margin: 0 auto; }
+
+@media (max-width: 640px) {
+  .photo-section img { height: 280px; }
+  .card img { height: 180px; }
+  section { padding: 3rem 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="overline">Wedding Week Activities</div>
+    <h1>Andrew & Zinnia</h1>
+    <p class="subtitle">A week of adventure on the Garden Isle — Kauai, Hawaii</p>
+    <div class="scroll-hint">Scroll to explore</div>
+    <span class="scroll-arrow">&#8595;</span>
+  </div>
+</section>
+
+<!-- ═══════════ OVERVIEW ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">The Island</div>
+    <div class="section-title">Welcome to Kauai</div>
+    <p class="section-intro">
+      The oldest and most lush Hawaiian island (and also our favorite one), Kauai offers dramatic coastlines,
+      emerald valleys, and world-class outdoor adventures. We've put together a menu of
+      activities for our wedding week — pick what excites you!
+    </p>
+    <div class="photo-section">
+      <img src="https://images.unsplash.com/photo-1562450334-0c6d6aff4697?w=1400&q=80&fit=crop"
+           alt="Napali Coast aerial view">
+      <div class="overlay-text">
+        <h3>The Napali Coast</h3>
+        <p>Towering sea cliffs, hidden waterfalls, and turquoise waters stretch 17 miles along Kauai's northwest shore.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ BEACHES ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Sun & Sand</div>
+    <div class="section-title">Beaches and Snorkeling</div>
+    <p class="section-intro">
+      Kauai has incredible beaches on every side of the island. Here are some of our favorites
+      that you'll want to visit during the week.
+    </p>
+    <div class="card-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1574394666973-6e764fd65318?w=800&q=80&fit=crop"
+             alt="Hanalei Bay beach">
+        <div class="card-body">
+          <h4>Hanalei Bay</h4>
+          <p>Our favorite beach. Andrew thinks this is the most beautiful place on earth and
+             would happily just go here every day.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1674095164399-f239aadf476a?w=800&q=80&fit=crop"
+             alt="Tunnels Beach Kauai">
+        <div class="card-body">
+          <h4>Tunnels Beach</h4>
+          <p>Best snorkeling on the north shore. Be warned — there's basically no cell reception
+             here. All the way past Hanalei town.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1593993553178-34999e930fbf?w=800&q=80&fit=crop"
+             alt="Anini Beach Kauai">
+        <div class="card-body">
+          <h4>Anini Beach</h4>
+          <p>Great beach for snorkeling near Princeville. Calm, protected waters thanks to the
+             longest fringing reef in Hawaii.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1640804051889-2bd415782604?w=800&q=80&fit=crop"
+             alt="Poipu Beach Kauai">
+        <div class="card-body">
+          <h4>Poipu Beach</h4>
+          <p>Best beach on the south side of the island for snorkeling, surfing, and bodyboarding.</p>
+        </div>
+      </div>
+    </div>
+    <div class="warning">
+      <strong>Sunscreen Warning:</strong> Please be careful with what sunscreen you bring to the island! Hawaii <em>only</em> allows mineral-based sunscreen. For the health of the reef ecosystem, please do not bring any sunscreen besides zinc-based sunscreen (no avobenzone, oxybenzone, octisalate, octocrylene, homosalate, etc). If you don't have mineral-based sunscreen at home, just buy it in Hawaii upon arrival.
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SURFING ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Water Sports</div>
+    <div class="section-title">Surfing at Hanalei Bay</div>
+    <p class="section-intro">
+      Gentle, rolling waves and a stunning mountain backdrop make Hanalei Bay one of the
+      best places in Hawaii for beginner and intermediate surfers alike.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1712813270150-0f52516b2591?w=800&q=80&fit=crop"
+             alt="Surfer on a wave">
+        <div class="card-body">
+          <div class="meta">OPTION A — GUIDED</div>
+          <h4>Surf Lessons</h4>
+          <p>Professional instructors, board and rash guard included. Perfect for first-timers.
+             About 90 minutes, four people max per instructor. There are a lot of surf schools
+             and surf rental shops in Hanalei — we have previously gone with Hanalei Surf School
+             and Hanalei Surf Co.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1765584155119-c933773a5746?w=800&q=80&fit=crop"
+             alt="Hanalei Bay pier at sunset">
+        <div class="card-body">
+          <div class="meta">OPTION B — DIY</div>
+          <h4>Board Rental</h4>
+          <p>Rent a board from Hanalei Surf Company and paddle out on your own.
+             Soft-tops available for beginners. Full-day and half-day rates.
+             Andrew and Zinnia have done this many times and can provide advice on which break
+             to go to in Hanalei Bay! Surfing in Hanalei Bay is Andrew's favorite thing to do
+             in Hawaii.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ HIKING ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Land Adventures</div>
+    <div class="section-title">Hiking Waimea Canyon</div>
+    <p class="section-intro">
+      Known as the "Grand Canyon of the Pacific," Waimea Canyon stretches 14 miles long and
+      3,600 feet deep. Three hikes offer something for every fitness level — all accessed via Highway 550 through Waimea Canyon &amp; Koke'e State Park. This is around a 1.5-hour drive from Princeville, so any adventure to Waimea Canyon is likely to be a full-day activity.
+    </p>
+
+    <div class="photo-section" style="margin-bottom: 2rem;">
+      <img src="https://images.unsplash.com/photo-1553972967-a9ba0f176b01?w=1400&q=80&fit=crop"
+           alt="Waimea Canyon panoramic view">
+      <div class="overlay-text">
+        <h3>The Grand Canyon of the Pacific</h3>
+        <p>Red-earth cliffs, misty ridgelines, and views that stretch to the ocean. The drive to the trailheads includes many lookouts, and you should absolutely stop at them on the way there because the views are incredible.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1549720274-385847be2497?w=800&q=80&fit=crop"
+             alt="Tropical waterfall on trail">
+        <div class="card-body">
+          <div class="meta">MODERATE — ~4 MILES</div>
+          <h4>Waipo'o Falls</h4>
+          <p>A rewarding out-and-back to a stunning 800-foot waterfall with canyon views the entire way.
+             You can jump in the river in the pool at the turnaround point if it's a hot day.
+             Great for most fitness levels. Allow about 3 hours. Andrew and Zinnia do this hike
+             basically every time they are in Kauai.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1567285369794-e64e94b697e0?w=800&q=80&fit=crop"
+             alt="Ridge trail hiking">
+        <div class="card-body">
+          <div class="meta">STRENUOUS — ~8-9 MILES</div>
+          <h4>Awa'awapuhi Trail</h4>
+          <p>A challenging ridge trail ending at a jaw-dropping overlook 2,500 feet above the Napali Coast.
+             Steep switchbacks on the return. Allow 5–6 hours. Andrew and Zinnia have done this
+             once and it was beautiful, though the uphill on the way back leaves you tired at the end.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1666228392412-fc465ce6434a?w=800&q=80&fit=crop"
+             alt="Boardwalk through lush forest">
+        <div class="card-body">
+          <div class="meta">STRENUOUS — ~10-12 MILES</div>
+          <h4>Alakai Swamp Trail</h4>
+          <p>Boardwalks wind through one of Earth's wettest spots — a high-altitude cloud-forest bog.
+             Otherworldly landscapes and rare birdlife. A full-day commitment. Andrew and Zinnia
+             haven't done this one yet, but have heard great things about it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SCUBA ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Underwater</div>
+    <div class="section-title">Scuba Diving</div>
+    <p class="section-intro">
+      Crystal-clear waters, sea turtles, monk seals, and vibrant reef life. All dives
+      through <strong>Fathom Five Divers</strong> — our favorite dive company and one we've gone
+      with many times — with three experience levels to choose from.
+    </p>
+
+    <div class="photo-section" style="margin-bottom: 2rem;">
+      <img src="https://images.unsplash.com/photo-1696735540751-6031e2d27472?w=1400&q=80&fit=crop"
+           alt="Sea turtle near coral reef">
+      <div class="overlay-text">
+        <h3>South Shore Scuba Diving</h3>
+        <p>Kauai's south shore offers world-class reef diving with regular sightings of turtles, eels, octopuses, and tropical fish of every variety.</p>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card">
+        <img src="https://dynamic-media.tacdn.com/media/photo-o/2e/ee/a5/3b/caption.jpg?w=1400&h=1000&s=1"
+             alt="Koloa Landing dive entry">
+        <div class="card-body">
+          <div class="meta">BEGINNER — NO CERTIFICATION</div>
+          <h4>Try Scuba</h4>
+          <p>No certification needed. Pool training followed by a shallow guided dive.
+             There are at most four students per instructor. It's quite fun and not scary, and
+             this Try Scuba class is how Zinnia convinced Andrew to get certified. This class is
+             most likely a 2-tank shore dive at Koloa Landing. Half-day experience.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://divertrek.com/wp-content/uploads/2024/08/Two-Turtles.jpg"
+             alt="Sea turtles at Sheraton Caverns">
+        <div class="card-body">
+          <div class="meta">CERTIFIED DIVERS — 2-TANK BOAT DIVE</div>
+          <h4>2-Tank Boat Dive</h4>
+          <p>Two dives at Kauai's top south-shore sites. Includes gear, weights, and
+             experienced dive masters. Typical depths 40–60 feet. Our favorite dive site
+             might be Sheraton Caverns, where you can frequently see sleeping turtles and dive
+             through arches.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://www.divephotoguide.com/images/news/uploaded/article_6151/869666879.jpg"
+             alt="Hawaiian monk seal underwater">
+        <div class="card-body">
+          <div class="meta">ADVANCED — 3-TANK EXPEDITION</div>
+          <h4>Ni'ihau 3-Tank Expedition</h4>
+          <p>Full-day boat trip to the "Forbidden Island." Three dives in pristine,
+             rarely-visited waters. Large pelagics, Hawaiian monk seals, and dramatic visibility.
+             Advanced certification required. Zinnia saw a seal here!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ E-FOILING ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Water Sports</div>
+    <div class="section-title">E-Foiling</div>
+    <p class="section-intro">
+      Glide above the water on an electric hydrofoil — it's like flying. No waves or wind needed.
+      Sessions are 90–120 minutes with a max of 3 students per instructor. If your group is
+      larger than 3, you'll do consecutive lessons so everyone still gets plenty of water time.
+    </p>
+    <div class="photo-section">
+      <img src="https://images.unsplash.com/photo-1601869959642-58e1ff8d81a3?w=1400&q=80&fit=crop"
+           alt="E-foil rider above water">
+      <div class="overlay-text">
+        <h3>Fly Above the Water</h3>
+        <p>Most people are up and foiling within 30 minutes. Providers: Kauai Foil Experience &amp; e-Foil Kauai.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ NAPALI KAYAK ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Epic Adventure</div>
+    <div class="section-title">Napali Coast Kayak</div>
+    <p class="section-intro">
+      The ultimate Kauai adventure: paddle 17 miles along the towering Napali Coast
+      from Ha'ena to Polihale. A full-day journey (roughly 6-7 hours of active paddling) with sea caves,
+      waterfalls, dolphins, and some of the most dramatic coastline on Earth.
+    </p>
+    <p class="section-intro">
+      This adventure sounds more intimidating than it is. We did this and, while we were very tired
+      by the end and it was definitely demanding, we didn't feel like it was extremely difficult.
+      It is no harder than any other all day kayaking trip; the current and wind is with you and
+      helps a lot.
+    </p>
+    <div class="photo-section">
+      <img src="https://cdn.prod.website-files.com/656249ae134c5c08c0a091d3/6588fe6f4f862c7fe49b5cfb_Na-Pali-Coast-Kayaking-Photo.webp"
+           alt="Kayaking along the Napali Coast">
+      <div class="overlay-text">
+        <h3>17 Miles of Paradise</h3>
+        <p>Paddle beneath 4,000-foot sea cliffs, past hidden beaches and into sea caves carved over millennia.</p>
+      </div>
+    </div>
+    <div class="warning">
+      <p><strong>Seasickness Warning:</strong> This is open-ocean kayaking and can have swells.
+         To avoid seasickness, you should take Dramamine or use a seasickness patch, even if you usually do not have any trouble with seasickness. Better safe than sorry with this one. If you're not sure, ask us!</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ SHORTER KAYAK TRIPS ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Water Adventures</div>
+    <div class="section-title">Shorter Kayak Trips (Event Captains Needed)</div>
+    <p class="section-intro">
+      Not ready for the full Napali expedition? Kauai has beautiful, mellow river kayaking that's
+      perfect for a relaxed half-day on the water.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <img src="https://kayakkauai.com/wp-content/uploads/2024/01/Wailua-River-Kayaking-Tours-2600x1250.jpg"
+             alt="Kayaking on the Wailua River">
+        <div class="card-body">
+          <div class="meta">EASY — HALF DAY</div>
+          <h4>Wailua River (Event Captains Needed)</h4>
+          <p>Paddle up Kauai's longest navigable river through lush jungle to a short trail
+             leading to a hidden waterfall. Calm, flat water — great for all skill levels.
+             This is around 30 min drive to the south, close to Lihue.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://dynamic-media.tacdn.com/media/photo-o/2f/48/49/54/caption.jpg?w=1400&h=1000&s=1"
+             alt="Hanalei River with mountains">
+        <div class="card-body">
+          <div class="meta">EASY — 2-3 HOURS</div>
+          <h4>Hanalei River (Event Captains Needed)</h4>
+          <p>Kayak or stand-up paddleboard along the scenic Hanalei River, framed by taro fields
+             and dramatic mountain ridges. A peaceful, easygoing paddle right in the heart of
+             Hanalei. This is in Hanalei right next to Wishing Well Shave Ice. We recommend
+             stopping for shave ice before or after your kayak.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ MORE ADVENTURES ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Community Organized</div>
+    <div class="section-title">More Adventures (Event Captains Needed)</div>
+    <p class="section-intro">
+      There are a lot more things you could do that we haven't planned for. If any of these seem
+      exciting, we'd love for volunteers to organize these activities for themselves and other folks
+      who may be interested. Please add them to the spreadsheet! We have suggestions and info about
+      many of these, so please ask us.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <img src="https://static.wixstatic.com/media/c24516_ebd0273705434180abf6777658430234~mv2.jpg/v1/fill/w_1728,h_1234,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/Bike%20Club%20Drone%202.jpg"
+             alt="Biking along the Kauai coast">
+        <div class="card-body">
+          <h4>Biking</h4>
+          <p>Ride the Ke Ala Hele Makalae Path starting from Kapa'a Beach Park — a paved
+             coastal trail with gorgeous ocean views the entire way. A very calm and pleasant
+             2–3 hour biking adventure, perfect for all fitness levels.
+             Zinnia and Andrew do this bike ride pretty much every time they visit Kauai, and it's lovely every time.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://cdn2.veltra.com/ptr/20181125214835_1945156728_2366_0.jpg"
+             alt="Helicopter tour over Kauai">
+        <div class="card-body">
+          <h4>Helicopter Tour</h4>
+          <p>See Kauai from above — waterfalls, the Napali Coast, Waimea Canyon, and Mt. Wai'ale'ale
+             (one of the wettest spots on Earth). Doors-off options available.
+             Zinnia and Andrew have done this and really enjoyed it; this is probably one of the best places in the world to see from above.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1661444545786-10d760c46976?w=800&q=80&fit=crop"
+             alt="Fishing charter boat on ocean">
+        <div class="card-body">
+          <h4>Deep Sea Fishing</h4>
+          <p>Charter a boat and try for mahi-mahi, ahi tuna, or marlin off the Kauai coast.
+             Half-day and full-day options available for groups.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1717355126113-7a8426b27ae3?w=800&q=80&fit=crop"
+             alt="Tropical botanical garden">
+        <div class="card-body">
+          <h4>Botanical Gardens</h4>
+          <p>Explore Kauai's stunning botanical gardens, home to rare tropical plants,
+             towering trees, and gorgeous scenery. A perfect low-key day to soak in the
+             island's natural beauty.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://wanderingwagars.com/wp-content/uploads/2019/06/Kauai-Chocolate-Tour-Twitter.jpg"
+             alt="Coffee and chocolate farm">
+        <div class="card-body">
+          <h4>Coffee and Chocolate Farm Tours</h4>
+          <p>Visit a working coffee plantation and taste locally grown chocolate. Learn how
+             Kauai's unique climate produces some of Hawaii's finest coffee and cacao.
+             We've done this on the Big Island, but not yet on Kauai, and we've heard good things about Lydgate Farm.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://www.hawaiidiscount.com/Content/Files/kauai%20zipline.png"
+             alt="Zipline through tropical canopy">
+        <div class="card-body">
+          <h4>Zipline & Tubing</h4>
+          <p>Soar over lush valleys on a multi-line zipline course, or float through
+             old sugar plantation irrigation tunnels on an inner tube.
+             We haven't done this on Kauai yet, but it seems fun.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING ═══════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Budget Planning</div>
+    <div class="section-title">Estimated Prices</div>
+    <p class="section-intro">
+      We know Hawaii can be a pricey vacation, so we checked how much these things cost in advance.
+      All prices below are estimated per person and pre-tax unless noted.
+    </p>
+    <table style="width:100%; border-collapse:collapse; margin:2rem 0; font-family:'Inter',sans-serif;">
+      <thead>
+        <tr style="border-bottom:2px solid #1B3A4B; text-align:left;">
+          <th style="padding:0.75rem 1rem; color:#1B3A4B;">Activity</th>
+          <th style="padding:0.75rem 1rem; color:#1B3A4B; text-align:right;">Estimated Price (per person)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Surf Lesson (4-person group)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$100</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">Surfboard Rental (per day)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$20 – $30</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">17-Mile Napali Coast Kayak</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$320</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">Wailua River Kayak Rental (tandem)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$75 – $125</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Hanalei River Kayak / SUP Rental</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$30 – $60</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">E-Foil Lesson</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$250 – $275</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Try Scuba (w/ rental)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$275</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">Certified 2-Tank Scuba (w/ rental)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$300</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Advanced 3-Tank Scuba (w/ rental)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$500</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">Bike Rental (Kapa'a path)</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$5 – $20/day</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Botanical Garden Tour</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$20 – $50</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5; background:#FAF6F0;">
+          <td style="padding:0.75rem 1rem;">Coffee / Chocolate Farm Tour</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$50 – $135</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e8e0d5;">
+          <td style="padding:0.75rem 1rem;">Helicopter Tour</td>
+          <td style="padding:0.75rem 1rem; text-align:right;">$285 – $400</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══════════ CLOSING ═══════════ -->
+<section class="closing">
+  <div class="closing-bg"></div>
+  <div class="closing-content">
+    <h2>We Can't Wait to Celebrate With You</h2>
+
+  </div>
+</section>
+
+</body>
+</html>

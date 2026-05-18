@@ -1,0 +1,25 @@
+{
+  "guests": [
+    { "name": "Guest 1", "points": 0 },
+    { "name": "Guest 2", "points": 0 },
+    { "name": "Guest 3", "points": 0 },
+    { "name": "Guest 4", "points": 0 },
+    { "name": "Guest 5", "points": 0 },
+    { "name": "Guest 6", "points": 0 },
+    { "name": "Guest 7", "points": 0 },
+    { "name": "Guest 8", "points": 0 },
+    { "name": "Guest 9", "points": 0 },
+    { "name": "Guest 10", "points": 0 },
+    { "name": "Guest 11", "points": 0 },
+    { "name": "Guest 12", "points": 0 },
+    { "name": "Guest 13", "points": 0 },
+    { "name": "Guest 14", "points": 0 },
+    { "name": "Guest 15", "points": 0 },
+    { "name": "Guest 16", "points": 0 },
+    { "name": "Guest 17", "points": 0 },
+    { "name": "Guest 18", "points": 0 },
+    { "name": "Guest 19", "points": 0 },
+    { "name": "Guest 20", "points": 0 }
+  ],
+  "feed": []
+}

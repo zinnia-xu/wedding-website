@@ -1,0 +1,14 @@
+# Large media folders
+Photos/
+Uni/
+
+# Temp zip files
+*.zip
+zi[A-Za-z0-9]*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/

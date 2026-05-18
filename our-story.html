@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.62), rgba(10,30,18,0.62)), url('Us.jpg') center 30% / cover no-repeat;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before { content: none; }
+        .page-hero::after { content: none; }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            position: relative;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* ─── STORY SECTIONS ─── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
+        }
+
+        .story-section {
+            margin-bottom: 3.5rem;
+            padding-bottom: 3.5rem;
+            border-bottom: 2px solid var(--cream-dark);
+        }
+        .story-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .story-section h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--hot-pink);
+            margin-bottom: 1.2rem;
+            font-weight: 400;
+        }
+
+        .story-text {
+            font-size: 1.02rem;
+            line-height: 1.85;
+            color: var(--text-mid);
+            font-weight: 400;
+        }
+
+        .story-text p {
+            margin-bottom: 1.1rem;
+        }
+        .story-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        .highlight {
+            color: var(--hot-pink);
+            font-weight: 600;
+        }
+
+        .story-image-placeholder {
+            width: 100%;
+            height: 320px;
+            background: linear-gradient(135deg, var(--jungle) 0%, var(--jungle-mid) 50%, var(--jungle-light) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .date-callout {
+            display: inline-block;
+            background: var(--pink-soft);
+            color: var(--hot-pink);
+            font-weight: 700;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2.5rem 1.5rem 4rem; }
+            .story-section h2 { font-size: 1.6rem; }
+            .story-image-placeholder { height: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="our-story.html" class="active">Our Story</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="schedule.html">Schedule</a></li>
+        <li><a href="things-to-do.html">Activities</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="points.html">Points</a></li>
+        <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+      </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Our Story</h1>
+        <p class="subtitle">From Dolores Park to forever</p>
+    </section>
+
+    <main>
+
+        <div class="story-section">
+            <h2>How We Met And Got To Know Each Other</h2>
+            <div class="story-text">
+                <p>When people ask us how we met, we generally have to pause for a moment and remember the long chain of intros that led to it&hellip; and then summarize as &ldquo;um, friends of friends of friends&rdquo;, rather than going into the details. But no one introduced us on purpose &ndash; rather, we both went to an event hosted by our friend Jenny in 2019 in Dolores Park, and proceeded not to talk to each other very much that particular day. (Technically, we first met at Qualitea, but that was just the first stop that day before we went to the park.)</p>
+                <p>For most of 2019, our paths crossed every few weeks, sometimes on purpose and sometimes incidentally through our mutual friends in San Francisco. We bought and carved some pumpkins together with friends. Andrew&rsquo;s roommate Bobby hosted a miracle berry tasting event and invited Zinnia and friends. Most memorable, however, was a house party that Andrew&rsquo;s roommate Khoa hosted.</p>
+                <p>Khoa invited Zinnia, so she was there in the backyard when Andrew and Bobby were chatting amongst themselves and considering trying out some West Coast Swing partner dancing classes that had become popular in the Mission near where they lived. Overhearing this, Zinnia interjected and boldly told both of them that this was a great idea and that she was joining &ndash; proudly inviting herself along to a recurring weekly event with Andrew for a few months.</p>
+                <p>A few months later, we had been seeing each other almost weekly and had gotten to know each other well. It was nearing Christmas of 2019. Around this time, San Francisco really empties out, and most of our friends were heading home to family for a week or two. Andrew had previously read about cross-country skiing in Yellowstone National Park, and this seemed like an excellent opportunity, if only he could find some friends to join him for that trip. He mentioned it to a few friends, and Zinnia (as per her usual) immediately and enthusiastically committed to going. Neither of us had ever been cross-country skiing, but how hard could it be?</p>
+                <p>This trip cemented our friendship. We saw hordes of bison, learned how to cross-country ski, tried challenging black-marked routes, almost fell into a river, nearly froze in sub-zero temperatures, and experienced our snow coach driving off the road into a ditch. (It was the driver&rsquo;s first day on the job.)</p>
+            </div>
+            <img src="Photos/yellowstone.JPG" alt="Yellowstone trip" style="width:100%; border-radius:12px; margin-top:1.5rem; display:block;">
+        </div>
+
+        <div class="story-section">
+            <div class="story-text">
+                <p>It took another six months before it &ldquo;became official&rdquo;. Neither of us were in a particular hurry, but we spent progressively more and more time with each other. On March 17th, 2020, the pandemic was escalating and San Francisco&rsquo;s stay-at-home order was issued. As everyone was struggling to adjust to isolation and social distancing and looking for any way to maintain social connection in the face of a stressful global apocalypse, we started going on long walks through the city to the beach on the weekends and keeping in touch daily on video calls, relying on each other more than any time before.</p>
+                <p>Eventually, on May 26, Zinnia decided that the friendship was definitely more than just that; we walked at night to Dolores Park, sat in social distancing circles drawn recently in white paint on the grass, and decided to embark on a journey together. (Note: Post-wedding, our official anniversary will be May 25th. Our wedding is on May 24th and we started dating on May 26th, and this averages to May 25th. We considered waiting to get married until 2029 so that May 26th would fall on a weekend and we could just remember a single anniversary date, but Zinnia vetoed this idea pretty quickly, so we&rsquo;re changing our anniversary to May 25th instead.)</p>
+            </div>
+        </div>
+
+        <div class="story-section">
+            <h2>The Next 5 Years</h2>
+            <div class="story-text">
+                <p>During the pandemic, if you had roommates, it was pretty challenging to spend a lot of time with anyone you weren&rsquo;t living with without violating the social norms of social isolation and sticking to your COVID pod. So, three months after we started dating, Zinnia packed her bags and moved in permanently into the apartment that Andrew, Ellen, and Rachel had recently rented in Noe Valley. It was an optimistic bet that the relationship would work well, and as you can guess, it turned out to be a good one. We lived there until early 2024 when the two of us bought our own house.</p>
+                <p>Although we were happy to be living with each other and with wonderful friends, San Francisco in fall of 2020 was not a fun place. The pandemic was raging, death tolls in the news were rising, the vaccine was not yet on the horizon. And, to add fuel to the fire, it was the worst fire season in the history of California. San Francisco was thick with smoke. For weeks on end, we woke up every morning with headaches from the smoke that leaked through our original San Francisco Victorian windows. We&rsquo;d place hopeful bets on whether the AQI might go below 200 in the next few days. We could no longer meet friends, not even outside, because the air outside the seven rooms of our apartment was literally caustic. There was an unforgettable day where the smoke crowded out the sun and it remained night-dark all through the day.</p>
+                <p>So the two of us bought a one way ticket to Hawaii and decided to stay &ldquo;until the pandemic was done&rdquo;. We double-masked on the plane and stayed in a quarantine hotel once we landed on the island. We spent nearly five months in Hawaii, splitting our time between the Big Island and Kauai, and began to feel like these islands were almost a second home. We&rsquo;re extremely excited to have all of our guests coming to Kauai for our wedding. We spent one of the most stressful and challenging periods of our early relationship here and being here together brought us lots of joy during the craziness of the pandemic.</p>
+                <p>In the years since then, we&rsquo;ve traveled together to countless places (Mexico, Japan, Thailand, Israel, Taiwan, Spain, Portugal, France, Croatia, Austria, Slovenia, Germany, England, Belgium, Netherlands, Vietnam, Indonesia, Singapore, Chile, Costa Rica, and more closer destinations) and went on countless adventures, both with friends and just us alone. We&rsquo;ve bought a house, changed jobs, made big and small decisions together.</p>
+                <p>Zinnia knew early on where this was headed, and that we would be here today, but Andrew took a bit more time to gather evidence that this was a lasting partnership. Five years after our relationship started, we got engaged at Cook&rsquo;s Monument on the Big Island, the same place where we had celebrated our six month anniversary by swimming with dolphins in Kealakekua Bay, and we&rsquo;re excited to get married almost exactly a year later and celebrate with our closest friends and family!</p>
+            </div>
+            <img src="Photos/Engaged.jpeg" alt="Engagement at Kealakekua Bay" style="width:100%; border-radius:12px; margin-top:1.5rem; display:block;">
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+    // Randomize names
+    (function() {
+        const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+        const pick = names[Math.floor(Math.random() * 2)];
+        document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+        document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+    })();
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>

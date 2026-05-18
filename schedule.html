@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule - Zinnia & Andrew</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --jungle: #1A3C2A;
+            --jungle-mid: #245838;
+            --jungle-light: #2E7245;
+            --hot-pink: #E8456B;
+            --pink-light: #F2728E;
+            --pink-soft: #FFF0F3;
+            --orange: #E8823C;
+            --orange-light: #F0A060;
+            --cream: #FFF8F0;
+            --cream-dark: #F0E6D6;
+            --white: #FFFFFF;
+            --text: #1A1A1A;
+            --text-mid: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background-color: var(--cream);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* ─── NAVIGATION ─── */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(26, 60, 42, 0.97);
+            backdrop-filter: blur(12px);
+            transition: box-shadow 0.3s ease;
+        }
+        nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; height: 72px;
+        }
+        .nav-logo {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem; font-weight: 400; color: var(--white);
+            letter-spacing: 0.02em; text-decoration: none;
+        }
+        .nav-links {
+            display: flex; gap: 0.15rem; list-style: none;
+            flex-wrap: wrap; justify-content: center;
+        }
+        .nav-links a {
+            text-decoration: none; color: rgba(255,255,255,0.7);
+            font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            padding: 0.5rem 0.9rem; border-radius: 6px;
+            transition: all 0.3s ease; white-space: nowrap;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white); background: rgba(255,255,255,0.12);
+        }
+        .hamburger {
+            display: none; flex-direction: column; gap: 6px;
+            cursor: pointer; background: none; border: none; padding: 5px;
+        }
+        .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
+
+        /* ─── SLACK BANNER ─── */
+        .slack-banner {
+            background: linear-gradient(135deg, #F5A623 0%, #E8823C 50%, #E8456B 100%);
+            text-align: center; padding: 0.8rem 2rem; margin-top: 72px;
+            display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;
+        }
+        .slack-text { color: var(--white); font-size: 0.9rem; font-weight: 600; }
+        .slack-btn {
+            display: inline-block; background: var(--white); color: #E8823C;
+            font-size: 0.85rem; font-weight: 700; padding: 0.4rem 1.2rem;
+            border-radius: 20px; text-decoration: none; letter-spacing: 0.03em;
+            transition: all 0.3s ease;
+        }
+        .slack-btn:hover { background: var(--cream); transform: translateY(-1px); }
+
+        /* ─── PAGE HERO ─── */
+        .page-hero {
+            background: linear-gradient(rgba(10,30,18,0.60), rgba(10,30,18,0.60)), url('Eucalyptus canopy.jpg') center 55% / cover no-repeat;
+            padding: 4rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before { content: none; }
+        .page-hero::after { content: none; }
+        .page-hero .page-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--white);
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            position: relative;
+        }
+        .page-hero .subtitle {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.05rem;
+            font-weight: 500;
+            font-style: italic;
+            position: relative;
+        }
+
+        /* ─── MAIN ─── */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem 5rem;
+        }
+
+        /* ─── DAY SECTIONS ─── */
+        .day-section {
+            margin-bottom: 3.5rem;
+        }
+        .day-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .day-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--cream-dark);
+        }
+
+        .day-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2rem;
+            color: var(--hot-pink);
+            font-weight: 400;
+            margin-bottom: 0.3rem;
+        }
+
+        .day-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* ─── TIMELINE ─── */
+        .timeline {
+            position: relative;
+            padding: 1.5rem 0 1.5rem 2.5rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--hot-pink) 0%, var(--orange) 100%);
+            border-radius: 3px;
+        }
+
+        .timeline-event {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        .timeline-event:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -2.5rem;
+            top: 0.3rem;
+            width: 19px;
+            height: 19px;
+            background: var(--white);
+            border: 3px solid var(--hot-pink);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .timeline-event:nth-child(even) .timeline-marker {
+            border-color: var(--orange);
+        }
+
+        .event-content {
+            background: var(--white);
+            padding: 1.5rem 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+            border: 2px solid var(--cream-dark);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .event-content:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .event-time {
+            color: var(--hot-pink);
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-event:nth-child(even) .event-time {
+            color: var(--orange);
+        }
+
+        .event-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            color: var(--jungle);
+            font-weight: 400;
+            margin-bottom: 0.3rem;
+        }
+
+        .event-location {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.02em;
+        }
+
+        .event-description {
+            color: var(--text-mid);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 3rem 2rem; text-align: center; background: var(--jungle);
+        }
+        .footer-names {
+            font-family: 'DM Serif Display', serif; font-size: 1.5rem;
+            color: var(--white); font-weight: 400; margin-bottom: 0.5rem;
+        }
+        .footer-date {
+            font-size: 0.75rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: rgba(255,255,255,0.5); font-weight: 600;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-links.open {
+                display: flex; flex-direction: column; position: absolute;
+                top: 72px; left: 0; right: 0;
+                background: rgba(26, 60, 42, 0.98);
+                padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+                box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            }
+            .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+            .hamburger { display: flex; }
+            .page-hero { padding: 7rem 1.5rem 3rem; }
+            main { padding: 2.5rem 1.5rem 4rem; }
+            .day-title { font-size: 1.6rem; }
+            .event-title { font-size: 1.15rem; }
+            .timeline { padding-left: 2rem; }
+            .timeline-marker { left: -2rem; width: 16px; height: 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">Z &amp; A</a>
+            <ul class="nav-links" id="navLinks">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="our-story.html">Our Story</a></li>
+        <li><a href="photos.html">Photos</a></li>
+        <li><a href="schedule.html" class="active">Schedule</a></li>
+        <li><a href="things-to-do.html">Activities</a></li>
+        <li><a href="leaderboard.html">Leaderboard</a></li>
+        <li><a href="points.html">Points</a></li>
+        <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+                <li><a href="uni.html">Uni 🐱</a></li>
+      </ul>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Slack Banner -->
+    <div class="slack-banner">
+        <span class="slack-text">Join our Slack for activity coordination, schedule updates, and trip communication!</span>
+        <a href="https://join.slack.com/t/andrewzinniawedding/shared_invite/zt-3vrqzcd0k-eEdojL__cyoq0R0PbZNidA" target="_blank" rel="noopener" class="slack-btn">Join Slack &rarr;</a>
+    </div>
+
+    <!-- Page Header -->
+    <section class="page-hero">
+        <h1 class="page-title">Wedding Week Schedule</h1>
+        <p class="subtitle">May 16&ndash;25, 2026 &middot; Kauai, Hawaii</p>
+    </section>
+
+    <main>
+
+        <div class="day-section" id="group-activities">
+            <div class="day-header">
+                <div class="day-title">Saturday, May 16 &ndash; Friday, May 22</div>
+                <p class="day-subtitle">Wedding Week Adventures</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">8:00 AM (Daily)</div>
+                        <div class="event-title">Group Activities</div>
+                        <div class="event-location">Location TBD</div>
+                        <div class="event-description">Kick off each day with a group adventure! Head over to the <a href="things-to-do.html" style="color:var(--hot-pink);font-weight:600;text-decoration:none;">Activities</a> tab to see what's planned and sign up for the ones that excite you.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section" id="competition">
+            <div class="day-header">
+                <div class="day-title">Saturday, May 23</div>
+                <p class="day-subtitle">Beach Competition Day</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">11:00 AM &ndash; 3:00 PM</div>
+                        <div class="event-title">Beach Competition</div>
+                        <div class="event-location">Hanalei Beach Pier</div>
+                        <div class="event-description">It's game time! Get ready for an epic field day competition on the beach. Teams will compete for points across every event, and points are very much on the line. There will be prizes for the winning team! We will randomly assign teams. Wear your best Hawaiian shirt! May the best team win!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section" id="ceremony">
+            <div class="day-header">
+                <div class="day-title">Sunday, May 24</div>
+                <p class="day-subtitle">The Big Day!</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">2:30 PM</div>
+                        <div class="event-title">Guests Arrive &amp; Mingle</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">Guests arrive at the venue. There is a bit of a walk to the ceremony site, so please plan accordingly and take your seats by 3:00 PM.</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">3:00 PM &ndash; 3:30 PM</div>
+                        <div class="event-title">Ceremony</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">The moment we've been waiting for! Join us as Zinnia and Andrew exchange vows surrounded by the beauty of Kauai. The ceremony will be under the trees.</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">3:30 PM &ndash; 5:30 PM</div>
+                        <div class="event-title">Cocktail Hour</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">Celebrate with open bar, appetizers, and a Shave Ice Truck (available 3:30–6:30 PM)! Lawn games and Mahjong will be available while you mingle, and we'll be calling groups over for photos throughout.
+                            <div style="margin-top:0.75rem; padding:0.75rem 1rem; background:var(--cream); border-radius:8px; border-left:3px solid var(--orange);">
+                                <div style="font-weight:700; font-size:0.85rem; color:var(--jungle); margin-bottom:0.2rem;">4:00 PM – 5:00 PM &nbsp;·&nbsp; Farm Tours &amp; Lei Making Workshop</div>
+                                <div style="font-size:0.88rem; color:var(--text-mid);">Join a guided tour of the farm to learn about Common Ground's regenerative farming practices, or head to the lei making workshop to construct your own.</div>
+                            </div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">5:30 PM</div>
+                        <div class="event-title">Guests Seated</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">Please make your way to your seats as we transition into the reception.</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">5:40 PM &ndash; 6:00 PM</div>
+                        <div class="event-title">Grand Entrance, First Dance &amp; Speeches</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">The newlyweds make their grand entrance, share their first dance, and deliver their mahalo speech — followed by a couple of heartfelt guest speeches.</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">6:00 PM &ndash; 7:00 PM</div>
+                        <div class="event-title">Dinner Buffet</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">The buffet opens! Our chef has crafted everything from food grown on the farm or sourced locally on island — true farm to table.
+                            <div style="margin-top:0.75rem; padding:0.75rem 1rem; background:var(--cream); border-radius:8px; border-left:3px solid var(--orange);">
+                                <div style="font-weight:700; font-size:0.85rem; color:var(--jungle); margin-bottom:0.2rem;">6:45 PM – 7:00 PM &nbsp;·&nbsp; Additional Speeches</div>
+                                <div style="font-size:0.88rem; color:var(--text-mid);">A few more toasts from our favorite people.</div>
+                            </div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">7:00 PM &ndash; 7:30 PM</div>
+                        <div class="event-title">Cake Cutting &amp; Competition Winners 🏆</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">We cut the cake and crown the winners of the wedding week competition!</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">7:30 PM &ndash; 10:00 PM</div>
+                        <div class="event-title">Dancing &amp; Evening Activities</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">The rest of the evening is yours. We'll have dancing, lawn games, Mahjong, and other activities available.</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">10:00 PM</div>
+                        <div class="event-title">End of Night 🌺</div>
+                        <div class="event-location">Common Ground Kauai</div>
+                        <div class="event-description">What a night! Thank you for celebrating with us. Safe travels home — we love you all.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="day-section" id="farewell-brunch">
+            <div class="day-header">
+                <div class="day-title">Monday, May 25</div>
+                <p class="day-subtitle">Farewell Brunch</p>
+            </div>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="timeline-marker"></div>
+                    <div class="event-content">
+                        <div class="event-time">10:30 AM</div>
+                        <div class="event-title">Farewell Brunch</div>
+                        <div class="event-location">Princeville Airbnbs</div>
+                        <div class="event-description">Join us for one last meal together before heading home. A casual, heartfelt brunch to toast new memories and say our goodbyes. Casual island attire.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="footer-names">Zinnia &amp; Andrew</p>
+        <p class="footer-date">May 24, 2026 &middot; Kauai, Hawaii</p>
+    </footer>
+
+    <script>
+    // Randomize names
+    (function() {
+        const names = [['Zinnia', 'Andrew'], ['Andrew', 'Zinnia']];
+        const pick = names[Math.floor(Math.random() * 2)];
+        document.querySelectorAll('.nav-logo').forEach(el => el.innerHTML = pick[0].charAt(0) + ' &amp; ' + pick[1].charAt(0));
+        document.querySelectorAll('.footer-names').forEach(el => el.innerHTML = pick[0] + ' &amp; ' + pick[1]);
+    })();
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+        });
+        document.getElementById('hamburger').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
