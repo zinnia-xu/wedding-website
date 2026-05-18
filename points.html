@@ -1863,6 +1863,9 @@
 
         function submitModalForm(e) {
             e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) return; // prevent double-submit
+            if (submitBtn) submitBtn.disabled = true;
             const who = document.getElementById('modalGuest').value;
             const customInput = document.getElementById('modalCustomPoints');
             const birdingWrap = document.getElementById('modalBirdingWrap');
@@ -1904,6 +1907,7 @@
                 statusDiv.className = 'form-status error';
                 statusDiv.textContent = 'Please select your name.';
                 statusDiv.style.display = 'block';
+                if (submitBtn) submitBtn.disabled = false;
                 return;
             }
 
@@ -1920,6 +1924,7 @@
                     statusDiv.className = 'form-status error';
                     statusDiv.textContent = data.error;
                     statusDiv.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = false;
                 } else {
                     statusDiv.className = 'form-status success';
                     statusDiv.innerHTML = '🎉 Points awarded!';
@@ -1934,6 +1939,7 @@
                 statusDiv.className = 'form-status error';
                 statusDiv.textContent = 'Error claiming points.';
                 statusDiv.style.display = 'block';
+                if (submitBtn) submitBtn.disabled = false;
                 console.error(err);
             });
         }
