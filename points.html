@@ -2035,6 +2035,9 @@
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
             document.getElementById('modalStatus').className = 'form-status';
+            // Always re-enable the submit button when opening a new modal
+            const modalSubmit = document.querySelector('#modalForm button[type="submit"]');
+            if (modalSubmit) { modalSubmit.disabled = false; modalSubmit.textContent = 'Claim Points! 🎉'; }
             const customWrap = document.getElementById('modalCustomPointsWrap');
             const customInput = document.getElementById('modalCustomPoints');
             const birdingWrap = document.getElementById('modalBirdingWrap');
