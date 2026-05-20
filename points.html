@@ -1854,29 +1854,51 @@
             }
         }
 
-        function openFeedEdit(btn, timestamp, name, currentPoints, currentReason) {
+        function openFeedEdit(btn) {
+            const timestamp = decodeURIComponent(btn.dataset.ts);
+            const name = decodeURIComponent(btn.dataset.name);
+            const currentPoints = parseInt(btn.dataset.pts);
+            const currentReason = decodeURIComponent(btn.dataset.reason);
             // Close any other open edits
             document.querySelectorAll('.feed-inline-edit').forEach(el => el.remove());
             const li = btn.closest('li.feed-item');
-            const existing = li.querySelector('.feed-inline-edit');
-            if (existing) { existing.remove(); return; }
             const form = document.createElement('div');
             form.className = 'feed-inline-edit';
-            form.innerHTML = `
-                <div>
-                    <label>Points</label>
-                    <input type="number" class="edit-pts" value="${currentPoints}" step="1">
-                </div>
-                <div>
-                    <label>Reason / Commentary</label>
-                    <textarea class="edit-reason">${currentReason}</textarea>
-                </div>
-                <div class="feed-inline-edit-btns">
-                    <button class="feed-inline-save" onclick="saveFeedEdit(this, '${timestamp}', '${name}')">Save</button>
-                    <button class="feed-inline-cancel" onclick="this.closest('.feed-inline-edit').remove()">Cancel</button>
-                </div>
-                <div class="edit-status" style="font-size:0.82rem;margin-top:0.25rem;"></div>
-            `;
+            form.dataset.ts = timestamp;
+            form.dataset.name = name;
+            const ptsInput = document.createElement('div');
+            ptsInput.innerHTML = '<label>Points</label>';
+            const pts = document.createElement('input');
+            pts.type = 'number';
+            pts.className = 'edit-pts';
+            pts.value = currentPoints;
+            pts.step = '1';
+            ptsInput.appendChild(pts);
+            const reasonWrap = document.createElement('div');
+            reasonWrap.innerHTML = '<label>Reason / Commentary</label>';
+            const reason = document.createElement('textarea');
+            reason.className = 'edit-reason';
+            reason.textContent = currentReason;
+            reasonWrap.appendChild(reason);
+            const btns = document.createElement('div');
+            btns.className = 'feed-inline-edit-btns';
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'feed-inline-save';
+            saveBtn.textContent = 'Save';
+            saveBtn.addEventListener('click', () => saveFeedEdit(saveBtn, timestamp, name));
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'feed-inline-cancel';
+            cancelBtn.textContent = 'Cancel';
+            cancelBtn.addEventListener('click', () => form.remove());
+            btns.appendChild(saveBtn);
+            btns.appendChild(cancelBtn);
+            const statusEl = document.createElement('div');
+            statusEl.className = 'edit-status';
+            statusEl.style.cssText = 'font-size:0.82rem;margin-top:0.25rem;';
+            form.appendChild(ptsInput);
+            form.appendChild(reasonWrap);
+            form.appendChild(btns);
+            form.appendChild(statusEl);
             li.appendChild(form);
         }
 
@@ -1973,7 +1995,7 @@
                 const rowClass = isPending ? ' pending' : (isDenied || isRejected) ? ' denied' : '';
                 const feedIcon = isPending ? item.points + '?' : (isDenied || isRejected) ? '🚫' : item.points;
                 const editBtn = feedAdminUnlocked
-                    ? `<button class="feed-edit-btn" onclick="openFeedEdit(this, ${JSON.stringify(item.timestamp)}, ${JSON.stringify(name)}, ${item.points}, ${JSON.stringify(item.reason || '')})">✏️ Edit</button>`
+                    ? `<button class="feed-edit-btn" data-ts="${encodeURIComponent(item.timestamp)}" data-name="${encodeURIComponent(name)}" data-pts="${item.points}" data-reason="${encodeURIComponent(item.reason || '')}">✏️ Edit</button>`
                     : '';
                 return `
                 <li class="feed-item${rowClass}" data-ts="${item.timestamp}" data-name="${name}">
@@ -2001,6 +2023,11 @@
         }
 
         document.getElementById('feedList').addEventListener('scroll', updateFeedScrollIndicator);
+
+        document.getElementById('feedList').addEventListener('click', function(e) {
+            const btn = e.target.closest('.feed-edit-btn');
+            if (btn) openFeedEdit(btn);
+        });
 
         // Modal functions
         function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling) {
