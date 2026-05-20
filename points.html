@@ -1448,7 +1448,7 @@
                         <strong>🐋 Spot a Humpback Whale</strong> <span class="pv-pts">+10 pts</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo or video to Slack. Bonus bragging rights if you catch a breach! <strong>Claim once only.</strong></div>
                     </div>
-                    <div class="pv-bonus-item" data-activity="Catch a Kauai Sunrise or Sunset" data-points="5">
+                    <div class="pv-bonus-item sunrise-sunset-item" data-activity="Catch a Kauai Sunrise or Sunset" data-points="5">
                         <strong>🌅 Catch a Kauai Sunrise or Sunset</strong> <span class="pv-pts">+5 pts each</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Up to 10 pts total — claim once for a sunrise, once for a sunset. Post your photo to Slack!</div>
                     </div>
@@ -1629,6 +1629,14 @@
                     <option value="15">4th session — 15 pts</option>
                 </select>
                 <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Points decrease with each session per day. Max 4 sessions claimed per day.</div>
+            </div>
+            <!-- Sunrise/Sunset selector -->
+            <div id="modalSunriseWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which are you claiming?</label>
+                <select id="modalSunriseType" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                    <option value="sunrise">🌄 Sunrise — +5 pts</option>
+                    <option value="sunset">🌅 Sunset — +5 pts</option>
+                </select>
             </div>
             <!-- Shave Ice shop input -->
             <div id="modalShaveIceWrap" style="display:none;margin-top:0.75rem;">
@@ -2035,7 +2043,7 @@
         });
 
         // Modal functions
-        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce) {
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce, sunrise) {
             document.getElementById('modalActivityName').textContent = activityName;
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
@@ -2050,6 +2058,7 @@
             const bingoWrap = document.getElementById('modalBingoWrap');
             const surfingWrap = document.getElementById('modalSurfingWrap');
             const shaveIceWrap = document.getElementById('modalShaveIceWrap');
+            const sunriseWrap = document.getElementById('modalSunriseWrap');
             // Reset all special modes
             customWrap.style.display = 'none';
             customInput.required = false;
@@ -2058,8 +2067,15 @@
             bingoWrap.style.display = 'none';
             surfingWrap.style.display = 'none';
             shaveIceWrap.style.display = 'none';
+            sunriseWrap.style.display = 'none';
             document.getElementById('modalShaveIceShop').value = '';
-            if (shaveIce) {
+            if (sunrise) {
+                currentModalType = 'sunrise';
+                document.getElementById('modalPointsHidden').value = '5';
+                document.getElementById('modalPoints').textContent = '+5 pts';
+                sunriseWrap.style.display = 'block';
+                document.getElementById('modalSunriseType').value = 'sunrise';
+            } else if (shaveIce) {
                 currentModalType = 'shaveice';
                 document.getElementById('modalPointsHidden').value = '5';
                 shaveIceWrap.style.display = 'block';
@@ -2137,6 +2153,7 @@
             const isSurfing = currentModalType === 'surfing';
             const isSnorkeling = currentModalType === 'snorkeling';
             const isShaveIce = currentModalType === 'shaveice';
+            const isSunrise = currentModalType === 'sunrise';
             let points, reason;
             if (isSurfing || isSnorkeling) {
                 const surfSel = document.getElementById('modalSurfingSession');
@@ -2150,6 +2167,10 @@
                 reason = points === 35
                     ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
                     : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
+            } else if (isSunrise) {
+                points = 5;
+                const type = document.getElementById('modalSunriseType').value;
+                reason = type === 'sunrise' ? 'Caught a Kauai Sunrise' : 'Caught a Kauai Sunset';
             } else if (isShaveIce) {
                 points = 5;
                 const shop = document.getElementById('modalShaveIceShop').value.trim();
@@ -2238,7 +2259,8 @@
                 const isBirding = this.classList.contains('birding-item');
                 const isFishing = this.classList.contains('fishing-item');
                 const isShaveIce = this.classList.contains('shave-ice-item');
-                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce);
+                const isSunrise = this.classList.contains('sunrise-sunset-item');
+                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce, isSunrise);
             });
         });
 
