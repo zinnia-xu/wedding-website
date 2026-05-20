@@ -1387,7 +1387,7 @@
                         <strong>🍠 Try Poi</strong> <span class="pv-pts">+5 pts</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a selfie or video of your reaction to the poi to Slack! <strong>Claim once only.</strong></div>
                     </div>
-                    <div class="pv-bonus-item" data-activity="Shave Ice selfie" data-points="5">
+                    <div class="pv-bonus-item shave-ice-item" data-activity="Shave Ice selfie" data-points="5">
                         <strong>🍧 Shave Ice Selfie</strong> <span class="pv-pts">+5 pts each</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a selfie of you with a shave ice — <strong>once per day, must be a unique shop each time!</strong> Tell us what you rate it out of 5.</div>
                     </div>
@@ -1629,6 +1629,11 @@
                     <option value="15">4th session — 15 pts</option>
                 </select>
                 <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Points decrease with each session per day. Max 4 sessions claimed per day.</div>
+            </div>
+            <!-- Shave Ice shop input -->
+            <div id="modalShaveIceWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which shop did you try? 🍧</label>
+                <input type="text" id="modalShaveIceShop" placeholder="e.g. JoJo's Shave Ice, Wishing Well…" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);box-sizing:border-box;">
             </div>
             <!-- Bingo selector -->
             <div id="modalBingoWrap" style="display:none;margin-top:0.75rem;">
@@ -2030,7 +2035,7 @@
         });
 
         // Modal functions
-        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling) {
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce) {
             document.getElementById('modalActivityName').textContent = activityName;
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
@@ -2044,6 +2049,7 @@
             const birdNamesInput = document.getElementById('modalBirdNames');
             const bingoWrap = document.getElementById('modalBingoWrap');
             const surfingWrap = document.getElementById('modalSurfingWrap');
+            const shaveIceWrap = document.getElementById('modalShaveIceWrap');
             // Reset all special modes
             customWrap.style.display = 'none';
             customInput.required = false;
@@ -2051,7 +2057,13 @@
             birdNamesInput.required = false;
             bingoWrap.style.display = 'none';
             surfingWrap.style.display = 'none';
-            if (surfing || snorkeling) {
+            shaveIceWrap.style.display = 'none';
+            document.getElementById('modalShaveIceShop').value = '';
+            if (shaveIce) {
+                currentModalType = 'shaveice';
+                document.getElementById('modalPointsHidden').value = '5';
+                shaveIceWrap.style.display = 'block';
+            } else if (surfing || snorkeling) {
                 currentModalType = surfing ? 'surfing' : 'snorkeling';
                 document.getElementById('modalPoints').textContent = '45 → 35 → 25 → 15 pts per session';
                 document.getElementById('modalPointsHidden').value = '';
@@ -2124,6 +2136,7 @@
             const isBingo = currentModalType === 'bingo';
             const isSurfing = currentModalType === 'surfing';
             const isSnorkeling = currentModalType === 'snorkeling';
+            const isShaveIce = currentModalType === 'shaveice';
             let points, reason;
             if (isSurfing || isSnorkeling) {
                 const surfSel = document.getElementById('modalSurfingSession');
@@ -2137,6 +2150,17 @@
                 reason = points === 35
                     ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
                     : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
+            } else if (isShaveIce) {
+                points = 5;
+                const shop = document.getElementById('modalShaveIceShop').value.trim();
+                if (!shop) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = 'Please enter which shop you tried!';
+                    statusDiv.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = false;
+                    return;
+                }
+                reason = `Shave Ice Selfie — ${shop}`;
             } else if (isBirding) {
                 points = parseInt(document.getElementById('modalBirdingPoints').value);
                 const names = document.getElementById('modalBirdNames').value.trim();
@@ -2213,7 +2237,8 @@
                 const isCustom = name === 'Team Captain';
                 const isBirding = this.classList.contains('birding-item');
                 const isFishing = this.classList.contains('fishing-item');
-                openModal(name, points, isCustom, isBirding, isFishing);
+                const isShaveIce = this.classList.contains('shave-ice-item');
+                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce);
             });
         });
 
