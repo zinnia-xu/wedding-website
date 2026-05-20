@@ -1410,7 +1410,7 @@
                         <strong>🐔 Chicken Selfie</strong> <span class="pv-pts">+5 pts</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Take a selfie of you with at least 5+ chickens and post to Slack! <strong>Claim once only.</strong></div>
                     </div>
-                    <div class="pv-bonus-item" data-activity="Rare Animal Photo" data-points="10">
+                    <div class="pv-bonus-item rare-animal-item" data-activity="Rare Animal Photo" data-points="10">
                         <strong>🐢 Rare Animal Photo</strong> <span class="pv-pts">+10 pts per unique animal</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo of a rare animal to Slack — monk seals, turtles, and other unusual wildlife welcome. Birds and geckos don't count for this one! <strong>Claim once per unique rare animal.</strong></div>
                     </div>
@@ -1629,6 +1629,11 @@
                     <option value="15">4th session — 15 pts</option>
                 </select>
                 <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Points decrease with each session per day. Max 4 sessions claimed per day.</div>
+            </div>
+            <!-- Rare Animal description -->
+            <div id="modalRareAnimalWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">What did you spot? 🐢</label>
+                <textarea id="modalRareAnimalDesc" placeholder="Describe the animal and where you found it — e.g. Hawaiian monk seal on Poipu Beach…" rows="3" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);box-sizing:border-box;resize:vertical;"></textarea>
             </div>
             <!-- Sunrise/Sunset selector -->
             <div id="modalSunriseWrap" style="display:none;margin-top:0.75rem;">
@@ -2043,7 +2048,7 @@
         });
 
         // Modal functions
-        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce, sunrise) {
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce, sunrise, rareAnimal) {
             document.getElementById('modalActivityName').textContent = activityName;
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
@@ -2059,6 +2064,7 @@
             const surfingWrap = document.getElementById('modalSurfingWrap');
             const shaveIceWrap = document.getElementById('modalShaveIceWrap');
             const sunriseWrap = document.getElementById('modalSunriseWrap');
+            const rareAnimalWrap = document.getElementById('modalRareAnimalWrap');
             // Reset all special modes
             customWrap.style.display = 'none';
             customInput.required = false;
@@ -2068,8 +2074,14 @@
             surfingWrap.style.display = 'none';
             shaveIceWrap.style.display = 'none';
             sunriseWrap.style.display = 'none';
+            rareAnimalWrap.style.display = 'none';
             document.getElementById('modalShaveIceShop').value = '';
-            if (sunrise) {
+            document.getElementById('modalRareAnimalDesc').value = '';
+            if (rareAnimal) {
+                currentModalType = 'rareanimal';
+                document.getElementById('modalPointsHidden').value = '10';
+                rareAnimalWrap.style.display = 'block';
+            } else if (sunrise) {
                 currentModalType = 'sunrise';
                 document.getElementById('modalPointsHidden').value = '5';
                 document.getElementById('modalPoints').textContent = '+5 pts';
@@ -2154,6 +2166,7 @@
             const isSnorkeling = currentModalType === 'snorkeling';
             const isShaveIce = currentModalType === 'shaveice';
             const isSunrise = currentModalType === 'sunrise';
+            const isRareAnimal = currentModalType === 'rareanimal';
             let points, reason;
             if (isSurfing || isSnorkeling) {
                 const surfSel = document.getElementById('modalSurfingSession');
@@ -2167,6 +2180,17 @@
                 reason = points === 35
                     ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
                     : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
+            } else if (isRareAnimal) {
+                points = 10;
+                const desc = document.getElementById('modalRareAnimalDesc').value.trim();
+                if (!desc) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = 'Please describe the animal you spotted!';
+                    statusDiv.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = false;
+                    return;
+                }
+                reason = `Rare Animal Photo — ${desc}`;
             } else if (isSunrise) {
                 points = 5;
                 const type = document.getElementById('modalSunriseType').value;
@@ -2260,7 +2284,8 @@
                 const isFishing = this.classList.contains('fishing-item');
                 const isShaveIce = this.classList.contains('shave-ice-item');
                 const isSunrise = this.classList.contains('sunrise-sunset-item');
-                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce, isSunrise);
+                const isRareAnimal = this.classList.contains('rare-animal-item');
+                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce, isSunrise, isRareAnimal);
             });
         });
 
