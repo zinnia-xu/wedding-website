@@ -1135,9 +1135,10 @@
                         <div class="pv-pts green">35 pts</div>
                         <div class="pv-limit">1× per day</div>
                     </div>
-                    <div class="pv-item" data-activity="Snorkeling" data-points="20">
+                    <div class="pv-item snorkeling-item" data-activity="Snorkeling" data-points="45">
                         <div class="pv-name">Snorkeling</div>
-                        <div class="pv-pts green">20 pts</div>
+                        <div class="pv-sub">45 → 35 → 25 → 15 pts per session</div>
+                        <div class="pv-pts amber">45 pts 1st session</div>
                         <div class="pv-limit">1× per day</div>
                     </div>
                 </div>
@@ -1508,9 +1509,9 @@
                 <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;">Points (10 pts per attendee, not counting yourself)</label>
                 <input type="number" id="modalCustomPoints" min="10" step="10" placeholder="e.g. 30 for 3 people" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
             </div>
-            <!-- Surfing session selector -->
+            <!-- Surfing/Snorkeling session selector -->
             <div id="modalSurfingWrap" style="display:none;margin-top:0.75rem;">
-                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which surf session is this today?</label>
+                <label id="modalSessionLabel" style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which session is this today?</label>
                 <select id="modalSurfingSession" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
                     <option value="45">1st session — 45 pts</option>
                     <option value="35">2nd session — 35 pts</option>
@@ -1786,7 +1787,7 @@
         document.getElementById('feedList').addEventListener('scroll', updateFeedScrollIndicator);
 
         // Modal functions
-        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing) {
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling) {
             document.getElementById('modalActivityName').textContent = activityName;
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
@@ -1804,10 +1805,11 @@
             birdNamesInput.required = false;
             bingoWrap.style.display = 'none';
             surfingWrap.style.display = 'none';
-            if (surfing) {
-                currentModalType = 'surfing';
+            if (surfing || snorkeling) {
+                currentModalType = surfing ? 'surfing' : 'snorkeling';
                 document.getElementById('modalPoints').textContent = '45 → 35 → 25 → 15 pts per session';
                 document.getElementById('modalPointsHidden').value = '';
+                document.getElementById('modalSessionLabel').textContent = surfing ? 'Which surf session is this today?' : 'Which snorkel session is this today?';
                 surfingWrap.style.display = 'block';
                 document.getElementById('modalSurfingSession').value = '45';
             } else if (bingo) {
@@ -1875,12 +1877,14 @@
 
             const isBingo = currentModalType === 'bingo';
             const isSurfing = currentModalType === 'surfing';
+            const isSnorkeling = currentModalType === 'snorkeling';
             let points, reason;
-            if (isSurfing) {
+            if (isSurfing || isSnorkeling) {
                 const surfSel = document.getElementById('modalSurfingSession');
                 points = parseInt(surfSel.value);
                 const sessionLabel = { 45: '1st', 35: '2nd', 25: '3rd', 15: '4th' }[points] || '';
-                reason = `Surfing — ${sessionLabel} session (${points} pts)`;
+                const activityName = isSurfing ? 'Surfing' : 'Snorkeling';
+                reason = `${activityName} — ${sessionLabel} session (${points} pts)`;
             } else if (isBingo) {
                 const bingoSel = document.getElementById('modalBingoType');
                 points = parseInt(bingoSel.value);
@@ -1951,7 +1955,8 @@
                 const name = this.dataset.activity;
                 const points = parseInt(this.dataset.points);
                 const isSurfing = this.classList.contains('surfing-item');
-                openModal(name, points, false, false, false, false, isSurfing);
+                const isSnorkeling = this.classList.contains('snorkeling-item');
+                openModal(name, points, false, false, false, false, isSurfing, isSnorkeling);
             });
         });
 
