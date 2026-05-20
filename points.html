@@ -325,6 +325,107 @@
             color: var(--text-light);
         }
 
+        .feed-edit-btn {
+            margin-left: auto;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.78rem;
+            background: none;
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-mid);
+            flex-shrink: 0;
+            align-self: flex-start;
+            opacity: 0.6;
+            transition: opacity 0.15s, border-color 0.15s;
+        }
+        .feed-edit-btn:hover { opacity: 1; border-color: var(--jungle); color: var(--jungle); }
+
+        .feed-inline-edit {
+            background: var(--cream);
+            border: 1.5px solid var(--jungle);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            margin-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .feed-inline-edit label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .feed-inline-edit input, .feed-inline-edit textarea {
+            width: 100%;
+            padding: 0.45rem 0.7rem;
+            border: 1.5px solid var(--cream-dark);
+            border-radius: 7px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            background: white;
+            box-sizing: border-box;
+        }
+        .feed-inline-edit textarea { resize: vertical; min-height: 60px; }
+        .feed-inline-edit-btns { display: flex; gap: 0.5rem; }
+        .feed-inline-save {
+            padding: 0.4rem 1rem;
+            background: var(--jungle);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .feed-inline-save:hover { background: var(--jungle-mid); }
+        .feed-inline-cancel {
+            padding: 0.4rem 1rem;
+            background: none;
+            border: 1.5px solid var(--cream-dark);
+            border-radius: 7px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: var(--text-mid);
+        }
+        .feed-admin-unlock {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .feed-admin-unlock input {
+            padding: 0.35rem 0.7rem;
+            border: 1.5px solid var(--cream-dark);
+            border-radius: 7px;
+            font-size: 0.85rem;
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            width: 160px;
+        }
+        .feed-admin-unlock button {
+            padding: 0.35rem 0.8rem;
+            background: var(--jungle);
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .feed-admin-toggle {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            text-decoration: underline;
+            margin-bottom: 0.4rem;
+        }
+
         .feed-empty {
             padding: 2rem 1rem;
             text-align: center;
@@ -1058,6 +1159,14 @@
                 </select>
                 <div class="feed-filter-summary" id="feedFilterSummary"></div>
             </div>
+            <div id="feedAdminArea" style="margin-bottom:0.5rem;">
+                <button class="feed-admin-toggle" onclick="toggleFeedAdminUnlock()">🔑 Admin edit</button>
+                <div class="feed-admin-unlock" id="feedAdminUnlock" style="display:none;">
+                    <input type="password" id="feedAdminKey" placeholder="Admin key" autocomplete="off">
+                    <button onclick="unlockFeedAdmin()">Unlock</button>
+                    <span id="feedAdminStatus" style="font-size:0.82rem;color:var(--text-mid);"></span>
+                </div>
+            </div>
             <div class="feed-scroll-wrap">
                 <ul class="feed-list" id="feedList">
                     <li class="feed-empty">Loading...</li>
@@ -1708,6 +1817,97 @@
         }
 
         let feedFilterPerson = '';
+        let feedAdminUnlocked = false;
+        let feedAdminKeyValue = '';
+
+        function toggleFeedAdminUnlock() {
+            const el = document.getElementById('feedAdminUnlock');
+            el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        async function unlockFeedAdmin() {
+            const key = document.getElementById('feedAdminKey').value.trim();
+            const statusEl = document.getElementById('feedAdminStatus');
+            if (!key) return;
+            // Verify key against backend
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key },
+                    body: JSON.stringify({ action: 'get' })
+                });
+                if (res.ok) {
+                    feedAdminUnlocked = true;
+                    feedAdminKeyValue = key;
+                    statusEl.textContent = '✅ Unlocked';
+                    statusEl.style.color = 'var(--jungle)';
+                    document.getElementById('feedAdminKey').style.display = 'none';
+                    document.querySelector('#feedAdminUnlock button').style.display = 'none';
+                    renderFeed();
+                } else {
+                    statusEl.textContent = '❌ Wrong key';
+                    statusEl.style.color = '#dc2626';
+                }
+            } catch(e) {
+                statusEl.textContent = '❌ Error';
+            }
+        }
+
+        function openFeedEdit(btn, timestamp, name, currentPoints, currentReason) {
+            // Close any other open edits
+            document.querySelectorAll('.feed-inline-edit').forEach(el => el.remove());
+            const li = btn.closest('li.feed-item');
+            const existing = li.querySelector('.feed-inline-edit');
+            if (existing) { existing.remove(); return; }
+            const form = document.createElement('div');
+            form.className = 'feed-inline-edit';
+            form.innerHTML = `
+                <div>
+                    <label>Points</label>
+                    <input type="number" class="edit-pts" value="${currentPoints}" step="1">
+                </div>
+                <div>
+                    <label>Reason / Commentary</label>
+                    <textarea class="edit-reason">${currentReason}</textarea>
+                </div>
+                <div class="feed-inline-edit-btns">
+                    <button class="feed-inline-save" onclick="saveFeedEdit(this, '${timestamp}', '${name}')">Save</button>
+                    <button class="feed-inline-cancel" onclick="this.closest('.feed-inline-edit').remove()">Cancel</button>
+                </div>
+                <div class="edit-status" style="font-size:0.82rem;margin-top:0.25rem;"></div>
+            `;
+            li.appendChild(form);
+        }
+
+        async function saveFeedEdit(btn, timestamp, name) {
+            const form = btn.closest('.feed-inline-edit');
+            const newPoints = parseInt(form.querySelector('.edit-pts').value);
+            const newReason = form.querySelector('.edit-reason').value.trim();
+            const statusEl = form.querySelector('.edit-status');
+            if (isNaN(newPoints)) { statusEl.textContent = 'Enter a valid points number.'; return; }
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + feedAdminKeyValue },
+                    body: JSON.stringify({ action: 'edit-feed-entry', timestamp, name, newPoints, newReason })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    form.remove();
+                    loadData();
+                } else {
+                    statusEl.textContent = data.error || 'Error saving.';
+                    btn.disabled = false;
+                    btn.textContent = 'Save';
+                }
+            } catch(e) {
+                statusEl.textContent = 'Network error.';
+                btn.disabled = false;
+                btn.textContent = 'Save';
+            }
+        }
 
         function applyFeedFilter() {
             feedFilterPerson = document.getElementById('feedPersonFilter').value;
@@ -1771,11 +1971,14 @@
                     : `<strong>${name}</strong> earned <span class="feed-points">${item.points > 0 ? '+' : ''}${item.points} points</span> for ${item.reason}`;
                 const rowClass = isPending ? ' pending' : (isDenied || isRejected) ? ' denied' : '';
                 const feedIcon = isPending ? item.points + '?' : (isDenied || isRejected) ? '🚫' : item.points;
+                const editBtn = feedAdminUnlocked
+                    ? `<button class="feed-edit-btn" onclick="openFeedEdit(this, ${JSON.stringify(item.timestamp)}, ${JSON.stringify(name)}, ${item.points}, ${JSON.stringify(item.reason || '')})">✏️ Edit</button>`
+                    : '';
                 return `
-                <li class="feed-item${rowClass}">
+                <li class="feed-item${rowClass}" data-ts="${item.timestamp}" data-name="${name}">
                     <div class="feed-icon">${feedIcon}</div>
                     <div class="feed-content">
-                        <div class="feed-text">${text}</div>
+                        <div class="feed-text" style="display:flex;align-items:flex-start;gap:0.5rem;">${text}${editBtn}</div>
                         ${isDenied ? denyReasonText : adminCommentText}
                         <div class="feed-time">${formatTime(item.timestamp) || item.timestamp}</div>
                     </div>

@@ -204,6 +204,30 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
     }
 
+    // Action: "edit-feed-entry" — change the points and/or reason of an existing approved entry
+    if (body.action === "edit-feed-entry") {
+      let data = (await store.get("data", { type: "json" })) || { guests: [], feed: [] };
+      const entry = data.feed.find(
+        f => f.timestamp === body.timestamp && f.name === body.name
+      );
+      if (!entry) {
+        return { statusCode: 404, headers, body: JSON.stringify({ error: "Feed entry not found" }) };
+      }
+      const oldPoints = entry.points || 0;
+      const newPoints = parseInt(body.newPoints, 10);
+      const diff = newPoints - oldPoints;
+      // Update the entry
+      entry.points = newPoints;
+      if (body.newReason !== undefined) entry.reason = body.newReason;
+      // Adjust guest total if the entry is approved
+      if ((entry.status === "approved" || !entry.status) && diff !== 0) {
+        const guest = data.guests.find(g => g.name.toLowerCase() === entry.name.toLowerCase());
+        if (guest) guest.points += diff;
+      }
+      await store.setJSON("data", data);
+      return { statusCode: 200, headers, body: JSON.stringify({ success: true, diff }) };
+    }
+
     return { statusCode: 400, headers, body: JSON.stringify({ error: "Unknown action." }) };
   } catch (error) {
     console.error("Admin update error:", error);
