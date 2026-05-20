@@ -1682,10 +1682,22 @@
         function populateAllDropdowns() {
             const options = '<option value="">— select your name —</option>' +
                 allGuests.map(n => `<option value="${n}">${n}</option>`).join('');
+
+            // Preserve currently selected names across all dropdowns
+            const prevModal = document.getElementById('modalGuest').value;
+            const prevReq = document.getElementById('reqWho').value;
+            const prevRecipe = document.getElementById('recipeGuest').value;
+            const prevBanana = document.getElementById('bananaGuest').value;
+
             document.getElementById('reqWho').innerHTML = options;
             document.getElementById('modalGuest').innerHTML = options;
             document.getElementById('recipeGuest').innerHTML = options;
             document.getElementById('bananaGuest').innerHTML = options;
+
+            if (prevModal && allGuests.includes(prevModal)) document.getElementById('modalGuest').value = prevModal;
+            if (prevReq && allGuests.includes(prevReq)) document.getElementById('reqWho').value = prevReq;
+            if (prevRecipe && allGuests.includes(prevRecipe)) document.getElementById('recipeGuest').value = prevRecipe;
+            if (prevBanana && allGuests.includes(prevBanana)) document.getElementById('bananaGuest').value = prevBanana;
 
             // Populate feed filter (preserve current selection if possible)
             const filterEl = document.getElementById('feedPersonFilter');
