@@ -1391,7 +1391,7 @@
                         <strong>🍧 Shave Ice Selfie</strong> <span class="pv-pts">+5 pts each</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a selfie of you with a shave ice — <strong>once per day, must be a unique shop each time!</strong> Tell us what you rate it out of 5.</div>
                     </div>
-                    <div class="pv-bonus-item" data-activity="Try a New Fruit" data-points="5">
+                    <div class="pv-bonus-item new-fruit-item" data-activity="Try a New Fruit" data-points="5">
                         <strong>🍈 Try a New Fruit</strong> <span class="pv-pts">+5 pts per new fruit</span>
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Claim once per new fruit you try! Post a photo and your thoughts to Slack.</div>
                     </div>
@@ -1629,6 +1629,11 @@
                     <option value="15">4th session — 15 pts</option>
                 </select>
                 <div style="font-size:0.8rem;color:var(--text-light);margin-top:0.5rem;">Points decrease with each session per day. Max 4 sessions claimed per day.</div>
+            </div>
+            <!-- New Fruit input -->
+            <div id="modalNewFruitWrap" style="display:none;margin-top:0.75rem;">
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Which fruit did you try? 🍈</label>
+                <input type="text" id="modalNewFruitName" placeholder="e.g. Lilikoi, Dragon Fruit, Starfruit…" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);box-sizing:border-box;">
             </div>
             <!-- Rare Animal description -->
             <div id="modalRareAnimalWrap" style="display:none;margin-top:0.75rem;">
@@ -2053,7 +2058,7 @@
         });
 
         // Modal functions
-        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce, sunrise, rareAnimal) {
+        function openModal(activityName, points, customPoints, birding, fishing, bingo, surfing, snorkeling, shaveIce, sunrise, rareAnimal, newFruit) {
             document.getElementById('modalActivityName').textContent = activityName;
             document.getElementById('modalReason').value = activityName;
             document.getElementById('modalStatus').style.display = 'none';
@@ -2070,6 +2075,7 @@
             const shaveIceWrap = document.getElementById('modalShaveIceWrap');
             const sunriseWrap = document.getElementById('modalSunriseWrap');
             const rareAnimalWrap = document.getElementById('modalRareAnimalWrap');
+            const newFruitWrap = document.getElementById('modalNewFruitWrap');
             // Reset all special modes
             customWrap.style.display = 'none';
             customInput.required = false;
@@ -2080,9 +2086,16 @@
             shaveIceWrap.style.display = 'none';
             sunriseWrap.style.display = 'none';
             rareAnimalWrap.style.display = 'none';
+            newFruitWrap.style.display = 'none';
             document.getElementById('modalShaveIceShop').value = '';
             document.getElementById('modalRareAnimalDesc').value = '';
-            if (rareAnimal) {
+            document.getElementById('modalNewFruitName').value = '';
+            if (newFruit) {
+                currentModalType = 'newfruit';
+                document.getElementById('modalPointsHidden').value = '5';
+                document.getElementById('modalPoints').textContent = '+5 pts per new fruit';
+                newFruitWrap.style.display = 'block';
+            } else if (rareAnimal) {
                 currentModalType = 'rareanimal';
                 document.getElementById('modalPointsHidden').value = '10';
                 document.getElementById('modalPoints').textContent = '+10 pts (with photo)';
@@ -2179,6 +2192,7 @@
             const isShaveIce = currentModalType === 'shaveice';
             const isSunrise = currentModalType === 'sunrise';
             const isRareAnimal = currentModalType === 'rareanimal';
+            const isNewFruit = currentModalType === 'newfruit';
             let points, reason;
             if (isSurfing || isSnorkeling) {
                 const surfSel = document.getElementById('modalSurfingSession');
@@ -2192,6 +2206,17 @@
                 reason = points === 35
                     ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
                     : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
+            } else if (isNewFruit) {
+                points = 5;
+                const fruit = document.getElementById('modalNewFruitName').value.trim();
+                if (!fruit) {
+                    statusDiv.className = 'form-status error';
+                    statusDiv.textContent = 'Please enter which fruit you tried!';
+                    statusDiv.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = false;
+                    return;
+                }
+                reason = `Try a New Fruit — ${fruit}`;
             } else if (isRareAnimal) {
                 points = parseInt(document.getElementById('modalRareAnimalPhoto').value);
                 const desc = document.getElementById('modalRareAnimalDesc').value.trim();
@@ -2298,7 +2323,8 @@
                 const isShaveIce = this.classList.contains('shave-ice-item');
                 const isSunrise = this.classList.contains('sunrise-sunset-item');
                 const isRareAnimal = this.classList.contains('rare-animal-item');
-                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce, isSunrise, isRareAnimal);
+                const isNewFruit = this.classList.contains('new-fruit-item');
+                openModal(name, points, isCustom, isBirding, isFishing, false, false, false, isShaveIce, isSunrise, isRareAnimal, isNewFruit);
             });
         });
 
