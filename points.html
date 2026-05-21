@@ -1411,8 +1411,8 @@
                         <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Take a selfie of you with at least 5+ chickens and post to Slack! <strong>Claim once only.</strong></div>
                     </div>
                     <div class="pv-bonus-item rare-animal-item" data-activity="Rare Animal Photo" data-points="10">
-                        <strong>🐢 Rare Animal Photo</strong> <span class="pv-pts">+10 pts per unique animal</span>
-                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Post a photo of a rare animal to Slack — monk seals, turtles, and other unusual wildlife welcome. Birds and geckos don't count for this one! <strong>Claim once per unique rare animal.</strong></div>
+                        <strong>🐢 Rare Animal Photo</strong> <span class="pv-pts">+10 pts with photo · +1 pt without</span>
+                        <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 0.25rem;">Spot a rare animal — monk seals, turtles, and other unusual wildlife welcome. Birds and geckos don't count! <strong>+10 pts if you post a photo to Slack, +1 pt if no photo. Claim once per unique rare animal.</strong></div>
                     </div>
                     <div class="pv-bonus-item birding-item" data-activity="Go Birding" data-points="5">
                         <strong>🦅 Go Birding</strong> <span class="pv-pts">+5 pts per unique bird type</span>
@@ -1633,7 +1633,12 @@
             <!-- Rare Animal description -->
             <div id="modalRareAnimalWrap" style="display:none;margin-top:0.75rem;">
                 <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">What did you spot? 🐢</label>
-                <textarea id="modalRareAnimalDesc" placeholder="Describe the animal and where you found it — e.g. Hawaiian monk seal on Poipu Beach…" rows="3" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);box-sizing:border-box;resize:vertical;"></textarea>
+                <textarea id="modalRareAnimalDesc" placeholder="Describe the animal and where you found it — e.g. Hawaiian monk seal on Poipu Beach…" rows="3" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);box-sizing:border-box;resize:vertical;margin-bottom:0.6rem;"></textarea>
+                <label style="font-size:0.82rem;font-weight:700;color:var(--jungle);display:block;margin-bottom:0.3rem;text-transform:uppercase;letter-spacing:0.04em;">Do you have a photo?</label>
+                <select id="modalRareAnimalPhoto" onchange="updateRareAnimalPoints()" style="width:100%;padding:0.6rem 0.85rem;border:2px solid var(--cream-dark);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.95rem;background:var(--cream);">
+                    <option value="10">📸 Yes, I'm posting a photo to Slack — +10 pts</option>
+                    <option value="1">👀 No photo — +1 pt</option>
+                </select>
             </div>
             <!-- Sunrise/Sunset selector -->
             <div id="modalSunriseWrap" style="display:none;margin-top:0.75rem;">
@@ -2080,7 +2085,8 @@
             if (rareAnimal) {
                 currentModalType = 'rareanimal';
                 document.getElementById('modalPointsHidden').value = '10';
-                document.getElementById('modalPoints').textContent = '+10 pts per unique animal';
+                document.getElementById('modalPoints').textContent = '+10 pts (with photo)';
+                document.getElementById('modalRareAnimalPhoto').value = '10';
                 rareAnimalWrap.style.display = 'block';
             } else if (sunrise) {
                 currentModalType = 'sunrise';
@@ -2138,6 +2144,11 @@
             document.body.style.overflow = 'hidden';
         }
 
+        function updateRareAnimalPoints() {
+            const pts = document.getElementById('modalRareAnimalPhoto').value;
+            document.getElementById('modalPoints').textContent = pts === '10' ? '+10 pts (with photo)' : '+1 pt (no photo)';
+        }
+
         function closeModal() {
             document.getElementById('activityModal').classList.remove('open');
             document.body.style.overflow = '';
@@ -2182,7 +2193,7 @@
                     ? 'Kauai Food Adventure Bingo — Full Blackout (35 pts)'
                     : 'Kauai Food Adventure Bingo — Row of 5 (15 pts)';
             } else if (isRareAnimal) {
-                points = 10;
+                points = parseInt(document.getElementById('modalRareAnimalPhoto').value);
                 const desc = document.getElementById('modalRareAnimalDesc').value.trim();
                 if (!desc) {
                     statusDiv.className = 'form-status error';
@@ -2191,7 +2202,8 @@
                     if (submitBtn) submitBtn.disabled = false;
                     return;
                 }
-                reason = `Rare Animal Photo — ${desc}`;
+                const hasPhoto = points === 10;
+                reason = `Rare Animal — ${desc}${hasPhoto ? ' (with photo)' : ' (no photo)'}`;
             } else if (isSunrise) {
                 points = 5;
                 const type = document.getElementById('modalSunriseType').value;
