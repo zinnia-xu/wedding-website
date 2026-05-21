@@ -2252,6 +2252,7 @@
                     statusDiv.className = 'form-status error';
                     statusDiv.textContent = currentModalType === 'fishing' ? 'Please enter what you caught.' : 'Please enter which birds you spotted.';
                     statusDiv.style.display = 'block';
+                    if (submitBtn) submitBtn.disabled = false;
                     return;
                 }
                 reason = currentModalType === 'fishing'
@@ -2310,7 +2311,7 @@
                 const points = parseInt(this.dataset.points);
                 const isSurfing = this.classList.contains('surfing-item');
                 const isSnorkeling = this.classList.contains('snorkeling-item');
-                openModal(name, points, false, false, false, false, isSurfing, isSnorkeling);
+                openModal(name, points, false, false, false, false, isSurfing, isSnorkeling, false, false, false, false);
             });
         });
 
@@ -2331,7 +2332,7 @@
 
         document.querySelectorAll('.bingo-item').forEach(item => {
             item.addEventListener('click', function() {
-                openModal('Kauai Food Adventure Bingo', 15, false, false, false, true);
+                openModal('Kauai Food Adventure Bingo', 15, false, false, false, true, false, false, false, false, false, false);
             });
         });
 
