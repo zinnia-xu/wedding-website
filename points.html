@@ -1167,6 +1167,9 @@
                     <span id="feedAdminStatus" style="font-size:0.82rem;color:var(--text-mid);"></span>
                 </div>
             </div>
+            <div id="feedGoneDark" style="display:none; text-align:center; padding: 2rem 1rem; color: var(--text-mid); font-style: italic; font-size: 1.05rem;">
+                🌑 Activity feed has gone dark.
+            </div>
             <div class="feed-scroll-wrap">
                 <ul class="feed-list" id="feedList">
                     <li class="feed-empty">Loading...</li>
@@ -1811,10 +1814,23 @@
                     allFeedItems = (data.feed || []).slice().reverse();
                     // Hide activity feed from guests if admin toggled it off
                     const activitySection = document.getElementById('activitySection');
+                    const feedGoneDark = document.getElementById('feedGoneDark');
                     if (data.feedHidden && !feedAdminUnlocked) {
-                        activitySection.style.display = 'none';
+                        activitySection.style.display = '';
+                        if (feedGoneDark) feedGoneDark.style.display = '';
+                        document.querySelector('.feed-filter-bar').style.display = 'none';
+                        document.getElementById('feedList').style.display = 'none';
+                        document.getElementById('feedAdminArea').style.display = 'none';
+                        const fadeEl = document.getElementById('feedScrollFade');
+                        if (fadeEl) fadeEl.style.display = 'none';
+                        const hintEl = document.getElementById('feedScrollHint');
+                        if (hintEl) hintEl.style.display = 'none';
                     } else {
                         activitySection.style.display = '';
+                        if (feedGoneDark) feedGoneDark.style.display = 'none';
+                        document.querySelector('.feed-filter-bar').style.display = '';
+                        document.getElementById('feedList').style.display = '';
+                        document.getElementById('feedAdminArea').style.display = '';
                         if (data.feedHidden && feedAdminUnlocked) {
                             document.getElementById('feedAdminStatus').textContent += ' · 👁 Feed hidden from guests';
                         }
