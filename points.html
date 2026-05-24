@@ -1809,6 +1809,16 @@
                 .then(data => {
                     allGuests = (data.guests || []).map(g => g.name).sort();
                     allFeedItems = (data.feed || []).slice().reverse();
+                    // Hide activity feed from guests if admin toggled it off
+                    const activitySection = document.getElementById('activitySection');
+                    if (data.feedHidden && !feedAdminUnlocked) {
+                        activitySection.style.display = 'none';
+                    } else {
+                        activitySection.style.display = '';
+                        if (data.feedHidden && feedAdminUnlocked) {
+                            document.getElementById('feedAdminStatus').textContent += ' · 👁 Feed hidden from guests';
+                        }
+                    }
                     renderFeed();
                     populateAllDropdowns();
                 })

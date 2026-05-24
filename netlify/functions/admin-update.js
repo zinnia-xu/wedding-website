@@ -111,6 +111,14 @@ exports.handler = async (event) => {
       return { statusCode: 200, headers, body: JSON.stringify({ success: true, hidden: data.hidden }) };
     }
 
+    // Action: "toggle-feed-visibility" — hide or show the points activity feed for guests
+    if (body.action === "toggle-feed-visibility") {
+      let data = (await store.get("data", { type: "json" })) || { guests: [], feed: [] };
+      data.feedHidden = !!body.feedHidden;
+      await store.setJSON("data", data);
+      return { statusCode: 200, headers, body: JSON.stringify({ success: true, feedHidden: data.feedHidden }) };
+    }
+
     // Action: "approve-request" — approve a pending points request (optionally with adjusted points)
     if (body.action === "approve-request") {
       let data = (await store.get("data", { type: "json" })) || { guests: [], feed: [] };

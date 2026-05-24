@@ -702,6 +702,16 @@
                 </div>
                 <div class="admin-status" id="visibilityStatus"></div>
 
+                <!-- Points Activity Feed Visibility Toggle -->
+                <div class="admin-visibility-box" id="feedVisibilityBox" style="margin-top:1rem;">
+                    <div class="admin-reset-info">
+                        <strong id="feedVisibilityTitle">Hide Points Activity Feed</strong>
+                        <span id="feedVisibilityDesc">Guests can currently see the points activity feed on the points page. Admins always see it.</span>
+                    </div>
+                    <button class="admin-btn hide-lb" id="feedVisibilityBtn" onclick="toggleFeedVisibility()">📋 Hide Activity Feed</button>
+                </div>
+                <div class="admin-status" id="feedVisibilityStatus"></div>
+
             </div>
         </div>
 
@@ -1065,18 +1075,21 @@
         let allGuests = [];
         let allGuestsData = []; // full {name, points} objects for lottery
         let leaderboardHidden = false;
+        let feedHidden = false;
 
         function loadData() {
             fetch(API_BASE + '/get-leaderboard')
                 .then(res => res.json())
                 .then(data => {
                     leaderboardHidden = !!data.hidden;
+                    feedHidden = !!data.feedHidden;
                     renderLeaderboard(data.guests || []);
                     allGuestsData = data.guests || [];
                     allGuests = allGuestsData.map(g => g.name).sort();
                     populateGuestDropdown();
                     buildLotteryWheel();
                     updateVisibilityUI(leaderboardHidden);
+                    updateFeedVisibilityUI(feedHidden);
                     if (adminKey) {
                         renderPendingRequests(data.feed || []);
                         renderAdminFeed(data.feed || []);
@@ -1624,6 +1637,55 @@
 
             btn.disabled = false;
             updateVisibilityUI(leaderboardHidden);
+        }
+
+        function updateFeedVisibilityUI(hidden) {
+            const btn = document.getElementById('feedVisibilityBtn');
+            const title = document.getElementById('feedVisibilityTitle');
+            const desc = document.getElementById('feedVisibilityDesc');
+            if (!btn) return;
+            if (hidden) {
+                btn.textContent = '📋 Show Activity Feed';
+                btn.className = 'admin-btn show-lb';
+                title.textContent = 'Activity Feed is Hidden';
+                desc.textContent = 'Guests cannot see the points activity feed. Admins still see it. Click to show it again.';
+            } else {
+                btn.textContent = '📋 Hide Activity Feed';
+                btn.className = 'admin-btn hide-lb';
+                title.textContent = 'Hide Points Activity Feed';
+                desc.textContent = 'Guests can currently see the points activity feed on the points page. Admins always see it.';
+            }
+        }
+
+        async function toggleFeedVisibility() {
+            const statusEl = document.getElementById('feedVisibilityStatus');
+            statusEl.className = 'admin-status';
+            const newHidden = !feedHidden;
+            const btn = document.getElementById('feedVisibilityBtn');
+            btn.disabled = true;
+            btn.textContent = 'Saving…';
+            try {
+                const res = await fetch(API_BASE + '/admin-update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminKey },
+                    body: JSON.stringify({ action: 'toggle-feed-visibility', feedHidden: newHidden }),
+                });
+                if (res.ok) {
+                    feedHidden = newHidden;
+                    updateFeedVisibilityUI(newHidden);
+                    statusEl.textContent = newHidden
+                        ? '📋 Activity feed is now hidden from guests!'
+                        : '📋 Activity feed is now visible to guests!';
+                    statusEl.className = 'admin-status success';
+                } else {
+                    throw new Error('API error');
+                }
+            } catch (err) {
+                statusEl.textContent = '❌ Error updating feed visibility.';
+                statusEl.className = 'admin-status error';
+            }
+            btn.disabled = false;
+            updateFeedVisibilityUI(feedHidden);
         }
     </script>
 </body>
