@@ -9,7 +9,7 @@ exports.handler = async () => {
     if (!data || !data.guests || data.guests.length === 0) return { statusCode: 200, body: "No data" };
 
     const SLACK_WEBHOOK = process.env.WEDDING_POINTS_SLACK_WEBHOOK;
-    if (!SLACK_WEBHOOK) return { statusCode: 200, body: "No webhook configured" };
+    if (!SLACK_WEBHOOK || process.env.DISABLE_SLACK === "true") return { statusCode: 200, body: "Slack posting disabled or no webhook configured" };
 
     // Sort guests by points descending
     const sorted = [...data.guests].sort((a, b) => b.points - a.points || a.name.localeCompare(b.name));

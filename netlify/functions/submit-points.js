@@ -81,7 +81,7 @@ exports.handler = async (event) => {
     let slackChannel = null;
     let slackTs = null;
 
-    if (SLACK_BOT_TOKEN && SLACK_CHANNEL_ID) {
+    if (SLACK_BOT_TOKEN && SLACK_CHANNEL_ID && process.env.DISABLE_SLACK !== "true") {
       // Use chat.postMessage so we get back the message ts (needed to update it later)
       const slackRes = await fetch("https://slack.com/api/chat.postMessage", {
         method: "POST",
@@ -111,7 +111,7 @@ exports.handler = async (event) => {
           });
         }
       }
-    } else if (SLACK_WEBHOOK) {
+    } else if (SLACK_WEBHOOK && process.env.DISABLE_SLACK !== "true") {
       // Legacy: incoming webhook (can't update messages later)
       const slackResponse = await fetch(SLACK_WEBHOOK, {
         method: "POST",

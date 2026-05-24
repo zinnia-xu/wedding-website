@@ -42,9 +42,9 @@ exports.handler = async (event) => {
 
     await store.setJSON("data", data);
 
-    // Post to #recipes Slack channel
+    // Post to #recipes Slack channel (skipped if DISABLE_SLACK=true)
     const RECIPES_WEBHOOK = process.env.WEDDING_RECIPES_SLACK_WEBHOOK || process.env.WEDDING_POINTS_SLACK_WEBHOOK;
-    if (RECIPES_WEBHOOK) {
+    if (RECIPES_WEBHOOK && process.env.DISABLE_SLACK !== "true") {
       await fetch(RECIPES_WEBHOOK, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,7 +56,7 @@ exports.handler = async (event) => {
 
     // Also notify #points-activity if a separate recipes webhook is configured
     const POINTS_WEBHOOK = process.env.WEDDING_POINTS_SLACK_WEBHOOK;
-    if (POINTS_WEBHOOK && POINTS_WEBHOOK !== RECIPES_WEBHOOK) {
+    if (POINTS_WEBHOOK && POINTS_WEBHOOK !== RECIPES_WEBHOOK && process.env.DISABLE_SLACK !== "true") {
       await fetch(POINTS_WEBHOOK, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

@@ -50,9 +50,9 @@ exports.handler = async (event) => {
 
     await store.setJSON("data", data);
 
-    // Post to Slack #points-activity
+    // Post to Slack #points-activity (skipped if DISABLE_SLACK=true)
     const SLACK_WEBHOOK = process.env.WEDDING_POINTS_SLACK_WEBHOOK;
-    if (SLACK_WEBHOOK) {
+    if (SLACK_WEBHOOK && process.env.DISABLE_SLACK !== "true") {
       const updatedGuest = data.guests.find((g) => g.name.toLowerCase() === who.toLowerCase());
       const total = updatedGuest ? updatedGuest.points : pointsNum;
       await fetch(SLACK_WEBHOOK, {
