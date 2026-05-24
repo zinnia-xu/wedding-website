@@ -41,6 +41,8 @@ exports.handler = async (event) => {
           { name: "Guest 20", points: 0 },
         ],
         feed: [],
+        hidden: false,
+        feedHidden: false,
       };
       await store.setJSON("data", defaultData);
       return { statusCode: 200, headers, body: JSON.stringify(defaultData) };
