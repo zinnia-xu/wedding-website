@@ -154,11 +154,12 @@
 
         .rank { font-weight: 700; color: var(--text-light); width: 50px; }
 
-        /* Top 3 — medium green */
+        /* Top 4 — medium green */
         .rank-1 .rank { color: #1a7a3a; font-size: 1.1rem; }
         .rank-2 .rank { color: #2e8f50; }
         .rank-3 .rank { color: #3da864; }
-        .rank-1 td, .rank-2 td, .rank-3 td { background: #c8ecd4 !important; }
+        .rank-4 .rank { color: #4db874; }
+        .rank-1 td, .rank-2 td, .rank-3 td, .rank-4 td { background: #c8ecd4 !important; }
 
         /* Has points — light green */
         .has-points td { background: #e8f7ed !important; }
@@ -530,7 +531,7 @@
 
         <!-- Competition Start Notice -->
         <div style="background: var(--pink-soft); border: 2px solid var(--pink-light); border-radius: 12px; padding: 1rem 1.5rem; margin-bottom: 2rem; text-align: center;">
-            <span style="font-size: 1.05rem; font-weight: 600; color: var(--jungle);">🏆 TODAY IS THE DAY WE CHOOSE A WINNER!</span>
+            <span style="font-size: 1.05rem; font-weight: 600; color: var(--jungle);">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS.</span>
         </div>
 
         <!-- Leaderboard Table -->
@@ -777,7 +778,7 @@
             tbody.innerHTML = guests.map((g, i) => {
                 const r = ranks[i];
                 let classes = '';
-                if (r <= 3 && g.points > 0) classes = ` rank-${r}`;
+                if (r <= 4 && g.points > 0) classes = ` rank-${r}`;
                 else if (g.points > 0) classes = ' has-points';
                 else classes = ' no-points';
 
@@ -826,8 +827,8 @@
                     ranks.push(rank);
                 }
             }
-            // Eligible: points > 0 and not rank 1/2/3
-            return sorted.filter((g, i) => g.points > 0 && ranks[i] > 3);
+            // Eligible: points > 0 and not rank 1/2/3/4
+            return sorted.filter((g, i) => g.points > 0 && ranks[i] > 4);
         }
 
         function buildLotteryWheel() {
