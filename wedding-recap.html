@@ -3,700 +3,328 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wedding Recap | Zinnia & Andrew</title>
+<title>Wedding Recap | Zinnia &amp; Andrew</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-
-  /* ── Analytics section ── */
-  .analytics-section {
-    width: 100%;
-    max-width: 900px;
-    padding: 0 1rem 2rem;
-  }
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-  }
-  .stat-card {
-    background: #131320;
-    border: 1px solid #2a1f3d;
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-  }
-  .stat-number {
-    font-size: 2rem;
-    font-weight: 800;
-    color: #f0d090;
-    line-height: 1;
-  }
-  .stat-label {
-    font-size: 0.68rem;
-    color: #6b5f7a;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-top: 0.3rem;
-  }
-  .chart-card {
-    background: #0a0a16;
-    border: 1px solid #1f1535;
-    border-radius: 10px;
-    padding: 1rem 1.2rem 1.2rem;
-    margin-bottom: 1rem;
-  }
-  .chart-card h3 {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #7c4dff;
-    margin-bottom: 0.8rem;
-  }
-  .charts-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-  @media (max-width: 600px) {
-    .charts-row { grid-template-columns: 1fr; }
-  }
-  canvas.chart { width: 100% !important; }
-
-  /* ── Site nav ── */
-  :root {
-    --jungle: #1A3C2A;
-    --white: #FFFFFF;
-  }
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 1000;
-    background: rgba(26, 60, 42, 0.97);
-    backdrop-filter: blur(12px);
-    transition: box-shadow 0.3s ease;
-  }
-  nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
-  .nav-inner {
-    max-width: 1200px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 2rem; height: 72px;
-  }
-  .nav-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.6rem; font-weight: 400; color: var(--white);
-    letter-spacing: 0.02em; text-decoration: none;
-  }
-  .nav-links {
-    display: flex; gap: 0.15rem; list-style: none;
-    flex-wrap: wrap; justify-content: center;
-  }
-  .nav-links a {
-    text-decoration: none; color: rgba(255,255,255,0.7);
-    font-size: 0.78rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 0.5rem 0.9rem; border-radius: 6px;
-    transition: all 0.3s ease; white-space: nowrap;
-  }
-  .nav-links a:hover, .nav-links a.active {
-    color: var(--white); background: rgba(255,255,255,0.12);
-  }
-  .hamburger {
-    display: none; flex-direction: column; gap: 6px;
-    cursor: pointer; background: none; border: none; padding: 5px;
-  }
-  .hamburger span { width: 26px; height: 2.5px; background: var(--white); border-radius: 2px; transition: all 0.3s ease; }
-  @media (max-width: 768px) {
-    .nav-links { display: none; }
-    .nav-links.open {
-      display: flex; flex-direction: column; position: absolute;
-      top: 72px; left: 0; right: 0;
-      background: rgba(26, 60, 42, 0.98);
-      padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    }
-    .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
-    .hamburger { display: flex; }
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: #0d1117;
-    color: #e8e0d5;
-    font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  /* ── Sticky header ── */
-  header {
-    width: 100%;
-    text-align: center;
-    padding: 0.9rem 1rem 0.4rem;
-    background: linear-gradient(180deg, #1a0a2e 0%, #0d1117 100%);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    border-bottom: 1px solid #1f1535;
-  }
-  header h1 {
-    font-size: clamp(1rem, 3.5vw, 1.7rem);
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: #f0d090;
-    text-shadow: 0 0 20px rgba(240,208,144,0.4);
-  }
-  #timestamp {
-    font-size: clamp(0.9rem, 2.5vw, 1.3rem);
-    font-weight: 700;
-    color: #c8e6c9;
-    letter-spacing: 0.06em;
-    margin-top: 0.2rem;
-  }
-  #progress-track {
-    width: 80%;
-    margin: 0.3rem auto 0;
-    height: 3px;
-    background: #2a1f3d;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  #progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #7c4dff, #f0d090);
-    border-radius: 2px;
-    transition: width 0.3s ease;
-  }
-  #controls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.35rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-bottom: 0.3rem;
-  }
-  #controls button {
-    background: #2d1f4e;
-    color: #e8d8ff;
-    border: 1px solid #5a3d8a;
-    border-radius: 16px;
-    padding: 0.26rem 0.8rem;
-    font-size: 0.76rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  #controls button:hover { background: #3d2a6e; }
-  #controls button.active { background: #5a3d8a; }
-  #guest-count {
-    font-size: 0.68rem;
-    color: #6b5f7a;
-    margin-top: 0.1rem;
-  }
-
-  /* ── Section labels ── */
-  .section-label {
-    width: 100%;
-    max-width: 900px;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #5a3d8a;
-    padding: 0.7rem 1rem 0.3rem;
-    border-top: 1px solid #1f1535;
-  }
-
-  /* ── Bar chart ── */
-  #chart-container {
-    width: 100%;
-    max-width: 900px;
-    padding: 0.3rem 1rem 0.5rem;
-  }
-  .bar-row {
-    display: flex;
-    align-items: center;
-    margin-bottom: 3px;
-    height: 25px;
-    transition: opacity 0.3s ease;
-  }
-  .rank-badge {
-    width: 22px; min-width: 22px;
-    font-size: 0.62rem; font-weight: 800;
-    text-align: center; color: #f0d090;
-  }
-  .bar-label {
-    width: 142px; min-width: 142px;
-    font-size: 0.7rem; font-weight: 600;
-    text-align: right; padding-right: 8px;
-    color: #e0d8f0;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .bar-wrap {
-    flex: 1; height: 100%;
-    position: relative; border-radius: 3px;
-    overflow: hidden; background: #1a1a2a;
-  }
-  .bar-fill {
-    height: 100%; border-radius: 3px;
-    transition: width 0.38s cubic-bezier(0.4,0,0.2,1);
-    min-width: 2px;
-  }
-  .bar-pts {
-    position: absolute; right: 6px; top: 50%;
-    transform: translateY(-50%);
-    font-size: 0.65rem; font-weight: 700;
-    color: rgba(255,255,255,0.9);
-    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    pointer-events: none; white-space: nowrap;
-  }
-
-  /* ── Line chart ── */
-  #line-section {
-    width: 100%;
-    max-width: 900px;
-    padding: 0 1rem 1rem;
-  }
-  #lineCanvas {
-    width: 100%;
-    display: block;
-    border-radius: 6px;
-    background: #0a0a16;
-  }
-
-  #done-msg {
-    display: none;
-    text-align: center;
-    padding: 0.8rem;
-    font-size: 1rem;
-    color: #f0d090;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-  footer {
-    padding: 0.6rem;
-    font-size: 0.67rem;
-    color: #4a3f5a;
-    text-align: center;
-  }
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root { --jungle: #1A3C2A; --white: #FFFFFF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Nav ── */
+nav {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  background: rgba(26,60,42,0.97);
+  backdrop-filter: blur(12px);
+  transition: box-shadow 0.3s;
+}
+nav.scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.15); }
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 72px;
+}
+.nav-logo {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem; color: #fff; text-decoration: none; letter-spacing: 0.02em;
+}
+.nav-links { display: flex; gap: 0.15rem; list-style: none; flex-wrap: wrap; justify-content: center; }
+.nav-links a {
+  text-decoration: none; color: rgba(255,255,255,0.7);
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.5rem 0.9rem; border-radius: 6px; transition: all 0.3s; white-space: nowrap;
+}
+.nav-links a:hover, .nav-links a.active { color: #fff; background: rgba(255,255,255,0.12); }
+.hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; background: none; border: none; padding: 5px; }
+.hamburger span { width: 26px; height: 2.5px; background: #fff; border-radius: 2px; transition: all 0.3s; }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column; position: absolute;
+    top: 72px; left: 0; right: 0; background: rgba(26,60,42,0.98);
+    padding: 1rem; border-bottom: 2px solid rgba(255,255,255,0.1);
+  }
+  .nav-links.open a { padding: 0.8rem 1rem; font-size: 0.85rem; }
+  .hamburger { display: flex; }
+}
+
+/* ── Page body ── */
+body {
+  background: #0d1117; color: #e8e0d5;
+  font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+}
+
+/* ── Page header ── */
+.page-header {
+  width: 100%; text-align: center;
+  padding: calc(72px + 1.4rem) 1rem 1rem;
+  background: linear-gradient(180deg, #1a0a2e 0%, #0d1117 100%);
+  border-bottom: 1px solid #1f1535;
+}
+.page-header h1 {
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  font-weight: 700; letter-spacing: 0.04em; color: #f0d090;
+  text-shadow: 0 0 24px rgba(240,208,144,0.35);
+}
+.page-header p { font-size: 0.82rem; color: #6b5f7a; margin-top: 0.3rem; }
+
+/* ── Section labels ── */
+.section-label {
+  width: 100%; max-width: 960px;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: #5a3d8a;
+  padding: 1.1rem 1rem 0.35rem;
+  border-top: 1px solid #1f1535;
+  margin-top: 0.5rem;
+}
+
+/* ── Analytics ── */
+.analytics-wrap {
+  width: 100%; max-width: 960px; padding: 0 1rem 1rem;
+}
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(155px,1fr));
+  gap: 0.75rem; margin-bottom: 1rem;
+}
+.stat-card {
+  background: #131320; border: 1px solid #2a1f3d;
+  border-radius: 10px; padding: 1rem; text-align: center;
+}
+.stat-number { font-size: 2rem; font-weight: 800; color: #f0d090; line-height: 1; }
+.stat-label {
+  font-size: 0.65rem; color: #6b5f7a;
+  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.3rem;
+}
+.chart-card {
+  background: #0a0a16; border: 1px solid #1f1535;
+  border-radius: 10px; padding: 1rem 1.2rem 1.2rem; margin-bottom: 1rem;
+}
+.chart-card h3 {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase; color: #7c4dff; margin-bottom: 0.8rem;
+}
+.charts-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+}
+@media (max-width: 600px) { .charts-row { grid-template-columns: 1fr; } }
+canvas.chart { width: 100% !important; }
+
+/* ── Race section ── */
+.race-wrap {
+  width: 100%; max-width: 960px; padding: 0 1rem 2rem;
+}
+
+/* Big play button */
+#playGate {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 2.5rem 1rem 1.5rem; gap: 0.75rem;
+}
+#bigPlayBtn {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, #7c4dff 0%, #f0d090 100%);
+  border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 40px rgba(124,77,255,0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 2.2rem;
+}
+#bigPlayBtn:hover { transform: scale(1.08); box-shadow: 0 0 55px rgba(124,77,255,0.7); }
+#bigPlayBtn:active { transform: scale(0.96); }
+#playGateLabel {
+  font-size: 0.78rem; color: #6b5f7a;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* Race header (hidden until play) */
+#raceHeader {
+  display: none;
+  background: #0d1117; border-bottom: 1px solid #1f1535;
+  text-align: center; padding: 0.7rem 1rem 0.5rem;
+  position: sticky; top: 72px; z-index: 9;
+}
+#timestamp {
+  font-size: clamp(0.9rem, 2.5vw, 1.25rem);
+  font-weight: 700; color: #c8e6c9; letter-spacing: 0.06em;
+}
+#guest-count { font-size: 0.68rem; color: #6b5f7a; margin-top: 0.1rem; }
+#progress-track {
+  width: 80%; margin: 0.3rem auto 0; height: 3px;
+  background: #2a1f3d; border-radius: 2px; overflow: hidden;
+}
+#progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c4dff, #f0d090);
+  border-radius: 2px; transition: width 0.3s ease; width: 0%;
+}
+#raceControls {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-top: 0.35rem; flex-wrap: wrap; justify-content: center;
+  padding-bottom: 0.35rem;
+}
+#raceControls button {
+  background: #2d1f4e; color: #e8d8ff; border: 1px solid #5a3d8a;
+  border-radius: 16px; padding: 0.26rem 0.85rem;
+  font-size: 0.76rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+#raceControls button:hover { background: #3d2a6e; }
+#raceControls button.active { background: #5a3d8a; }
+
+/* Bar chart */
+#chart-container { width: 100%; padding: 0.3rem 0 0.5rem; }
+.bar-row {
+  display: flex; align-items: center; margin-bottom: 3px; height: 25px;
+  transition: opacity 0.3s ease;
+}
+.rank-badge { width: 22px; min-width: 22px; font-size: 0.62rem; font-weight: 800; text-align: center; color: #f0d090; }
+.bar-label {
+  width: 142px; min-width: 142px; font-size: 0.7rem; font-weight: 600;
+  text-align: right; padding-right: 8px; color: #e0d8f0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bar-wrap { flex: 1; height: 100%; position: relative; border-radius: 3px; overflow: hidden; background: #1a1a2a; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.38s cubic-bezier(0.4,0,0.2,1); min-width: 2px; }
+.bar-pts {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  font-size: 0.65rem; font-weight: 700; color: rgba(255,255,255,0.9);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6); pointer-events: none; white-space: nowrap;
+}
+
+/* Line chart */
+#line-section { width: 100%; padding: 0.5rem 0 0; }
+#lineCanvas { width: 100% !important; display: block; border-radius: 6px; background: #0a0a16; }
+
+/* Done message */
+#done-msg {
+  display: none; text-align: center; padding: 0.8rem;
+  font-size: 1rem; color: #f0d090; font-weight: 700; letter-spacing: 0.05em;
+}
+
+footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center; }
+</style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav id="navbar">
-    <div class="nav-inner">
-      <a href="index.html" class="nav-logo">Z &amp; A</a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="our-story.html">Our Story</a></li>
-        <li><a href="photos.html">Photos</a></li>
-        <li><a href="schedule.html">Schedule</a></li>
-        <li><a href="things-to-do.html">Activities</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="points.html">Points</a></li>
-        <li><a href="wedding-recap.html" class="active">Wedding Recap</a></li>
-        <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="uni.html">Uni 🐱</a></li>
-      </ul>
-      <button class="hamburger" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
-
-<header style="padding-top: calc(0.9rem + 72px)">
-  <h1>🌺 Wedding Recap — Kauai 2026</h1>
-  <div id="timestamp">–</div>
-  <div id="guest-count"></div>
-  <div id="progress-track"><div id="progress-fill" style="width:0%"></div></div>
-  <div id="controls">
-    <button id="btnPlay">⏸ Pause</button>
-    <button id="btnRestart">↺ Restart</button>
-    <span style="font-size:0.72rem;color:#6b5f7a">Speed:</span>
-    <button id="btn1x" class="active" onclick="setSpeed(700)">1×</button>
-    <button id="btn2x" onclick="setSpeed(350)">2×</button>
-    <button id="btn4x" onclick="setSpeed(175)">4×</button>
+<!-- Nav -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">Z &amp; A</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="our-story.html">Our Story</a></li>
+      <li><a href="photos.html">Photos</a></li>
+      <li><a href="schedule.html">Schedule</a></li>
+      <li><a href="things-to-do.html">Activities</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+      <li><a href="points.html">Points</a></li>
+      <li><a href="wedding-recap.html" class="active">Wedding Recap</a></li>
+      <li><a href="beach-leaderboard.html">Beach 🏖️</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      <li><a href="uni.html">Uni 🐱</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
-</header>
+</nav>
 
-<div class="section-label">Racing Bar Chart</div>
-<div id="chart-container"></div>
-
-<div class="section-label">Running Line Chart</div>
-<div id="line-section">
-  <canvas id="lineCanvas" height="380"></canvas>
+<!-- Page title -->
+<div class="page-header">
+  <h1>🌺 Wedding Recap — Kauai 2026</h1>
+  <p>Andrew &amp; Zinnia · May 1–24, 2026</p>
 </div>
 
-<div id="done-msg">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS! 🏆</div>
-<footer>Points earned May 1–24, 2026 · 6-hour snapshots · All guests shown</footer>
+<!-- ═══════════════ ANALYTICS ═══════════════ -->
+<div class="section-label">Activity Analytics</div>
+<div class="analytics-wrap">
 
-<script>
-const SNAPSHOTS = [{"time":"May 1 \u00b7 12:00 am","data":[]},{"time":"May 1 \u00b7 6:00 am","data":[]},{"time":"May 1 \u00b7 12:00 pm","data":[]},{"time":"May 1 \u00b7 6:00 pm","data":[["Rachel Macfarlane",9]]},{"time":"May 2 \u00b7 12:00 am","data":[["Sidra Hussain",15],["Rachel Macfarlane",9]]},{"time":"May 2 \u00b7 6:00 am","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 2 \u00b7 12:00 pm","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 2 \u00b7 6:00 pm","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 3 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",9]]},{"time":"May 3 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 3 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 3 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 4 \u00b7 12:00 am","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 6:00 am","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 12:00 pm","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 6:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 12:00 am","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 6:00 am","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 12:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 6:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5]]},{"time":"May 6 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Laura Carlson",31],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 6:00 am","data":[["Nicole Kreutter",102],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 12:00 pm","data":[["Nicole Kreutter",102],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 6:00 pm","data":[["Nicole Kreutter",109],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 12:00 am","data":[["Nicole Kreutter",109],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",44],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Sidra Hussain",52],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Sidra Hussain",52],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Sidra Hussain",67],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Sidra Hussain",67],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",5],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",100],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Sidra Hussain",75],["Rachel Macfarlane",74],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Rachel Macfarlane",109],["Audrey Musselman-Brown",105],["Sidra Hussain",85],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 12:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 6:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Emily Tsai",55],["Cindy Liu",37],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 12:00 pm","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Emily Tsai",55],["Cindy Liu",37],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 6:00 pm","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Kathleen Schaefer",56],["Emily Tsai",55],["Cindy Liu",42],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 12:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Ekaterina Gibiansky",115],["Rachel Macfarlane",109],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Laura Carlson",81],["Saige Manier",70],["Zinnia Xu",65],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",19],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 6:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Ekaterina Gibiansky",115],["Rachel Macfarlane",114],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Anjali Kayal",94],["Laura Carlson",81],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Julia Xu",39],["Jennifer Brennan",35],["Bobby Ullman",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",151],["Nicole Kreutter",143],["Sidra Hussain",135],["Ekaterina Gibiansky",115],["Rachel Macfarlane",114],["Leonid Gibiansky",105],["Laura Carlson",101],["Tamara Gibiansky",100],["Anjali Kayal",94],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Julia Xu",39],["Jennifer Brennan",35],["Bobby Ullman",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 6:00 pm","data":[["Nicole Kreutter",168],["Audrey Musselman-Brown",151],["Sidra Hussain",135],["Rachel Macfarlane",124],["Ekaterina Gibiansky",115],["Laura Carlson",111],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Anjali Kayal",94],["Bobby Ullman",80],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Julia Xu",49],["Cindy Liu",42],["Jennifer Brennan",35],["Evelyn Siu",23],["Alysia Mascolo",20],["Ellen Hui",15],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 18 \u00b7 12:00 am","data":[["Nicole Kreutter",178],["Audrey Musselman-Brown",171],["Sidra Hussain",168],["Rachel Macfarlane",149],["Laura Carlson",141],["Ekaterina Gibiansky",115],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",94],["Zinnia Xu",90],["Bobby Ullman",85],["Kathleen Schaefer",81],["Saige Manier",70],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Julia Xu",49],["Cindy Liu",42],["Jennifer Brennan",35],["Amanda Lee",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Ellen Hui",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 18 \u00b7 6:00 am","data":[["Sidra Hussain",214],["Nicole Kreutter",193],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",81],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Alysia Mascolo",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 18 \u00b7 12:00 pm","data":[["Sidra Hussain",214],["Nicole Kreutter",193],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",81],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Alysia Mascolo",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 18 \u00b7 6:00 pm","data":[["Sidra Hussain",214],["Nicole Kreutter",198],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",86],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Lauren Nishizaki",60],["Emily Tsai",55],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 19 \u00b7 12:00 am","data":[["Sidra Hussain",264],["Audrey Musselman-Brown",240],["Nicole Kreutter",208],["Laura Carlson",200],["Rachel Macfarlane",198],["Zinnia Xu",154],["Ekaterina Gibiansky",135],["Kathleen Schaefer",131],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["Ellen Hui",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Saige Manier",74],["Julia Xu",69],["Tiffany Kha",65],["Devon Stork",61],["Lauren Nishizaki",60],["Emily Tsai",55],["Cameron Haydinger",55],["Cindy Liu",42],["Auresa Nyctea",36],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5],["Jacob Bandes-Storch",5]]},{"time":"May 19 \u00b7 6:00 am","data":[["Nicole Kreutter",295],["Sidra Hussain",269],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Adele Feng",14],["Adam Watson",14],["Jacob Bandes-Storch",10],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 19 \u00b7 12:00 pm","data":[["Nicole Kreutter",296],["Sidra Hussain",269],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 19 \u00b7 6:00 pm","data":[["Nicole Kreutter",301],["Sidra Hussain",274],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",330],["Nicole Kreutter",311],["Laura Carlson",295],["Sidra Hussain",274],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Rachel Macfarlane",208],["Leonid Gibiansky",190],["Kathleen Schaefer",166],["Zinnia Xu",154],["Auresa Nyctea",151],["Tiffany Kha",120],["Saige Manier",119],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 6:00 am","data":[["Laura Carlson",375],["Sidra Hussain",369],["Audrey Musselman-Brown",365],["Nicole Kreutter",351],["Rachel Macfarlane",273],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Zinnia Xu",209],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Kathleen Schaefer",166],["Auresa Nyctea",161],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 12:00 pm","data":[["Nicole Kreutter",416],["Laura Carlson",375],["Audrey Musselman-Brown",370],["Sidra Hussain",369],["Rachel Macfarlane",278],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Zinnia Xu",209],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Auresa Nyctea",161],["Cameron Haydinger",160],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Jake Low",75],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 6:00 pm","data":[["Nicole Kreutter",416],["Audrey Musselman-Brown",385],["Laura Carlson",375],["Sidra Hussain",370],["Zinnia Xu",285],["Rachel Macfarlane",278],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Auresa Nyctea",161],["Cameron Haydinger",160],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Steven An",77],["Jake Low",75],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 12:00 am","data":[["Nicole Kreutter",471],["Laura Carlson",405],["Audrey Musselman-Brown",385],["Sidra Hussain",370],["Rachel Macfarlane",358],["Zinnia Xu",320],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Tiffany Kha",205],["Leonid Gibiansky",190],["Evelyn Siu",188],["Julia Xu",175],["Auresa Nyctea",171],["Cameron Haydinger",160],["Ethan Carlson",152],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",80],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 6:00 am","data":[["Nicole Kreutter",486],["Sidra Hussain",475],["Audrey Musselman-Brown",470],["Laura Carlson",440],["Rachel Macfarlane",388],["Ekaterina Gibiansky",325],["Zinnia Xu",320],["Kathleen Schaefer",291],["Tiffany Kha",290],["Leonid Gibiansky",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Evelyn Siu",188],["Cameron Haydinger",160],["Ethan Carlson",152],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",80],["Adele Feng",79],["Adam Watson",79],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 12:00 pm","data":[["Nicole Kreutter",491],["Sidra Hussain",485],["Audrey Musselman-Brown",480],["Laura Carlson",440],["Rachel Macfarlane",388],["Kathleen Schaefer",346],["Ekaterina Gibiansky",335],["Tiffany Kha",330],["Zinnia Xu",320],["Leonid Gibiansky",305],["Cameron Haydinger",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Ethan Carlson",217],["Evelyn Siu",188],["Lauren Nishizaki",150],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 6:00 pm","data":[["Nicole Kreutter",491],["Sidra Hussain",485],["Audrey Musselman-Brown",480],["Laura Carlson",440],["Rachel Macfarlane",388],["Kathleen Schaefer",346],["Ekaterina Gibiansky",335],["Tiffany Kha",330],["Zinnia Xu",320],["Leonid Gibiansky",305],["Cameron Haydinger",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Ethan Carlson",217],["Evelyn Siu",188],["Steven An",177],["Lauren Nishizaki",150],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Devon Stork",66],["Glenn Thomas",60],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Travis Lewis",15]]},{"time":"May 22 \u00b7 12:00 am","data":[["Nicole Kreutter",496],["Sidra Hussain",485],["Audrey Musselman-Brown",485],["Laura Carlson",470],["Rachel Macfarlane",388],["Zinnia Xu",380],["Bobby Ullman",370],["Kathleen Schaefer",346],["Auresa Nyctea",336],["Ekaterina Gibiansky",335],["Tiffany Kha",335],["Julia Xu",325],["Leonid Gibiansky",305],["Cameron Haydinger",290],["Ethan Carlson",282],["Ellen Hui",265],["Evelyn Siu",208],["Steven An",177],["Lauren Nishizaki",150],["Saige Manier",119],["Anjali Kayal",104],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Glenn Thomas",75],["Devon Stork",66],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Travis Lewis",15],["Christine Lo",5],["Joe Chang",5]]},{"time":"May 22 \u00b7 6:00 am","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",560],["Rachel Macfarlane",528],["Laura Carlson",495],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",420],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",319],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",135],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 22 \u00b7 12:00 pm","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",580],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",324],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",135],["Jake Low",120],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 22 \u00b7 6:00 pm","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",580],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",324],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",155],["Jake Low",120],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 23 \u00b7 12:00 am","data":[["Sidra Hussain",680],["Nicole Kreutter",676],["Audrey Musselman-Brown",610],["Kathleen Schaefer",571],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Auresa Nyctea",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Anjali Kayal",384],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Ellen Hui",315],["Ethan Carlson",311],["Jennifer Brennan",255],["Evelyn Siu",238],["Devon Stork",236],["Julie Deng",215],["Jake Low",200],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",165],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Christine Lo",80],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Joe Chang",66],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Siyan Kang",5]]},{"time":"May 23 \u00b7 6:00 am","data":[["Nicole Kreutter",741],["Sidra Hussain",730],["Audrey Musselman-Brown",660],["Laura Carlson",615],["Kathleen Schaefer",571],["Rachel Macfarlane",528],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Cameron Haydinger",440],["Zinnia Xu",440],["Anjali Kayal",424],["Julia Xu",412],["Bobby Ullman",370],["Ellen Hui",315],["Teresa Lin",315],["Ethan Carlson",311],["Devon Stork",291],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Julie Deng",215],["Jake Low",200],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",165],["Saige Manier",119],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Siyan Kang",5]]},{"time":"May 23 \u00b7 12:00 pm","data":[["Nicole Kreutter",756],["Sidra Hussain",748],["Audrey Musselman-Brown",665],["Laura Carlson",615],["Kathleen Schaefer",571],["Zinnia Xu",555],["Rachel Macfarlane",528],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Cameron Haydinger",440],["Anjali Kayal",424],["Ellen Hui",415],["Julia Xu",412],["Lauren Nishizaki",382],["Adele Feng",379],["Bobby Ullman",370],["Teresa Lin",315],["Ethan Carlson",311],["Adam Watson",304],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Julie Deng",215],["Glenn Thomas",175],["Saige Manier",119],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 23 \u00b7 6:00 pm","data":[["Nicole Kreutter",756],["Sidra Hussain",748],["Rachel Macfarlane",713],["Audrey Musselman-Brown",670],["Laura Carlson",615],["Kathleen Schaefer",571],["Zinnia Xu",555],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Julie Deng",445],["Ethan Wu",445],["Cameron Haydinger",440],["Ethan Carlson",426],["Anjali Kayal",424],["Ellen Hui",415],["Julia Xu",412],["Lauren Nishizaki",382],["Adele Feng",379],["Bobby Ullman",370],["Teresa Lin",315],["Adam Watson",304],["Saige Manier",299],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Travis Lewis",190],["Glenn Thomas",175],["Emily Tsai",155],["Cindy Liu",147],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Amanda Lee",60],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Gavin Meeker",20],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 24 \u00b7 12:00 am","data":[["Nicole Kreutter",798],["Sidra Hussain",750],["Rachel Macfarlane",713],["Laura Carlson",712],["Audrey Musselman-Brown",672],["Tiffany Kha",585],["Kathleen Schaefer",576],["Zinnia Xu",556],["Ekaterina Gibiansky",515],["Auresa Nyctea",496],["Leonid Gibiansky",485],["Ellen Hui",461],["Julie Deng",445],["Ethan Wu",445],["Cameron Haydinger",440],["Adele Feng",439],["Ethan Carlson",431],["Anjali Kayal",424],["Julia Xu",412],["Lauren Nishizaki",383],["Bobby Ullman",370],["Teresa Lin",315],["Adam Watson",304],["Saige Manier",299],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",261],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Travis Lewis",215],["Emily Tsai",205],["Glenn Thomas",175],["Cindy Liu",147],["Christine Lo",120],["Joe Chang",111],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",96],["Amanda Lee",60],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Gavin Meeker",20],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 24 \u00b7 6:00 am","data":[["Nicole Kreutter",803],["Sidra Hussain",750],["Rachel Macfarlane",721],["Laura Carlson",717],["Audrey Musselman-Brown",672],["Auresa Nyctea",636],["Kathleen Schaefer",606],["Tiffany Kha",590],["Zinnia Xu",557],["Anjali Kayal",554],["Ellen Hui",536],["Ekaterina Gibiansky",525],["Leonid Gibiansky",490],["Cameron Haydinger",465],["Julie Deng",445],["Ethan Wu",445],["Adele Feng",439],["Ethan Carlson",431],["Devon Stork",421],["Julia Xu",412],["Lauren Nishizaki",383],["Justin Cosentino",381],["Bobby Ullman",370],["Saige Manier",361],["Teresa Lin",315],["Amanda Lee",310],["Adam Watson",304],["Steven An",267],["Jennifer Brennan",261],["Evelyn Siu",238],["Jacob Bandes-Storch",235],["Emily Tsai",230],["Jake Low",220],["Travis Lewis",220],["Glenn Thomas",200],["George Xu",200],["Hongyan Liu",200],["Cindy Liu",187],["Christine Lo",120],["Joe Chang",111],["Tamara Gibiansky",100],["Lian Xu",100],["Moriah Katt",85],["Mike Katt",80],["Gavin Meeker",60],["Alysia Mascolo",30],["Jack Ma",11],["Scott Roepnack",11],["Siyan Kang",5],["Lauren Kazmierski",5],["Abby Gregory",5],["John Call",5]]},{"time":"May 24 \u00b7 12:00 pm","data":[["Nicole Kreutter",861],["Sidra Hussain",841],["Rachel Macfarlane",801],["Laura Carlson",783],["Audrey Musselman-Brown",738],["Auresa Nyctea",725],["Tiffany Kha",658],["Kathleen Schaefer",655],["Anjali Kayal",607],["Ellen Hui",590],["Ekaterina Gibiansky",580],["Adele Feng",576],["Bobby Ullman",557],["Zinnia Xu",557],["Ethan Wu",556],["Cameron Haydinger",551],["Jack Ma",545],["Adam Watson",540],["Julie Deng",538],["Scott Roepnack",537],["Ethan Carlson",511],["Leonid Gibiansky",495],["Julia Xu",491],["Devon Stork",482],["Lauren Nishizaki",444],["Justin Cosentino",430],["Saige Manier",422],["Amanda Lee",407],["Teresa Lin",368],["Jacob Bandes-Storch",328],["Jake Low",325],["Jennifer Brennan",310],["Travis Lewis",303],["Emily Tsai",302],["Evelyn Siu",300],["Glenn Thomas",279],["Cindy Liu",267],["Steven An",267],["George Xu",266],["Hongyan Liu",200],["Joe Chang",173],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Gavin Meeker",108],["Tamara Gibiansky",100],["Lian Xu",100],["Alysia Mascolo",98],["John Call",86],["Michelle Chu",80],["Laura McNerney",80],["Elroy An",79],["Chris Yang",79],["Neil Chaudhary",72],["Dasha Pruss",72],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Annie Cherkaev",66],["Michelle Bui",62],["Reuben Lasrado",61],["Nic Bertagnolli",61],["Billy Csete",49],["Tobin Yehle",49],["Eric Wu",48]]},{"time":"May 24 \u00b7 6:00 pm","data":[["Nicole Kreutter",861],["Sidra Hussain",841],["Rachel Macfarlane",801],["Laura Carlson",783],["Audrey Musselman-Brown",738],["Auresa Nyctea",725],["Tiffany Kha",678],["Kathleen Schaefer",660],["Anjali Kayal",607],["Ellen Hui",590],["Ekaterina Gibiansky",580],["Adele Feng",576],["Zinnia Xu",562],["Bobby Ullman",557],["Cameron Haydinger",556],["Ethan Wu",556],["Jack Ma",545],["Adam Watson",540],["Julie Deng",538],["Scott Roepnack",537],["Ethan Carlson",511],["Leonid Gibiansky",495],["Julia Xu",491],["Devon Stork",482],["Saige Manier",447],["Lauren Nishizaki",444],["Amanda Lee",439],["Justin Cosentino",430],["Evelyn Siu",390],["Travis Lewis",375],["Teresa Lin",368],["Jacob Bandes-Storch",328],["Jake Low",325],["Jennifer Brennan",310],["Emily Tsai",302],["Steven An",302],["Cindy Liu",292],["Glenn Thomas",279],["George Xu",266],["Dasha Pruss",262],["Hongyan Liu",200],["Joe Chang",173],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Gavin Meeker",108],["Tamara Gibiansky",100],["Lian Xu",100],["Alysia Mascolo",98],["John Call",86],["Michelle Chu",80],["Laura McNerney",80],["Elroy An",79],["Chris Yang",79],["Neil Chaudhary",72],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Annie Cherkaev",66],["Michelle Bui",62],["Reuben Lasrado",61],["Nic Bertagnolli",61],["Billy Csete",49],["Tobin Yehle",49],["Eric Wu",48]]},{"time":"May 25 \u00b7 12:00 am","data":[["Sidra Hussain",888],["Nicole Kreutter",866],["Rachel Macfarlane",858],["Laura Carlson",834],["Audrey Musselman-Brown",795],["Auresa Nyctea",770],["Tiffany Kha",726],["Kathleen Schaefer",660],["Ellen Hui",638],["Adele Feng",631],["Anjali Kayal",627],["Bobby Ullman",592],["Jack Ma",585],["Adam Watson",580],["Ekaterina Gibiansky",580],["Scott Roepnack",567],["Zinnia Xu",562],["Cameron Haydinger",556],["Ethan Wu",556],["Julie Deng",538],["Ethan Carlson",511],["Amanda Lee",507],["Saige Manier",504],["Devon Stork",502],["Julia Xu",496],["Leonid Gibiansky",495],["Travis Lewis",463],["Lauren Nishizaki",444],["Justin Cosentino",430],["Michelle Chu",430],["Evelyn Siu",425],["Teresa Lin",368],["Emily Tsai",361],["Nic Bertagnolli",361],["Cindy Liu",357],["Laura McNerney",355],["Tobin Yehle",349],["Glenn Thomas",342],["Annie Cherkaev",341],["Jake Low",335],["Jacob Bandes-Storch",328],["Jennifer Brennan",310],["Steven An",302],["Neil Chaudhary",302],["George Xu",266],["Dasha Pruss",262],["Alysia Mascolo",248],["Hongyan Liu",200],["Billy Csete",194],["Joe Chang",173],["Gavin Meeker",163],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Tamara Gibiansky",100],["Lian Xu",100],["John Call",86],["Elroy An",79],["Chris Yang",79],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Michelle Bui",62],["Reuben Lasrado",61],["Eric Wu",48]]}];
-
-const COLORS = [
-  '#7c4dff','#00bcd4','#ff6b6b','#66bb6a','#ffa726',
-  '#ec407a','#29b6f6','#ff7043','#9ccc65','#ab47bc',
-  '#26c6da','#ef5350','#42a5f5','#ffca28','#26a69a',
-  '#d4e157','#78909c','#5c6bc0','#f06292','#26d98b',
-  '#ff8a65','#8d6e63','#90a4ae','#a5d6a7','#ce93d8',
-  '#80cbc4','#ffe082','#b0bec5','#ffab91','#c5e1a5',
-  '#f48fb1','#81d4fa','#dce775','#aed6f1','#f9e79f',
-  '#a9cce3','#fadbd8','#b3e5fc','#d7ccc8','#e8f5e9',
-  '#fce4ec','#e3f2fd','#fff3e0','#f3e5f5','#e0f7fa',
-  '#f9fbe7','#ede7f6','#e8eaf6','#e1f5fe','#fff8e1'
-];
-
-// Stable name → color mapping
-const allNames = new Set();
-SNAPSHOTS.forEach(s => s.data.forEach(([n]) => allNames.add(n)));
-const nameList = [...allNames].sort();
-const nameColors = {};
-nameList.forEach((n, i) => { nameColors[n] = COLORS[i % COLORS.length]; });
-
-// Pre-build bar rows
-const MAX_ENTRIES = Math.max(...SNAPSHOTS.map(s => s.data.length));
-const container = document.getElementById('chart-container');
-const rows = [];
-for (let i = 0; i < MAX_ENTRIES; i++) {
-  const row = document.createElement('div');
-  row.className = 'bar-row';
-  row.style.opacity = '0';
-  row.innerHTML =
-    `<div class="rank-badge" id="rank-${i}"></div>` +
-    `<div class="bar-label" id="label-${i}"></div>` +
-    `<div class="bar-wrap">` +
-      `<div class="bar-fill" id="bar-${i}" style="width:0%"></div>` +
-      `<span class="bar-pts" id="pts-${i}"></span>` +
-    `</div>`;
-  container.appendChild(row);
-  rows.push(row);
-}
-
-// Precompute per-guest history across all snapshots
-const guestHistory = {}; // name -> [pts at each snapshot]
-nameList.forEach(name => {
-  guestHistory[name] = SNAPSHOTS.map(s => {
-    const e = s.data.find(([n]) => n === name);
-    return e ? e[1] : 0;
-  });
-});
-
-// Global max points (for y-axis)
-const GLOBAL_MAX = Math.max(...nameList.map(n => Math.max(...guestHistory[n])));
-
-// Canvas setup
-const canvas = document.getElementById('lineCanvas');
-const dpr = window.devicePixelRatio || 1;
-function resizeCanvas() {
-  const w = canvas.parentElement.clientWidth - 32; // account for padding
-  canvas.style.width = w + 'px';
-  canvas.width = w * dpr;
-  canvas.height = 380 * dpr;
-  canvas.style.height = '380px';
-}
-resizeCanvas();
-window.addEventListener('resize', () => { resizeCanvas(); drawLine(currentFrame); });
-
-const ctx = canvas.getContext('2d');
-
-// Padding inside canvas
-const PAD = { top: 20, right: 130, bottom: 40, left: 48 };
-
-function snapX(idx) {
-  const w = canvas.width / dpr;
-  return PAD.left + (idx / (SNAPSHOTS.length - 1)) * (w - PAD.left - PAD.right);
-}
-function ptsY(pts) {
-  const h = canvas.height / dpr;
-  return PAD.top + (1 - pts / (GLOBAL_MAX * 1.05)) * (h - PAD.top - PAD.bottom);
-}
-
-// X-axis tick positions: first snap of each day
-const dayTicks = [];
-SNAPSHOTS.forEach((s, i) => {
-  if (s.time.includes('· 12:00 am') || i === 0) dayTicks.push({ idx: i, label: s.time.split(' ·')[0].trim() });
-});
-
-function drawLine(frameIdx) {
-  const w = canvas.width / dpr;
-  const h = canvas.height / dpr;
-  ctx.save();
-  ctx.scale(dpr, dpr);
-  ctx.clearRect(0, 0, w, h);
-
-  // Background grid
-  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-  ctx.lineWidth = 1;
-  const yGridSteps = 5;
-  for (let g = 0; g <= yGridSteps; g++) {
-    const y = ptsY((GLOBAL_MAX * g) / yGridSteps);
-    ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(w - PAD.right, y); ctx.stroke();
-    // Y label
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.font = `${10}px 'Segoe UI', sans-serif`;
-    ctx.textAlign = 'right';
-    ctx.fillText(Math.round((GLOBAL_MAX * g) / yGridSteps), PAD.left - 5, y + 4);
-  }
-
-  // X-axis ticks (every other day to avoid crowding)
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.font = `9px 'Segoe UI', sans-serif`;
-  ctx.textAlign = 'center';
-  dayTicks.forEach((t, i) => {
-    if (i % 2 !== 0 && i !== dayTicks.length - 1) return; // every other day
-    const x = snapX(t.idx);
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, PAD.top); ctx.lineTo(x, h - PAD.bottom); ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.25)';
-    ctx.fillText(t.label, x, h - PAD.bottom + 14);
-  });
-
-  // Draw each guest's line up to frameIdx
-  nameList.forEach(name => {
-    const history = guestHistory[name];
-    const color = nameColors[name];
-    const hasAnyPts = history.slice(0, frameIdx + 1).some(p => p > 0);
-    if (!hasAnyPts) return;
-
-    ctx.beginPath();
-    ctx.strokeStyle = color + '88'; // semi-transparent
-    ctx.lineWidth = 1.2;
-    ctx.lineJoin = 'round';
-
-    let started = false;
-    for (let i = 0; i <= frameIdx; i++) {
-      const x = snapX(i);
-      const y = ptsY(history[i]);
-      if (!started) { ctx.moveTo(x, y); started = true; }
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-  });
-
-  // Determine top 7 at this frame
-  const currentRanking = SNAPSHOTS[frameIdx].data.slice(0, 7);
-
-  // Draw top 7 lines again, brighter + labels
-  currentRanking.forEach(([name], rank) => {
-    const history = guestHistory[name];
-    const color = nameColors[name];
-
-    ctx.beginPath();
-    ctx.strokeStyle = color;
-    ctx.lineWidth = rank === 0 ? 2.5 : 1.8;
-    ctx.lineJoin = 'round';
-
-    let started = false;
-    for (let i = 0; i <= frameIdx; i++) {
-      const x = snapX(i);
-      const y = ptsY(history[i]);
-      if (!started) { ctx.moveTo(x, y); started = true; }
-      else ctx.lineTo(x, y);
-    }
-    ctx.stroke();
-
-    // Label at current frame position
-    const cx = snapX(frameIdx);
-    const cy = ptsY(history[frameIdx]);
-    // Dot
-    ctx.beginPath();
-    ctx.arc(cx, cy, rank === 0 ? 4 : 2.5, 0, Math.PI * 2);
-    ctx.fillStyle = color;
-    ctx.fill();
-    // Name label
-    ctx.font = `${rank === 0 ? 11 : 9.5}px 'Segoe UI', sans-serif`;
-    ctx.fillStyle = rank === 0 ? color : color + 'dd';
-    ctx.textAlign = 'left';
-    const shortName = name.split(' ')[0]; // first name only
-    ctx.fillText(shortName, cx + 7, cy + 4);
-  });
-
-  // Vertical "now" line
-  const nowX = snapX(frameIdx);
-  ctx.strokeStyle = 'rgba(240,208,144,0.35)';
-  ctx.lineWidth = 1;
-  ctx.setLineDash([4, 3]);
-  ctx.beginPath(); ctx.moveTo(nowX, PAD.top); ctx.lineTo(nowX, h - PAD.bottom); ctx.stroke();
-  ctx.setLineDash([]);
-
-  ctx.restore();
-}
-
-// ── Shared animation state ──
-let currentFrame = 0;
-let paused = false;
-let speed = 700;
-let timer = null;
-
-const tsEl = document.getElementById('timestamp');
-const progressFill = document.getElementById('progress-fill');
-const doneMsg = document.getElementById('done-msg');
-const guestCount = document.getElementById('guest-count');
-
-function renderBars(idx) {
-  const snap = SNAPSHOTS[idx];
-  const data = snap.data;
-  const maxPts = data.length ? Math.max(...data.map(([,p]) => p), 1) : 1;
-  tsEl.textContent = snap.time;
-  progressFill.style.width = ((idx / (SNAPSHOTS.length - 1)) * 100).toFixed(1) + '%';
-  guestCount.textContent = data.length > 0 ? data.length + ' guests on the board' : 'Race not yet started';
-  for (let i = 0; i < MAX_ENTRIES; i++) {
-    if (i < data.length) {
-      const [name, pts] = data[i];
-      rows[i].style.opacity = '1';
-      document.getElementById(`rank-${i}`).textContent = i + 1;
-      document.getElementById(`label-${i}`).textContent =
-        i === 0 ? '🥇 ' + name : i === 1 ? '🥈 ' + name : i === 2 ? '🥉 ' + name : name;
-      const bar = document.getElementById(`bar-${i}`);
-      bar.style.width = (pts / maxPts * 100).toFixed(1) + '%';
-      bar.style.backgroundColor = nameColors[name] || '#7c4dff';
-      document.getElementById(`pts-${i}`).textContent = pts.toLocaleString() + ' pts';
-    } else {
-      rows[i].style.opacity = '0';
-    }
-  }
-}
-
-function advance() {
-  renderBars(currentFrame);
-  drawLine(currentFrame);
-  if (currentFrame >= SNAPSHOTS.length - 1) {
-    clearInterval(timer); timer = null;
-    doneMsg.style.display = 'block';
-    document.getElementById('btnPlay').textContent = '▶ Play';
-    paused = true;
-    return;
-  }
-  currentFrame++;
-}
-
-function startTimer() {
-  if (timer) clearInterval(timer);
-  timer = setInterval(advance, speed);
-}
-
-function setSpeed(s) {
-  speed = s;
-  document.getElementById('btn1x').classList.toggle('active', s === 700);
-  document.getElementById('btn2x').classList.toggle('active', s === 350);
-  document.getElementById('btn4x').classList.toggle('active', s === 175);
-  if (!paused) startTimer();
-}
-
-document.getElementById('btnPlay').addEventListener('click', () => {
-  paused = !paused;
-  if (paused) {
-    clearInterval(timer); timer = null;
-    document.getElementById('btnPlay').textContent = '▶ Play';
-  } else {
-    doneMsg.style.display = 'none';
-    if (currentFrame >= SNAPSHOTS.length - 1) currentFrame = 0;
-    document.getElementById('btnPlay').textContent = '⏸ Pause';
-    advance(); startTimer();
-  }
-});
-
-document.getElementById('btnRestart').addEventListener('click', () => {
-  clearInterval(timer); timer = null;
-  currentFrame = 0; paused = false;
-  doneMsg.style.display = 'none';
-  document.getElementById('btnPlay').textContent = '⏸ Pause';
-  advance(); startTimer();
-});
-
-advance();
-startTimer();
-
-// Site nav behaviour
-document.getElementById('navbar').addEventListener('scroll', () => {}, {passive:true});
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-});
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('navLinks').classList.toggle('open');
-});
-</script>
-
-<div class="section-label" style="margin-top:0.5rem">Activity Analytics</div>
-<div class="analytics-section">
-
-  <!-- Key stats -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-number">1,438</div>
-      <div class="stat-label">Total Submissions</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">25,761</div>
-      <div class="stat-label">Points Awarded</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">65</div>
-      <div class="stat-label">Participating Guests</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">24</div>
-      <div class="stat-label">Days of Competition</div>
-    </div>
+    <div class="stat-card"><div class="stat-number">1,438</div><div class="stat-label">Total Submissions</div></div>
+    <div class="stat-card"><div class="stat-number">25,761</div><div class="stat-label">Points Awarded</div></div>
+    <div class="stat-card"><div class="stat-number">65</div><div class="stat-label">Participating Guests</div></div>
+    <div class="stat-card"><div class="stat-number">24</div><div class="stat-label">Days of Competition</div></div>
   </div>
 
-  <!-- Activity frequency bar chart -->
   <div class="chart-card">
     <h3>Most Completed Activities</h3>
     <canvas class="chart" id="activityBar" height="420"></canvas>
   </div>
 
-  <!-- Total points generated per activity -->
   <div class="chart-card">
     <h3>Points Generated Per Activity</h3>
     <canvas class="chart" id="activityPts" height="420"></canvas>
   </div>
 
   <div class="charts-row">
-    <!-- Activity type breakdown pie -->
     <div class="chart-card">
       <h3>Activity Type Breakdown</h3>
       <canvas class="chart" id="typePie" height="260"></canvas>
     </div>
-    <!-- Small vs big pie -->
     <div class="chart-card">
       <h3>Quick vs Big Point Activities</h3>
       <canvas class="chart" id="smallBigPie" height="260"></canvas>
     </div>
   </div>
 
-  <!-- Points per day -->
   <div class="chart-card">
     <h3>Points Submitted Per Day</h3>
     <canvas class="chart" id="dayBar" height="220"></canvas>
   </div>
 
-  <!-- Most active guests -->
   <div class="chart-card">
     <h3>Most Active Guests (by submissions)</h3>
     <canvas class="chart" id="guestBar" height="300"></canvas>
   </div>
 
-  <!-- Unique participants per activity -->
   <div class="chart-card">
     <h3>Unique Guest Participation Per Activity</h3>
     <canvas class="chart" id="participantsBar" height="420"></canvas>
   </div>
-
 </div>
 
+<!-- ═══════════════ RACE SECTION ═══════════════ -->
+<div class="section-label">Points Race Animation</div>
+
+<!-- Sticky race header (shown after play) -->
+<div id="raceHeader">
+  <div id="timestamp">–</div>
+  <div id="guest-count"></div>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+  <div id="raceControls">
+    <button id="btnPause">⏸ Pause</button>
+    <button id="btnRestart">↺ Restart</button>
+    <span style="font-size:0.72rem;color:#6b5f7a">Speed:</span>
+    <button id="btn1x" class="active" onclick="setSpeed(700)">1×</button>
+    <button id="btn2x" onclick="setSpeed(350)">2×</button>
+    <button id="btn4x" onclick="setSpeed(175)">4×</button>
+  </div>
+</div>
+
+<div class="race-wrap">
+
+  <!-- Big play gate -->
+  <div id="playGate">
+    <button id="bigPlayBtn" aria-label="Play race animation">▶</button>
+    <div id="playGateLabel">Watch the points race unfold</div>
+  </div>
+
+  <!-- Charts (hidden until play) -->
+  <div id="raceCharts" style="display:none">
+    <div id="chart-container"></div>
+    <div id="line-section">
+      <canvas id="lineCanvas" height="380"></canvas>
+    </div>
+    <div id="done-msg">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS! 🏆</div>
+  </div>
+</div>
+
+<footer>Points earned May 1–24, 2026 · 6-hour snapshots · All 65 participating guests</footer>
+
 <script>
+// ── Analytics Charts ──
 const ANALYTICS = {"total_submissions":1438,"total_points":25761,"total_guests":65,"activity_freq":[["Wildlife Sighting",222,1750,50],["Try a New Fruit",206,1025,34],["Other",105,1972,43],["Shave Ice",102,510,39],["Snorkeling",65,2398,35],["Sunrise / Sunset",64,325,37],["Hiking",62,2289,38],["Beach Competition",57,3674,57],["Watch a Film/Show",54,448,27],["Try Poi",50,297,25],["Eurovision",45,559,21],["Rainbow Selfie",45,221,29],["Biking",35,670,22],["Napali Coast Kayak",34,2477,30],["Food Bingo",33,585,23],["Scuba Diving",28,1396,20],["Running",27,270,27],["Open Water Swimming",27,261,27],["Surfing",26,1080,19],["Banana Slug Art",24,617,21],["Shared a Recipe",23,109,17],["Team Captain",22,864,16],["Kilauea Lighthouse",22,519,21],["Selfie with A&Z",18,90,17],["Botanical Gardens",17,510,15]],"type_breakdown":[["Water \ud83c\udf0a",249,11946],["Land \ud83c\udf3f",163,4258],["Nature \ud83e\udd8e",331,2296],["Food & Drink \ud83c\udf4d",404,2602],["Entertainment \ud83c\udfac",99,1007],["Creative & Social \ud83c\udfa8",87,1680],["Other",105,1972]],"small_big":[["Under 30 pts",1083,7986],["30+ pts",355,17775]],"points_by_day":[["2026-05-01",24,4],["2026-05-02",40,3],["2026-05-03",49,6],["2026-05-04",49,6],["2026-05-05",102,6],["2026-05-06",36,4],["2026-05-07",123,12],["2026-05-08",62,4],["2026-05-09",58,9],["2026-05-10",60,2],["2026-05-11",5,1],["2026-05-12",33,6],["2026-05-13",15,1],["2026-05-14",60,4],["2026-05-15",76,5],["2026-05-16",612,32],["2026-05-17",805,83],["2026-05-18",917,75],["2026-05-19",923,63],["2026-05-20",1492,81],["2026-05-21",2155,126],["2026-05-22",2977,203],["2026-05-23",4443,246],["2026-05-24",10645,456]],"top_guests":[["Sidra Hussain",83,888],["Nicole Kreutter",83,866],["Audrey Musselman-Brown",62,795],["Rachel Macfarlane",58,858],["Auresa Nyctea",57,770],["Laura Carlson",51,834],["Adele Feng",45,631],["Kathleen Schaefer",44,660],["Adam Watson",43,580],["Anjali Kayal",43,627],["Tiffany Kha",40,726],["Julia Xu",39,496],["Devon Stork",37,502],["Ellen Hui",36,638],["Cameron Haydinger",33,556],["Zinnia Xu",33,561],["Saige Manier",31,504],["Lauren Nishizaki",29,444],["Scott Roepnack",29,567],["Evelyn Siu",28,425]]};
 
 Chart.defaults.color = 'rgba(255,255,255,0.5)';
-Chart.defaults.font.family = "'DM Sans', 'Segoe UI', sans-serif";
+Chart.defaults.font.family = "'DM Sans','Segoe UI',sans-serif";
 Chart.defaults.font.size = 11;
 
 const PALETTE = [
@@ -710,116 +338,256 @@ const PALETTE = [
 function makeHBar(id, labels, values, colors, label) {
   new Chart(document.getElementById(id), {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [{ label, data: values, backgroundColor: colors || PALETTE, borderRadius: 4, borderSkipped: false }]
-    },
+    data: { labels, datasets: [{ label, data: values, backgroundColor: colors||PALETTE, borderRadius:4, borderSkipped:false }] },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.x.toLocaleString() } } },
+      indexAxis: 'y', responsive: true,
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.x.toLocaleString()}} },
       scales: {
-        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.4)' } },
-        y: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.7)', font: { size: 11 } } }
+        x: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.4)'} },
+        y: { grid:{display:false}, ticks:{color:'rgba(255,255,255,0.7)',font:{size:11}} }
       }
     }
   });
 }
-
 function makeVBar(id, labels, values, colors) {
   new Chart(document.getElementById(id), {
     type: 'bar',
-    data: {
-      labels,
-      datasets: [{ data: values, backgroundColor: colors || PALETTE, borderRadius: 4, borderSkipped: false }]
-    },
+    data: { labels, datasets: [{ data:values, backgroundColor:colors||PALETTE, borderRadius:4, borderSkipped:false }] },
     options: {
       responsive: true,
-      plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ' ' + ctx.parsed.y.toLocaleString() } } },
+      plugins: { legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+ctx.parsed.y.toLocaleString()}} },
       scales: {
-        x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)', maxRotation: 45 } },
-        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: 'rgba(255,255,255,0.4)' } }
+        x: { grid:{display:false}, ticks:{color:'rgba(255,255,255,0.5)',maxRotation:45} },
+        y: { grid:{color:'rgba(255,255,255,0.05)'}, ticks:{color:'rgba(255,255,255,0.4)'} }
       }
     }
   });
 }
-
 function makePie(id, labels, values, colors) {
   new Chart(document.getElementById(id), {
     type: 'doughnut',
-    data: { labels, datasets: [{ data: values, backgroundColor: colors || PALETTE, borderWidth: 2, borderColor: '#0a0a16' }] },
+    data: { labels, datasets: [{ data:values, backgroundColor:colors||PALETTE, borderWidth:2, borderColor:'#0a0a16' }] },
     options: {
       responsive: true,
       plugins: {
-        legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.65)', padding: 10, font: { size: 11 } } },
-        tooltip: { callbacks: { label: ctx => ' ' + ctx.label + ': ' + ctx.parsed + ' entries' } }
+        legend: { position:'bottom', labels:{color:'rgba(255,255,255,0.65)',padding:10,font:{size:11}} },
+        tooltip: { callbacks:{label:ctx=>' '+ctx.label+': '+ctx.parsed+' entries'} }
       }
     }
   });
 }
 
-// ── 1. Activity frequency bar ──
-const actFreq = ANALYTICS.activity_freq.filter(([,,, g]) => true).slice(0, 20);
-makeHBar('activityBar',
-  actFreq.map(([name]) => name),
-  actFreq.map(([, cnt]) => cnt),
-  PALETTE,
-  'Completions'
-);
+const actFreq = ANALYTICS.activity_freq.slice(0,20);
+makeHBar('activityBar', actFreq.map(([n])=>n), actFreq.map(([,c])=>c), PALETTE, 'Completions');
 
-// ── 2. Points per activity bar ──
-const actPts = [...ANALYTICS.activity_freq].sort((a,b) => b[2]-a[2]).slice(0,20);
-makeHBar('activityPts',
-  actPts.map(([name]) => name),
-  actPts.map(([,,pts]) => pts),
-  PALETTE.map(c => c + 'cc'),
-  'Total Points'
-);
+const actPts = [...ANALYTICS.activity_freq].sort((a,b)=>b[2]-a[2]).slice(0,20);
+makeHBar('activityPts', actPts.map(([n])=>n), actPts.map(([,,p])=>p), PALETTE.map(c=>c+'cc'), 'Total Points');
 
-// ── 3. Activity type pie ──
-const typeColors = ['#29b6f6','#66bb6a','#ff8a65','#ffca28','#ec407a','#ab47bc','#78909c'];
 makePie('typePie',
-  ANALYTICS.type_breakdown.map(([t]) => t),
-  ANALYTICS.type_breakdown.map(([,c]) => c),
-  typeColors
+  ANALYTICS.type_breakdown.map(([t])=>t),
+  ANALYTICS.type_breakdown.map(([,c])=>c),
+  ['#29b6f6','#66bb6a','#ff8a65','#ffca28','#ec407a','#ab47bc','#78909c']
 );
-
-// ── 4. Small vs Big pie ──
 makePie('smallBigPie',
-  ANALYTICS.small_big.map(([label]) => label),
-  ANALYTICS.small_big.map(([,cnt]) => cnt),
+  ANALYTICS.small_big.map(([l])=>l), ANALYTICS.small_big.map(([,c])=>c),
   ['#7c4dff','#f0d090']
 );
 
-// ── 5. Points by day bar ──
 const dayData = ANALYTICS.points_by_day;
+const dayMax = Math.max(...dayData.map(x=>x[1]));
 makeVBar('dayBar',
-  dayData.map(([d]) => d.slice(5).replace('-', '/')),
-  dayData.map(([,pts]) => pts),
-  dayData.map(([,pts]) => {
-    const pct = pts / Math.max(...dayData.map(x=>x[1]));
-    return `rgba(124,77,255,${(0.3 + pct * 0.7).toFixed(2)})`;
-  })
+  dayData.map(([d])=>d.slice(5).replace('-','/')),
+  dayData.map(([,p])=>p),
+  dayData.map(([,p])=>`rgba(124,77,255,${(0.3+p/dayMax*0.7).toFixed(2)})`)
 );
 
-// ── 6. Most active guests bar ──
-const guestData = ANALYTICS.top_guests.slice(0, 15);
 makeHBar('guestBar',
-  guestData.map(([name]) => name.split(' ')[0] + ' ' + name.split(' ').slice(1).join(' ')),
-  guestData.map(([,cnt]) => cnt),
-  PALETTE,
-  'Submissions'
+  ANALYTICS.top_guests.slice(0,15).map(([n])=>n),
+  ANALYTICS.top_guests.slice(0,15).map(([,c])=>c),
+  PALETTE, 'Submissions'
 );
 
-// ── 7. Unique participants per activity ──
-const partData = [...ANALYTICS.activity_freq].sort((a,b) => b[3]-a[3]).slice(0,20);
-makeHBar('participantsBar',
-  partData.map(([name]) => name),
-  partData.map(([,,,guests]) => guests),
-  PALETTE.map(c => c + 'bb'),
-  'Unique Guests'
-);
+const partData = [...ANALYTICS.activity_freq].sort((a,b)=>b[3]-a[3]).slice(0,20);
+makeHBar('participantsBar', partData.map(([n])=>n), partData.map(([,,,g])=>g), PALETTE.map(c=>c+'bb'), 'Unique Guests');
+
+// ── Race Animation ──
+const SNAPSHOTS = [{"time":"May 1 \u00b7 12:00 am","data":[]},{"time":"May 1 \u00b7 6:00 am","data":[]},{"time":"May 1 \u00b7 12:00 pm","data":[]},{"time":"May 1 \u00b7 6:00 pm","data":[["Rachel Macfarlane",9]]},{"time":"May 2 \u00b7 12:00 am","data":[["Sidra Hussain",15],["Rachel Macfarlane",9]]},{"time":"May 2 \u00b7 6:00 am","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 2 \u00b7 12:00 pm","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 2 \u00b7 6:00 pm","data":[["Sidra Hussain",15],["Rachel Macfarlane",9],["Audrey Musselman-Brown",5]]},{"time":"May 3 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",9]]},{"time":"May 3 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 3 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 3 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Rachel Macfarlane",14]]},{"time":"May 4 \u00b7 12:00 am","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 6:00 am","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 12:00 pm","data":[["Rachel Macfarlane",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14]]},{"time":"May 4 \u00b7 6:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 12:00 am","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 6:00 am","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 12:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Devon Stork",5]]},{"time":"May 5 \u00b7 6:00 pm","data":[["Rachel Macfarlane",44],["Nicole Kreutter",44],["Audrey Musselman-Brown",35],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5]]},{"time":"May 6 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 6 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",95],["Nicole Kreutter",69],["Rachel Macfarlane",44],["Laura Carlson",31],["Sidra Hussain",20],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 6:00 am","data":[["Nicole Kreutter",102],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 12:00 pm","data":[["Nicole Kreutter",102],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Kathleen Schaefer",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 7 \u00b7 6:00 pm","data":[["Nicole Kreutter",109],["Audrey Musselman-Brown",95],["Laura Carlson",61],["Rachel Macfarlane",44],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 12:00 am","data":[["Nicole Kreutter",109],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",44],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 8 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Sidra Hussain",22],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Sidra Hussain",52],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",64],["Sidra Hussain",52],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Sidra Hussain",67],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Julia Xu",14],["Auresa Nyctea",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 9 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Sidra Hussain",67],["Rachel Macfarlane",64],["Kathleen Schaefer",36],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",5],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 10 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Devon Stork",5],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 11 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",95],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",100],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",67],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Adele Feng",4],["Adam Watson",4],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 12 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Rachel Macfarlane",74],["Sidra Hussain",73],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Laura Carlson",76],["Sidra Hussain",75],["Rachel Macfarlane",74],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 13 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 6:00 am","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 12:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 14 \u00b7 6:00 pm","data":[["Nicole Kreutter",121],["Audrey Musselman-Brown",105],["Rachel Macfarlane",89],["Laura Carlson",76],["Sidra Hussain",75],["Kathleen Schaefer",36],["Devon Stork",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Jennifer Brennan",5],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 12:00 am","data":[["Nicole Kreutter",121],["Rachel Macfarlane",109],["Audrey Musselman-Brown",105],["Sidra Hussain",85],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 6:00 am","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 15 \u00b7 6:00 pm","data":[["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Sidra Hussain",115],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 12:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",76],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Emily Tsai",15],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Cindy Liu",10],["Glenn Thomas",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 6:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Emily Tsai",55],["Cindy Liu",37],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 12:00 pm","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Emily Tsai",55],["Cindy Liu",37],["Kathleen Schaefer",36],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 16 \u00b7 6:00 pm","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Rachel Macfarlane",109],["Laura Carlson",81],["Saige Manier",70],["Kathleen Schaefer",56],["Emily Tsai",55],["Cindy Liu",42],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",14],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 12:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Ekaterina Gibiansky",115],["Rachel Macfarlane",109],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Laura Carlson",81],["Saige Manier",70],["Zinnia Xu",65],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Devon Stork",35],["Jennifer Brennan",35],["Bobby Ullman",30],["Julia Xu",19],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 6:00 am","data":[["Sidra Hussain",135],["Audrey Musselman-Brown",131],["Nicole Kreutter",121],["Ekaterina Gibiansky",115],["Rachel Macfarlane",114],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Anjali Kayal",94],["Laura Carlson",81],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Julia Xu",39],["Jennifer Brennan",35],["Bobby Ullman",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 12:00 pm","data":[["Audrey Musselman-Brown",151],["Nicole Kreutter",143],["Sidra Hussain",135],["Ekaterina Gibiansky",115],["Rachel Macfarlane",114],["Leonid Gibiansky",105],["Laura Carlson",101],["Tamara Gibiansky",100],["Anjali Kayal",94],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Cindy Liu",42],["Julia Xu",39],["Jennifer Brennan",35],["Bobby Ullman",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 17 \u00b7 6:00 pm","data":[["Nicole Kreutter",168],["Audrey Musselman-Brown",151],["Sidra Hussain",135],["Rachel Macfarlane",124],["Ekaterina Gibiansky",115],["Laura Carlson",111],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["Anjali Kayal",94],["Bobby Ullman",80],["Zinnia Xu",75],["Saige Manier",70],["Devon Stork",60],["Kathleen Schaefer",56],["Emily Tsai",55],["Lauren Nishizaki",50],["Julia Xu",49],["Cindy Liu",42],["Jennifer Brennan",35],["Evelyn Siu",23],["Alysia Mascolo",20],["Ellen Hui",15],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Cameron Haydinger",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 18 \u00b7 12:00 am","data":[["Nicole Kreutter",178],["Audrey Musselman-Brown",171],["Sidra Hussain",168],["Rachel Macfarlane",149],["Laura Carlson",141],["Ekaterina Gibiansky",115],["Leonid Gibiansky",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",94],["Zinnia Xu",90],["Bobby Ullman",85],["Kathleen Schaefer",81],["Saige Manier",70],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Julia Xu",49],["Cindy Liu",42],["Jennifer Brennan",35],["Amanda Lee",30],["Evelyn Siu",23],["Alysia Mascolo",20],["Ellen Hui",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Steven An",12],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5],["Ethan Carlson",2]]},{"time":"May 18 \u00b7 6:00 am","data":[["Sidra Hussain",214],["Nicole Kreutter",193],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",81],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Alysia Mascolo",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 18 \u00b7 12:00 pm","data":[["Sidra Hussain",214],["Nicole Kreutter",193],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",81],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Emily Tsai",55],["Lauren Nishizaki",50],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Alysia Mascolo",20],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 18 \u00b7 6:00 pm","data":[["Sidra Hussain",214],["Nicole Kreutter",198],["Audrey Musselman-Brown",190],["Rachel Macfarlane",153],["Laura Carlson",145],["Ekaterina Gibiansky",135],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Zinnia Xu",94],["Anjali Kayal",94],["Kathleen Schaefer",86],["Saige Manier",74],["Julia Xu",69],["Devon Stork",61],["Lauren Nishizaki",60],["Emily Tsai",55],["Ellen Hui",50],["Cindy Liu",42],["Justin Cosentino",40],["Jennifer Brennan",35],["Ethan Carlson",32],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Cameron Haydinger",15],["Adele Feng",14],["Adam Watson",14],["Auresa Nyctea",10],["Glenn Thomas",5],["Tiffany Kha",5]]},{"time":"May 19 \u00b7 12:00 am","data":[["Sidra Hussain",264],["Audrey Musselman-Brown",240],["Nicole Kreutter",208],["Laura Carlson",200],["Rachel Macfarlane",198],["Zinnia Xu",154],["Ekaterina Gibiansky",135],["Kathleen Schaefer",131],["Bobby Ullman",110],["Leonid Gibiansky",110],["Tamara Gibiansky",100],["Ellen Hui",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Saige Manier",74],["Julia Xu",69],["Tiffany Kha",65],["Devon Stork",61],["Lauren Nishizaki",60],["Emily Tsai",55],["Cameron Haydinger",55],["Cindy Liu",42],["Auresa Nyctea",36],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5],["Jacob Bandes-Storch",5]]},{"time":"May 19 \u00b7 6:00 am","data":[["Nicole Kreutter",295],["Sidra Hussain",269],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Adele Feng",14],["Adam Watson",14],["Jacob Bandes-Storch",10],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 19 \u00b7 12:00 pm","data":[["Nicole Kreutter",296],["Sidra Hussain",269],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 19 \u00b7 6:00 pm","data":[["Nicole Kreutter",301],["Sidra Hussain",274],["Laura Carlson",255],["Audrey Musselman-Brown",250],["Rachel Macfarlane",208],["Ekaterina Gibiansky",180],["Kathleen Schaefer",166],["Bobby Ullman",155],["Leonid Gibiansky",155],["Zinnia Xu",154],["Tiffany Kha",120],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Saige Manier",74],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Auresa Nyctea",41],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 12:00 am","data":[["Audrey Musselman-Brown",330],["Nicole Kreutter",311],["Laura Carlson",295],["Sidra Hussain",274],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Rachel Macfarlane",208],["Leonid Gibiansky",190],["Kathleen Schaefer",166],["Zinnia Xu",154],["Auresa Nyctea",151],["Tiffany Kha",120],["Saige Manier",119],["Julia Xu",114],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 6:00 am","data":[["Laura Carlson",375],["Sidra Hussain",369],["Audrey Musselman-Brown",365],["Nicole Kreutter",351],["Rachel Macfarlane",273],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Zinnia Xu",209],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Kathleen Schaefer",166],["Auresa Nyctea",161],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Cameron Haydinger",75],["Lauren Nishizaki",65],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Jake Low",10],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 12:00 pm","data":[["Nicole Kreutter",416],["Laura Carlson",375],["Audrey Musselman-Brown",370],["Sidra Hussain",369],["Rachel Macfarlane",278],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Zinnia Xu",209],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Auresa Nyctea",161],["Cameron Haydinger",160],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Jake Low",75],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Steven An",22],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 20 \u00b7 6:00 pm","data":[["Nicole Kreutter",416],["Audrey Musselman-Brown",385],["Laura Carlson",375],["Sidra Hussain",370],["Zinnia Xu",285],["Rachel Macfarlane",278],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Tiffany Kha",205],["Leonid Gibiansky",190],["Julia Xu",175],["Auresa Nyctea",161],["Cameron Haydinger",160],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Anjali Kayal",94],["Ethan Carlson",82],["Steven An",77],["Jake Low",75],["Devon Stork",61],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Evelyn Siu",23],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 12:00 am","data":[["Nicole Kreutter",471],["Laura Carlson",405],["Audrey Musselman-Brown",385],["Sidra Hussain",370],["Rachel Macfarlane",358],["Zinnia Xu",320],["Kathleen Schaefer",236],["Ekaterina Gibiansky",235],["Bobby Ullman",210],["Tiffany Kha",205],["Leonid Gibiansky",190],["Evelyn Siu",188],["Julia Xu",175],["Auresa Nyctea",171],["Cameron Haydinger",160],["Ethan Carlson",152],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",80],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Adele Feng",14],["Adam Watson",14],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 6:00 am","data":[["Nicole Kreutter",486],["Sidra Hussain",475],["Audrey Musselman-Brown",470],["Laura Carlson",440],["Rachel Macfarlane",388],["Ekaterina Gibiansky",325],["Zinnia Xu",320],["Kathleen Schaefer",291],["Tiffany Kha",290],["Leonid Gibiansky",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Evelyn Siu",188],["Cameron Haydinger",160],["Ethan Carlson",152],["Lauren Nishizaki",130],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",80],["Adele Feng",79],["Adam Watson",79],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 12:00 pm","data":[["Nicole Kreutter",491],["Sidra Hussain",485],["Audrey Musselman-Brown",480],["Laura Carlson",440],["Rachel Macfarlane",388],["Kathleen Schaefer",346],["Ekaterina Gibiansky",335],["Tiffany Kha",330],["Zinnia Xu",320],["Leonid Gibiansky",305],["Cameron Haydinger",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Ethan Carlson",217],["Evelyn Siu",188],["Lauren Nishizaki",150],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Steven An",77],["Devon Stork",66],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Amanda Lee",30],["Jacob Bandes-Storch",15],["Glenn Thomas",5]]},{"time":"May 21 \u00b7 6:00 pm","data":[["Nicole Kreutter",491],["Sidra Hussain",485],["Audrey Musselman-Brown",480],["Laura Carlson",440],["Rachel Macfarlane",388],["Kathleen Schaefer",346],["Ekaterina Gibiansky",335],["Tiffany Kha",330],["Zinnia Xu",320],["Leonid Gibiansky",305],["Cameron Haydinger",280],["Julia Xu",275],["Auresa Nyctea",271],["Bobby Ullman",220],["Ethan Carlson",217],["Evelyn Siu",188],["Steven An",177],["Lauren Nishizaki",150],["Saige Manier",119],["Ellen Hui",105],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Anjali Kayal",99],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Devon Stork",66],["Glenn Thomas",60],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Travis Lewis",15]]},{"time":"May 22 \u00b7 12:00 am","data":[["Nicole Kreutter",496],["Sidra Hussain",485],["Audrey Musselman-Brown",485],["Laura Carlson",470],["Rachel Macfarlane",388],["Zinnia Xu",380],["Bobby Ullman",370],["Kathleen Schaefer",346],["Auresa Nyctea",336],["Ekaterina Gibiansky",335],["Tiffany Kha",335],["Julia Xu",325],["Leonid Gibiansky",305],["Cameron Haydinger",290],["Ethan Carlson",282],["Ellen Hui",265],["Evelyn Siu",208],["Steven An",177],["Lauren Nishizaki",150],["Saige Manier",119],["Anjali Kayal",104],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Glenn Thomas",75],["Devon Stork",66],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Jennifer Brennan",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Travis Lewis",15],["Christine Lo",5],["Joe Chang",5]]},{"time":"May 22 \u00b7 6:00 am","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",560],["Rachel Macfarlane",528],["Laura Carlson",495],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",420],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",319],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",135],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Jake Low",90],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 22 \u00b7 12:00 pm","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",580],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",324],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",135],["Jake Low",120],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 22 \u00b7 6:00 pm","data":[["Nicole Kreutter",656],["Sidra Hussain",640],["Audrey Musselman-Brown",580],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Kathleen Schaefer",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Auresa Nyctea",381],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Anjali Kayal",324],["Ellen Hui",315],["Ethan Carlson",311],["Evelyn Siu",238],["Julie Deng",215],["Devon Stork",181],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",155],["Jake Low",120],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Christine Lo",40],["Moriah Katt",40],["Mike Katt",40],["Jennifer Brennan",35],["Joe Chang",35],["Alysia Mascolo",30],["Jacob Bandes-Storch",15]]},{"time":"May 23 \u00b7 12:00 am","data":[["Sidra Hussain",680],["Nicole Kreutter",676],["Audrey Musselman-Brown",610],["Kathleen Schaefer",571],["Rachel Macfarlane",528],["Laura Carlson",500],["Tiffany Kha",455],["Auresa Nyctea",441],["Zinnia Xu",440],["Julia Xu",412],["Ekaterina Gibiansky",400],["Anjali Kayal",384],["Bobby Ullman",370],["Cameron Haydinger",370],["Leonid Gibiansky",370],["Ellen Hui",315],["Ethan Carlson",311],["Jennifer Brennan",255],["Evelyn Siu",238],["Devon Stork",236],["Julie Deng",215],["Jake Low",200],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",165],["Saige Manier",119],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Christine Lo",80],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Joe Chang",66],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Jacob Bandes-Storch",15],["Siyan Kang",5]]},{"time":"May 23 \u00b7 6:00 am","data":[["Nicole Kreutter",741],["Sidra Hussain",730],["Audrey Musselman-Brown",660],["Laura Carlson",615],["Kathleen Schaefer",571],["Rachel Macfarlane",528],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Cameron Haydinger",440],["Zinnia Xu",440],["Anjali Kayal",424],["Julia Xu",412],["Bobby Ullman",370],["Ellen Hui",315],["Teresa Lin",315],["Ethan Carlson",311],["Devon Stork",291],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Julie Deng",215],["Jake Low",200],["Lauren Nishizaki",180],["Steven An",177],["Glenn Thomas",165],["Saige Manier",119],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Adele Feng",79],["Adam Watson",79],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Siyan Kang",5]]},{"time":"May 23 \u00b7 12:00 pm","data":[["Nicole Kreutter",756],["Sidra Hussain",748],["Audrey Musselman-Brown",665],["Laura Carlson",615],["Kathleen Schaefer",571],["Zinnia Xu",555],["Rachel Macfarlane",528],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Cameron Haydinger",440],["Anjali Kayal",424],["Ellen Hui",415],["Julia Xu",412],["Lauren Nishizaki",382],["Adele Feng",379],["Bobby Ullman",370],["Teresa Lin",315],["Ethan Carlson",311],["Adam Watson",304],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Julie Deng",215],["Glenn Thomas",175],["Saige Manier",119],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Travis Lewis",70],["Amanda Lee",60],["Emily Tsai",55],["Cindy Liu",42],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 23 \u00b7 6:00 pm","data":[["Nicole Kreutter",756],["Sidra Hussain",748],["Rachel Macfarlane",713],["Audrey Musselman-Brown",670],["Laura Carlson",615],["Kathleen Schaefer",571],["Zinnia Xu",555],["Ekaterina Gibiansky",500],["Auresa Nyctea",496],["Leonid Gibiansky",470],["Tiffany Kha",455],["Julie Deng",445],["Ethan Wu",445],["Cameron Haydinger",440],["Ethan Carlson",426],["Anjali Kayal",424],["Ellen Hui",415],["Julia Xu",412],["Lauren Nishizaki",382],["Adele Feng",379],["Bobby Ullman",370],["Teresa Lin",315],["Adam Watson",304],["Saige Manier",299],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",255],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Travis Lewis",190],["Glenn Thomas",175],["Emily Tsai",155],["Cindy Liu",147],["Christine Lo",110],["Joe Chang",101],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",95],["Amanda Lee",60],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Gavin Meeker",20],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 24 \u00b7 12:00 am","data":[["Nicole Kreutter",798],["Sidra Hussain",750],["Rachel Macfarlane",713],["Laura Carlson",712],["Audrey Musselman-Brown",672],["Tiffany Kha",585],["Kathleen Schaefer",576],["Zinnia Xu",556],["Ekaterina Gibiansky",515],["Auresa Nyctea",496],["Leonid Gibiansky",485],["Ellen Hui",461],["Julie Deng",445],["Ethan Wu",445],["Cameron Haydinger",440],["Adele Feng",439],["Ethan Carlson",431],["Anjali Kayal",424],["Julia Xu",412],["Lauren Nishizaki",383],["Bobby Ullman",370],["Teresa Lin",315],["Adam Watson",304],["Saige Manier",299],["Devon Stork",291],["Steven An",267],["Jennifer Brennan",261],["Evelyn Siu",238],["Jacob Bandes-Storch",230],["Jake Low",220],["Travis Lewis",215],["Emily Tsai",205],["Glenn Thomas",175],["Cindy Liu",147],["Christine Lo",120],["Joe Chang",111],["Tamara Gibiansky",100],["George Xu",100],["Hongyan Liu",100],["Justin Cosentino",96],["Amanda Lee",60],["Moriah Katt",40],["Mike Katt",40],["Alysia Mascolo",30],["Gavin Meeker",20],["Jack Ma",10],["Scott Roepnack",10],["Siyan Kang",5]]},{"time":"May 24 \u00b7 6:00 am","data":[["Nicole Kreutter",803],["Sidra Hussain",750],["Rachel Macfarlane",721],["Laura Carlson",717],["Audrey Musselman-Brown",672],["Auresa Nyctea",636],["Kathleen Schaefer",606],["Tiffany Kha",590],["Zinnia Xu",557],["Anjali Kayal",554],["Ellen Hui",536],["Ekaterina Gibiansky",525],["Leonid Gibiansky",490],["Cameron Haydinger",465],["Julie Deng",445],["Ethan Wu",445],["Adele Feng",439],["Ethan Carlson",431],["Devon Stork",421],["Julia Xu",412],["Lauren Nishizaki",383],["Justin Cosentino",381],["Bobby Ullman",370],["Saige Manier",361],["Teresa Lin",315],["Amanda Lee",310],["Adam Watson",304],["Steven An",267],["Jennifer Brennan",261],["Evelyn Siu",238],["Jacob Bandes-Storch",235],["Emily Tsai",230],["Jake Low",220],["Travis Lewis",220],["Glenn Thomas",200],["George Xu",200],["Hongyan Liu",200],["Cindy Liu",187],["Christine Lo",120],["Joe Chang",111],["Tamara Gibiansky",100],["Lian Xu",100],["Moriah Katt",85],["Mike Katt",80],["Gavin Meeker",60],["Alysia Mascolo",30],["Jack Ma",11],["Scott Roepnack",11],["Siyan Kang",5],["Lauren Kazmierski",5],["Abby Gregory",5],["John Call",5]]},{"time":"May 24 \u00b7 12:00 pm","data":[["Nicole Kreutter",861],["Sidra Hussain",841],["Rachel Macfarlane",801],["Laura Carlson",783],["Audrey Musselman-Brown",738],["Auresa Nyctea",725],["Tiffany Kha",658],["Kathleen Schaefer",655],["Anjali Kayal",607],["Ellen Hui",590],["Ekaterina Gibiansky",580],["Adele Feng",576],["Bobby Ullman",557],["Zinnia Xu",557],["Ethan Wu",556],["Cameron Haydinger",551],["Jack Ma",545],["Adam Watson",540],["Julie Deng",538],["Scott Roepnack",537],["Ethan Carlson",511],["Leonid Gibiansky",495],["Julia Xu",491],["Devon Stork",482],["Lauren Nishizaki",444],["Justin Cosentino",430],["Saige Manier",422],["Amanda Lee",407],["Teresa Lin",368],["Jacob Bandes-Storch",328],["Jake Low",325],["Jennifer Brennan",310],["Travis Lewis",303],["Emily Tsai",302],["Evelyn Siu",300],["Glenn Thomas",279],["Cindy Liu",267],["Steven An",267],["George Xu",266],["Hongyan Liu",200],["Joe Chang",173],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Gavin Meeker",108],["Tamara Gibiansky",100],["Lian Xu",100],["Alysia Mascolo",98],["John Call",86],["Michelle Chu",80],["Laura McNerney",80],["Elroy An",79],["Chris Yang",79],["Neil Chaudhary",72],["Dasha Pruss",72],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Annie Cherkaev",66],["Michelle Bui",62],["Reuben Lasrado",61],["Nic Bertagnolli",61],["Billy Csete",49],["Tobin Yehle",49],["Eric Wu",48]]},{"time":"May 24 \u00b7 6:00 pm","data":[["Nicole Kreutter",861],["Sidra Hussain",841],["Rachel Macfarlane",801],["Laura Carlson",783],["Audrey Musselman-Brown",738],["Auresa Nyctea",725],["Tiffany Kha",678],["Kathleen Schaefer",660],["Anjali Kayal",607],["Ellen Hui",590],["Ekaterina Gibiansky",580],["Adele Feng",576],["Zinnia Xu",562],["Bobby Ullman",557],["Cameron Haydinger",556],["Ethan Wu",556],["Jack Ma",545],["Adam Watson",540],["Julie Deng",538],["Scott Roepnack",537],["Ethan Carlson",511],["Leonid Gibiansky",495],["Julia Xu",491],["Devon Stork",482],["Saige Manier",447],["Lauren Nishizaki",444],["Amanda Lee",439],["Justin Cosentino",430],["Evelyn Siu",390],["Travis Lewis",375],["Teresa Lin",368],["Jacob Bandes-Storch",328],["Jake Low",325],["Jennifer Brennan",310],["Emily Tsai",302],["Steven An",302],["Cindy Liu",292],["Glenn Thomas",279],["George Xu",266],["Dasha Pruss",262],["Hongyan Liu",200],["Joe Chang",173],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Gavin Meeker",108],["Tamara Gibiansky",100],["Lian Xu",100],["Alysia Mascolo",98],["John Call",86],["Michelle Chu",80],["Laura McNerney",80],["Elroy An",79],["Chris Yang",79],["Neil Chaudhary",72],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Annie Cherkaev",66],["Michelle Bui",62],["Reuben Lasrado",61],["Nic Bertagnolli",61],["Billy Csete",49],["Tobin Yehle",49],["Eric Wu",48]]},{"time":"May 25 \u00b7 12:00 am","data":[["Sidra Hussain",888],["Nicole Kreutter",866],["Rachel Macfarlane",858],["Laura Carlson",834],["Audrey Musselman-Brown",795],["Auresa Nyctea",770],["Tiffany Kha",726],["Kathleen Schaefer",660],["Ellen Hui",638],["Adele Feng",631],["Anjali Kayal",627],["Bobby Ullman",592],["Jack Ma",585],["Adam Watson",580],["Ekaterina Gibiansky",580],["Scott Roepnack",567],["Zinnia Xu",562],["Cameron Haydinger",556],["Ethan Wu",556],["Julie Deng",538],["Ethan Carlson",511],["Amanda Lee",507],["Saige Manier",504],["Devon Stork",502],["Julia Xu",496],["Leonid Gibiansky",495],["Travis Lewis",463],["Lauren Nishizaki",444],["Justin Cosentino",430],["Michelle Chu",430],["Evelyn Siu",425],["Teresa Lin",368],["Emily Tsai",361],["Nic Bertagnolli",361],["Cindy Liu",357],["Laura McNerney",355],["Tobin Yehle",349],["Glenn Thomas",342],["Annie Cherkaev",341],["Jake Low",335],["Jacob Bandes-Storch",328],["Jennifer Brennan",310],["Steven An",302],["Neil Chaudhary",302],["George Xu",266],["Dasha Pruss",262],["Alysia Mascolo",248],["Hongyan Liu",200],["Billy Csete",194],["Joe Chang",173],["Gavin Meeker",163],["Moriah Katt",153],["Mike Katt",141],["Christine Lo",120],["Tamara Gibiansky",100],["Lian Xu",100],["John Call",86],["Elroy An",79],["Chris Yang",79],["Abby Gregory",68],["Siyan Kang",66],["Lauren Kazmierski",66],["Michelle Bui",62],["Reuben Lasrado",61],["Eric Wu",48]]}];
+
+const RACE_COLORS = [
+  '#7c4dff','#00bcd4','#ff6b6b','#66bb6a','#ffa726',
+  '#ec407a','#29b6f6','#ff7043','#9ccc65','#ab47bc',
+  '#26c6da','#ef5350','#42a5f5','#ffca28','#26a69a',
+  '#d4e157','#78909c','#5c6bc0','#f06292','#26d98b',
+  '#ff8a65','#8d6e63','#90a4ae','#a5d6a7','#ce93d8',
+  '#80cbc4','#ffe082','#b0bec5','#ffab91','#c5e1a5',
+  '#f48fb1','#81d4fa','#dce775','#aed6f1','#f9e79f',
+  '#a9cce3','#fadbd8','#b3e5fc','#d7ccc8','#e8f5e9',
+  '#fce4ec','#e3f2fd','#fff3e0','#f3e5f5','#e0f7fa',
+  '#f9fbe7','#ede7f6','#e8eaf6','#e1f5fe','#fff8e1'
+];
+const allNames = new Set();
+SNAPSHOTS.forEach(s=>s.data.forEach(([n])=>allNames.add(n)));
+const nameList = [...allNames].sort();
+const nameColors = {};
+nameList.forEach((n,i)=>{ nameColors[n]=RACE_COLORS[i%RACE_COLORS.length]; });
+
+const MAX_ENTRIES = Math.max(...SNAPSHOTS.map(s=>s.data.length));
+const barContainer = document.getElementById('chart-container');
+const rows = [];
+for (let i=0;i<MAX_ENTRIES;i++) {
+  const row = document.createElement('div');
+  row.className='bar-row'; row.style.opacity='0';
+  row.innerHTML=
+    `<div class="rank-badge" id="rank-${i}"></div>`+
+    `<div class="bar-label" id="label-${i}"></div>`+
+    `<div class="bar-wrap"><div class="bar-fill" id="bar-${i}" style="width:0%"></div>`+
+    `<span class="bar-pts" id="pts-${i}"></span></div>`;
+  barContainer.appendChild(row);
+  rows.push(row);
+}
+
+// Precompute per-guest history
+const guestHistory = {};
+nameList.forEach(name=>{
+  guestHistory[name]=SNAPSHOTS.map(s=>{ const e=s.data.find(([n])=>n===name); return e?e[1]:0; });
+});
+const GLOBAL_MAX = Math.max(...nameList.map(n=>Math.max(...guestHistory[n])));
+
+// Canvas
+const canvas = document.getElementById('lineCanvas');
+const dpr = window.devicePixelRatio||1;
+function resizeCanvas() {
+  const w = canvas.parentElement.clientWidth;
+  canvas.style.width=w+'px'; canvas.width=w*dpr;
+  canvas.height=380*dpr; canvas.style.height='380px';
+}
+window.addEventListener('resize',()=>{ resizeCanvas(); if(started) drawLine(currentFrame); });
+
+const ctx = canvas.getContext('2d');
+const PAD = {top:20,right:130,bottom:40,left:48};
+function snapX(idx){const w=canvas.width/dpr;return PAD.left+(idx/(SNAPSHOTS.length-1))*(w-PAD.left-PAD.right);}
+function ptsY(pts){const h=canvas.height/dpr;return PAD.top+(1-pts/(GLOBAL_MAX*1.05))*(h-PAD.top-PAD.bottom);}
+
+const dayTicks=[];
+SNAPSHOTS.forEach((s,i)=>{if(s.time.includes('· 12:00 am')||i===0)dayTicks.push({idx:i,label:s.time.split(' ·')[0].trim()});});
+
+function drawLine(frameIdx) {
+  const w=canvas.width/dpr, h=canvas.height/dpr;
+  ctx.save(); ctx.scale(dpr,dpr); ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle='rgba(255,255,255,0.04)'; ctx.lineWidth=1;
+  for(let g=0;g<=5;g++){
+    const y=ptsY(GLOBAL_MAX*g/5);
+    ctx.beginPath();ctx.moveTo(PAD.left,y);ctx.lineTo(w-PAD.right,y);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.25)';ctx.font=`10px 'DM Sans',sans-serif`;
+    ctx.textAlign='right';ctx.fillText(Math.round(GLOBAL_MAX*g/5),PAD.left-5,y+4);
+  }
+  ctx.font=`9px 'DM Sans',sans-serif`;ctx.textAlign='center';
+  dayTicks.forEach((t,i)=>{
+    if(i%2!==0&&i!==dayTicks.length-1)return;
+    const x=snapX(t.idx);
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(x,PAD.top);ctx.lineTo(x,h-PAD.bottom);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.25)';ctx.fillText(t.label,x,h-PAD.bottom+14);
+  });
+  nameList.forEach(name=>{
+    const history=guestHistory[name];
+    if(!history.slice(0,frameIdx+1).some(p=>p>0))return;
+    ctx.beginPath();ctx.strokeStyle=nameColors[name]+'88';ctx.lineWidth=1.2;ctx.lineJoin='round';
+    let started=false;
+    for(let i=0;i<=frameIdx;i++){const x=snapX(i),y=ptsY(history[i]);if(!started){ctx.moveTo(x,y);started=true;}else ctx.lineTo(x,y);}
+    ctx.stroke();
+  });
+  const topN=SNAPSHOTS[frameIdx].data.slice(0,7);
+  topN.forEach(([name],rank)=>{
+    const history=guestHistory[name],color=nameColors[name];
+    ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=rank===0?2.5:1.8;ctx.lineJoin='round';
+    let started=false;
+    for(let i=0;i<=frameIdx;i++){const x=snapX(i),y=ptsY(history[i]);if(!started){ctx.moveTo(x,y);started=true;}else ctx.lineTo(x,y);}
+    ctx.stroke();
+    const cx=snapX(frameIdx),cy=ptsY(history[frameIdx]);
+    ctx.beginPath();ctx.arc(cx,cy,rank===0?4:2.5,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+    ctx.font=`${rank===0?11:9.5}px 'DM Sans',sans-serif`;
+    ctx.fillStyle=rank===0?color:color+'dd';ctx.textAlign='left';
+    ctx.fillText(name.split(' ')[0],cx+7,cy+4);
+  });
+  const nowX=snapX(frameIdx);
+  ctx.strokeStyle='rgba(240,208,144,0.35)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(nowX,PAD.top);ctx.lineTo(nowX,h-PAD.bottom);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.restore();
+}
+
+function renderBars(idx){
+  const snap=SNAPSHOTS[idx],data=snap.data;
+  const maxPts=data.length?Math.max(...data.map(([,p])=>p),1):1;
+  document.getElementById('timestamp').textContent=snap.time;
+  document.getElementById('progress-fill').style.width=((idx/(SNAPSHOTS.length-1))*100).toFixed(1)+'%';
+  document.getElementById('guest-count').textContent=data.length?data.length+' guests on the board':'Race not yet started';
+  for(let i=0;i<MAX_ENTRIES;i++){
+    if(i<data.length){
+      const [name,pts]=data[i];
+      rows[i].style.opacity='1';
+      document.getElementById(`rank-${i}`).textContent=i+1;
+      document.getElementById(`label-${i}`).textContent=i===0?'🥇 '+name:i===1?'🥈 '+name:i===2?'🥉 '+name:name;
+      const bar=document.getElementById(`bar-${i}`);
+      bar.style.width=(pts/maxPts*100).toFixed(1)+'%';
+      bar.style.backgroundColor=nameColors[name]||'#7c4dff';
+      document.getElementById(`pts-${i}`).textContent=pts.toLocaleString()+' pts';
+    } else rows[i].style.opacity='0';
+  }
+}
+
+let currentFrame=0,paused=false,speed=700,timer=null,started=false;
+
+function advance(){
+  renderBars(currentFrame);drawLine(currentFrame);
+  if(currentFrame>=SNAPSHOTS.length-1){
+    clearInterval(timer);timer=null;
+    document.getElementById('done-msg').style.display='block';
+    document.getElementById('btnPause').textContent='▶ Play';
+    paused=true;return;
+  }
+  currentFrame++;
+}
+function startTimer(){if(timer)clearInterval(timer);timer=setInterval(advance,speed);}
+function setSpeed(s){
+  speed=s;
+  document.getElementById('btn1x').classList.toggle('active',s===700);
+  document.getElementById('btn2x').classList.toggle('active',s===350);
+  document.getElementById('btn4x').classList.toggle('active',s===175);
+  if(!paused)startTimer();
+}
+
+// Big play button
+document.getElementById('bigPlayBtn').addEventListener('click',()=>{
+  started=true;
+  document.getElementById('playGate').style.display='none';
+  document.getElementById('raceCharts').style.display='block';
+  document.getElementById('raceHeader').style.display='block';
+  resizeCanvas();
+  advance();startTimer();
+});
+
+document.getElementById('btnPause').addEventListener('click',()=>{
+  paused=!paused;
+  if(paused){clearInterval(timer);timer=null;document.getElementById('btnPause').textContent='▶ Play';}
+  else{
+    document.getElementById('done-msg').style.display='none';
+    if(currentFrame>=SNAPSHOTS.length-1)currentFrame=0;
+    document.getElementById('btnPause').textContent='⏸ Pause';
+    advance();startTimer();
+  }
+});
+document.getElementById('btnRestart').addEventListener('click',()=>{
+  clearInterval(timer);timer=null;currentFrame=0;paused=false;
+  document.getElementById('done-msg').style.display='none';
+  document.getElementById('btnPause').textContent='⏸ Pause';
+  advance();startTimer();
+});
+
+// Nav
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);});
+document.getElementById('hamburger').addEventListener('click',()=>{document.getElementById('navLinks').classList.toggle('open');});
 </script>
-
 </body>
 </html>
