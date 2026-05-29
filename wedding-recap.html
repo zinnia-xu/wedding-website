@@ -177,6 +177,9 @@ canvas.chart { width: 100% !important; }
 .bar-row.visible {
   display: flex;
 }
+.bar-row.winner-4 .bar-label { color: #f0d090; }
+.bar-row.winner-4 .rank-badge { color: #f0d090; }
+.bar-row.winner-4 .bar-wrap { background: #2a2010; }
 .rank-badge { width: 22px; min-width: 22px; font-size: 0.62rem; font-weight: 800; text-align: center; color: #f0d090; }
 .bar-label {
   width: 142px; min-width: 142px; font-size: 0.7rem; font-weight: 600;
@@ -788,8 +791,9 @@ function renderBars(idx){
     if(i<data.length){
       const [name,pts]=data[i];
       rows[i].classList.add('visible');
+      i===3 ? rows[i].classList.add('winner-4') : rows[i].classList.remove('winner-4');
       document.getElementById(`rank-${i}`).textContent=i+1;
-      document.getElementById(`label-${i}`).textContent=i===0?'🥇 '+name:i===1?'🥈 '+name:i===2?'🥉 '+name:name;
+      document.getElementById(`label-${i}`).textContent=i===0?'🥇 '+name:i===1?'🥈 '+name:i===2?'🥉 '+name:i===3?'🏅 '+name:name;
       const bar=document.getElementById(`bar-${i}`);
       bar.style.width=(pts/maxPts*100).toFixed(1)+'%';
       bar.style.backgroundColor=nameColors[name]||'#7c4dff';
