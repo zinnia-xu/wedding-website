@@ -200,6 +200,77 @@ canvas.chart { width: 100% !important; }
 }
 
 footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center; }
+
+/* ── Community Reviews ── */
+.reviews-wrap {
+  width: 100%; max-width: 960px; padding: 0 1rem 0.5rem;
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.review-card {
+  background: #0a0a16; border: 1px solid #1f1535;
+  border-radius: 12px; overflow: hidden;
+}
+.review-card-header {
+  display: flex; align-items: center; gap: 0.65rem;
+  padding: 0.85rem 1.1rem 0.7rem;
+  border-bottom: 1px solid #1f1535;
+}
+.review-card-header .emoji { font-size: 1.4rem; line-height: 1; }
+.review-card-header h3 { font-size: 0.97rem; font-weight: 700; color: #e8e0d5; }
+.review-card-header .sub { font-size: 0.72rem; color: #6b5f7a; margin-top: 0.1rem; }
+.review-table { width: 100%; border-collapse: collapse; }
+.review-table td {
+  padding: 0.55rem 1.1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.8rem; vertical-align: top; line-height: 1.45;
+}
+.review-table tr:last-child td { border-bottom: none; }
+.review-table .reviewer {
+  color: #c8a8ff; font-weight: 700; width: 130px; white-space: nowrap;
+}
+.review-table .comment { color: #d0c8e0; }
+.review-table .comment em { color: #a89fbf; font-style: italic; }
+.consensus {
+  margin: 0; padding: 0.55rem 1.1rem 0.75rem;
+  font-size: 0.76rem; color: #9b8fa0; font-style: italic;
+  border-top: 1px solid #1f1535;
+}
+.consensus strong { color: #c8a8ff; font-style: normal; }
+
+/* Eurovision */
+.eurovision-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+@media(max-width:600px){ .eurovision-grid{grid-template-columns:1fr;} }
+.eurov-block { padding: 0.85rem 1.1rem; border-right: 1px solid #1f1535; }
+.eurov-block:last-child { border-right: none; }
+.eurov-block h4 { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #7c4dff; margin-bottom: 0.5rem; }
+.eurov-winner { font-size: 1.1rem; font-weight: 800; color: #f0d090; }
+.eurov-winner span { font-size: 0.8rem; font-weight: 400; color: #9b8fa0; display: block; margin-top: 0.15rem; }
+.eurov-note { font-size: 0.78rem; color: #d0c8e0; line-height: 1.5; }
+.eurov-note em { color: #9b8fa0; font-size: 0.73rem; }
+
+/* Shave ice leaderboard */
+.shave-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+}
+@media(max-width:600px){ .shave-grid{grid-template-columns:1fr;} }
+.shave-left { padding: 0.75rem 1.1rem; border-right: 1px solid #1f1535; }
+.shave-right { padding: 0.75rem 1.1rem; }
+.shave-rank-row {
+  display: flex; align-items: flex-start; gap: 0.65rem;
+  padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.shave-rank-row:last-child { border-bottom: none; }
+.shave-num { font-size: 0.72rem; font-weight: 800; color: #f0d090; width: 20px; flex-shrink: 0; padding-top: 1px; }
+.shave-info { flex: 1; }
+.shave-name { font-size: 0.82rem; font-weight: 700; color: #e8e0d5; }
+.shave-verdict { font-size: 0.7rem; color: #9b8fa0; margin-top: 0.1rem; }
+.shave-review-block { padding: 0.45rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.shave-review-block:last-child { border-bottom: none; }
+.shave-shop-name { font-size: 0.78rem; font-weight: 700; color: #c8a8ff; margin-bottom: 0.35rem; }
+.shave-mini-row { display: flex; gap: 0.4rem; font-size: 0.74rem; color: #d0c8e0; line-height: 1.4; margin-bottom: 0.2rem; }
+.shave-mini-row .who { color: #9b8fa0; font-weight: 600; width: 90px; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -231,6 +302,198 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 <div class="page-header">
   <h1>🌺 Wedding Recap — Kauai 2026</h1>
   <p>Andrew &amp; Zinnia · May 1–24, 2026</p>
+</div>
+
+<!-- ═══════════════ COMMUNITY REVIEWS ═══════════════ -->
+<div class="section-label">Movies &amp; Docs</div>
+<div class="reviews-wrap">
+
+  <!-- My Octopus Teacher -->
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">🐙</div>
+      <div><h3>My Octopus Teacher</h3><div class="sub">Netflix Documentary</div></div>
+    </div>
+    <table class="review-table">
+      <tr><td class="reviewer">Audrey</td><td class="comment"><em>"Pretty sure that guy is in love with that octopus"</em></td></tr>
+      <tr><td class="reviewer">Rachel</td><td class="comment"><em>"I am in love with that octopus"</em></td></tr>
+      <tr><td class="reviewer">Julia X</td><td class="comment"><em>"Man discovers his feelings / octopus be vibing"</em></td></tr>
+      <tr><td class="reviewer">Nicole</td><td class="comment"><em>"I want octopus best friend"</em></td></tr>
+      <tr><td class="reviewer">Evelyn</td><td class="comment"><em>"Thought he looked forward a little too much to seeing his friend the octopus"</em></td></tr>
+      <tr><td class="reviewer">Sidra</td><td class="comment"><em>"Huge fan of the octopus. Weird vibes from the guy. Wanted way more or way less of his story"</em></td></tr>
+      <tr><td class="reviewer">Jennifer B</td><td class="comment"><em>"Loved watching the octopus move. Thought you all were being too harsh about the guy but now I get it"</em></td></tr>
+      <tr><td class="reviewer">Rachel (follow-up)</td><td class="comment">Defended the guy — <em>"it's normal to have unexplained ennui that you fix by going into the ocean every day"</em></td></tr>
+    </table>
+    <p class="consensus"><strong>Consensus:</strong> Universal octopus love 🐙 — divided on the guy (most found him a bit much)</p>
+  </div>
+
+  <!-- LISTERS -->
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">🐦</div>
+      <div><h3>LISTERS: A Glimpse Into Extreme Birdwatching</h3><div class="sub">Documentary</div></div>
+    </div>
+    <table class="review-table">
+      <tr><td class="reviewer">Rachel</td><td class="comment"><em>"Creative, funny, extreme birdwatchers are extreme"</em></td></tr>
+      <tr><td class="reviewer">Sidra</td><td class="comment"><em>"Fun. Love the commitment"</em></td></tr>
+      <tr><td class="reviewer">Ruby</td><td class="comment"><em>"Birds yes good"</em></td></tr>
+      <tr><td class="reviewer">Audrey</td><td class="comment"><em>"Really shows you how any hobby can become a Problem if you get into it enough. Also loved the bird videography"</em></td></tr>
+      <tr><td class="reviewer">Nicole</td><td class="comment"><em>"Amazing work, reminds us to do activities for fun and not for points — but maybe a little for points also 😂"</em></td></tr>
+    </table>
+    <p class="consensus"><strong>Consensus:</strong> Crowd pleaser — charming, funny, universally enjoyed 🐦</p>
+  </div>
+
+  <!-- Chief of War -->
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">⚔️</div>
+      <div><h3>Chief of War</h3><div class="sub">Apple TV+</div></div>
+    </div>
+    <table class="review-table">
+      <tr><td class="reviewer">Nicole</td><td class="comment"><em>"Very upsetting last 3 episodes. Had to alternately cover my eyes, my mouth, and the screen"</em></td></tr>
+      <tr><td class="reviewer">Laura C</td><td class="comment"><em>"50% of the Hollywood pitch must have been 'Jason Momoa does things in a loincloth'"</em></td></tr>
+      <tr><td class="reviewer">Bobby</td><td class="comment"><em>"Didn't realize they filled cannons with nails historically. Some people just be crazy and making bad choices"</em></td></tr>
+      <tr><td class="reviewer">Audrey</td><td class="comment"><em>"Extremely upsetting gore. Really loved the feather capes and headpieces — makes me want to learn about Hawaiian crafts"</em></td></tr>
+      <tr><td class="reviewer">Sidra</td><td class="comment"><em>"Fun to learn about the islands. Main takeaway: how close can you get to molten lava without catching on fire?"</em></td></tr>
+    </table>
+    <p class="consensus"><strong>Consensus:</strong> Visually stunning but brutally gory in the final episodes; Jason Momoa appreciated 🌺</p>
+  </div>
+
+  <!-- Remarkably Bright Creatures -->
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">🎬</div>
+      <div><h3>Remarkably Bright Creatures</h3><div class="sub">Film</div></div>
+    </div>
+    <table class="review-table">
+      <tr><td class="reviewer">Laura C</td><td class="comment">DNF — <em>"Less than 50% in and the group abandoned the movie"</em></td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ═══════════════ EUROVISION ═══════════════ -->
+<div class="section-label">Eurovision 2026</div>
+<div class="reviews-wrap">
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">🎵</div>
+      <div><h3>Eurovision 2026</h3><div class="sub">#eurovision</div></div>
+    </div>
+    <div class="eurovision-grid">
+      <div class="eurov-block">
+        <h4>Winner</h4>
+        <div class="eurov-winner">🇧🇬 Bulgaria — DARA<span>"Bangaranga"</span></div>
+        <br>
+        <h4>Prediction Contest</h4>
+        <div class="eurov-note">
+          7 of 8 guests predicted 🇫🇮 Finland — who placed <strong>6th</strong><br>
+          The 8th guess: 🇸🇪 Sweden — who placed <strong>20th</strong><br><br>
+          <strong style="color:#c8a8ff">4 pts each:</strong> Zinnia, Nicole, Audrey, Sidra, Rachel, Saige, Laura C<br>
+          <strong style="color:#f0d090">Bonus pt:</strong> Nicole — guessed UK for 0 pts; UK got 1 pt. <em>Basically the same 😂</em>
+        </div>
+      </div>
+      <div class="eurov-block" style="border-right:none">
+        <h4>Favorite Acts</h4>
+        <table class="review-table" style="margin:-0.55rem -1.1rem;width:calc(100% + 2.2rem)">
+          <tr><td class="reviewer" style="width:110px">Auresa</td><td class="comment">🇧🇬 Bulgaria, 🇱🇺 Luxembourg (Mother Nature) — <em>"I like the lady songs more in general"</em></td></tr>
+          <tr><td class="reviewer">Amanda</td><td class="comment">🇮🇹 Italy, 🇲🇩 Moldova, 🇲🇹 Malta, 🇦🇹 Austria</td></tr>
+          <tr><td class="reviewer">Travis</td><td class="comment">🇲🇩 Moldova, 🇧🇪 Belgium, 🇸🇪 Sweden — <em>"Viva Moldova goes harder than it had any right to"</em></td></tr>
+          <tr><td class="reviewer">Sidra</td><td class="comment">🇲🇩 Moldova — <em>"So silly and fun"</em></td></tr>
+        </table>
+        <p class="consensus" style="margin:0;border-top:none;padding-top:0.5rem"><strong>Consensus:</strong> Moldova was a surprise crowd favorite 🇲🇩; Bulgaria the worthy winner 🇧🇬</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SHAVE ICE ═══════════════ -->
+<div class="section-label">Shave Ice Rankings 🍧</div>
+<div class="reviews-wrap">
+  <div class="review-card">
+    <div class="review-card-header">
+      <div class="emoji">🍧</div>
+      <div><h3>Kauai Shave Ice Power Rankings</h3><div class="sub">#photos · final standings</div></div>
+    </div>
+    <div class="shave-grid">
+      <!-- Left: final leaderboard -->
+      <div class="shave-left">
+        <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7c4dff;margin-bottom:0.6rem">Final Leaderboard</div>
+        <div class="shave-rank-row">
+          <div class="shave-num">🥇</div>
+          <div class="shave-info"><div class="shave-name">Hee Fat General Store</div><div class="shave-verdict">Unanimous — house-made everything</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num">🥈</div>
+          <div class="shave-info"><div class="shave-name">Wishing Well</div><div class="shave-verdict">Consistently strong — get Tropical Bliss</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num">🥉</div>
+          <div class="shave-info"><div class="shave-name">Familee Korean Shave Ice</div><div class="shave-verdict">Unique creamy style</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num" style="color:#9b8fa0">4</div>
+          <div class="shave-info"><div class="shave-name">Cocos Kauai</div><div class="shave-verdict">Solid</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num" style="color:#9b8fa0">5</div>
+          <div class="shave-info"><div class="shave-name">North Shore / Foodland</div><div class="shave-verdict">Fresh fruit version only</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num" style="color:#6b5f7a">6</div>
+          <div class="shave-info"><div class="shave-name">Keiki / Resort</div><div class="shave-verdict">Mid</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num" style="color:#6b5f7a">7</div>
+          <div class="shave-info"><div class="shave-name">JoJo's</div><div class="shave-verdict">Skip</div></div>
+        </div>
+        <div class="shave-rank-row">
+          <div class="shave-num" style="color:#6b5f7a">8</div>
+          <div class="shave-info"><div class="shave-name">Wai'oli Resort</div><div class="shave-verdict">Skip (but sneak in anyway)</div></div>
+        </div>
+      </div>
+      <!-- Right: review highlights -->
+      <div class="shave-right">
+        <div style="font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#7c4dff;margin-bottom:0.6rem">Review Highlights</div>
+
+        <div class="shave-review-block">
+          <div class="shave-shop-name">🥇 Hee Fat General Store</div>
+          <div class="shave-mini-row"><span class="who">Lauren N</span><span>5/5 — excellent texture, house-made syrups &amp; ice cream</span></div>
+          <div class="shave-mini-row"><span class="who">Nicole</span><span>"Definitely favorite so far!"</span></div>
+          <div class="shave-mini-row"><span class="who">Auresa</span><span>5/5 — "Best on island imo"</span></div>
+          <div class="shave-mini-row"><span class="who">Adele</span><span>⭐ "Hawaiian Sunrise — so good"</span></div>
+        </div>
+
+        <div class="shave-review-block">
+          <div class="shave-shop-name">🥈 Wishing Well</div>
+          <div class="shave-mini-row"><span class="who">Lauren N</span><span>5/5 — recommends lilikoi &amp; papaya toppings</span></div>
+          <div class="shave-mini-row"><span class="who">Glenn</span><span>10/10 😋</span></div>
+          <div class="shave-mini-row"><span class="who">Tiffany</span><span>4.5/5 — Yum!</span></div>
+          <div class="shave-mini-row"><span class="who">Ethan C</span><span>"Tropical Bliss is the best I've had so far"</span></div>
+          <div class="shave-mini-row"><span class="who">Abby</span><span>4/5 — "So yummy; out of mochi 😭"</span></div>
+        </div>
+
+        <div class="shave-review-block">
+          <div class="shave-shop-name">🥉 Familee Korean Shave Ice</div>
+          <div class="shave-mini-row"><span class="who">Auresa</span><span>4/5 — creamy &amp; delicious; powder on top a little weird</span></div>
+        </div>
+
+        <div class="shave-review-block">
+          <div class="shave-shop-name">North Shore / Foodland</div>
+          <div class="shave-mini-row"><span class="who">Rachel</span><span>3.5/5 — "Spoiled by Hee Fat"</span></div>
+          <div class="shave-mini-row"><span class="who">Sidra</span><span>Regular 0/5 · Fresh fruit 3.5/5 — regular unbearably sweet</span></div>
+          <div class="shave-mini-row"><span class="who">Zinnia</span><span>Tigers blood was tasty!</span></div>
+        </div>
+
+        <div class="shave-review-block">
+          <div class="shave-shop-name">Other Notable</div>
+          <div class="shave-mini-row"><span class="who">Keiki</span><span>Julia X: 3/5 — "Sauce:ice ratio was 5000:10"</span></div>
+          <div class="shave-mini-row"><span class="who">JoJo's</span><span>Sidra: 2.5/5 — syrups too sweet, too many ice chunks</span></div>
+          <div class="shave-mini-row"><span class="who">Wai'oli</span><span>Teresa: 2/5 — "not flavored in the middle, but infiltrating the resort was 5/5!"</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══════════════ ANALYTICS ═══════════════ -->
