@@ -137,7 +137,7 @@ canvas.chart { width: 100% !important; }
 
 /* Race header (hidden until play) */
 #raceHeader {
-  display: none;
+  display: block;
   background: #0d1117; border-bottom: 1px solid #1f1535;
   text-align: center; padding: 0.7rem 1rem 0.5rem;
   position: sticky; top: 72px; z-index: 9;
@@ -302,6 +302,31 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 <div class="page-header">
   <h1>🌺 Wedding Recap — Kauai 2026</h1>
   <p>Andrew &amp; Zinnia · May 1–24, 2026</p>
+</div>
+
+<!-- ═══════════════ RACE SECTION (moved to top) ═══════════════ -->
+<div class="section-label">Points Race Animation</div>
+
+<div id="raceHeader">
+  <div id="timestamp">–</div>
+  <div id="guest-count"></div>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+  <div id="raceControls">
+    <button id="btnPause">⏸ Pause</button>
+    <button id="btnRestart">↺ Restart</button>
+    <span style="font-size:0.72rem;color:#6b5f7a">Speed:</span>
+    <button id="btn1x" class="active" onclick="setSpeed(700)">1×</button>
+    <button id="btn2x" onclick="setSpeed(350)">2×</button>
+    <button id="btn4x" onclick="setSpeed(175)">4×</button>
+  </div>
+</div>
+
+<div class="race-wrap">
+  <div id="chart-container"></div>
+  <div id="line-section">
+    <canvas id="lineCanvas" height="380"></canvas>
+  </div>
+  <div id="done-msg">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS! 🏆</div>
 </div>
 
 <!-- ═══════════════ COMMUNITY REVIEWS ═══════════════ -->
@@ -550,41 +575,6 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
   </div>
 </div>
 
-<!-- ═══════════════ RACE SECTION ═══════════════ -->
-<div class="section-label">Points Race Animation</div>
-
-<!-- Sticky race header (shown after play) -->
-<div id="raceHeader">
-  <div id="timestamp">–</div>
-  <div id="guest-count"></div>
-  <div id="progress-track"><div id="progress-fill"></div></div>
-  <div id="raceControls">
-    <button id="btnPause">⏸ Pause</button>
-    <button id="btnRestart">↺ Restart</button>
-    <span style="font-size:0.72rem;color:#6b5f7a">Speed:</span>
-    <button id="btn1x" class="active" onclick="setSpeed(700)">1×</button>
-    <button id="btn2x" onclick="setSpeed(350)">2×</button>
-    <button id="btn4x" onclick="setSpeed(175)">4×</button>
-  </div>
-</div>
-
-<div class="race-wrap">
-
-  <!-- Big play gate -->
-  <div id="playGate">
-    <button id="bigPlayBtn" aria-label="Play race animation">▶</button>
-    <div id="playGateLabel">Watch the points race unfold</div>
-  </div>
-
-  <!-- Charts (hidden until play) -->
-  <div id="raceCharts" style="display:none">
-    <div id="chart-container"></div>
-    <div id="line-section">
-      <canvas id="lineCanvas" height="380"></canvas>
-    </div>
-    <div id="done-msg">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS! 🏆</div>
-  </div>
-</div>
 
 <footer>Points earned May 1–24, 2026 · 6-hour snapshots · All 65 participating guests</footer>
 
@@ -806,7 +796,7 @@ function renderBars(idx){
   }
 }
 
-let currentFrame=0,paused=false,speed=700,timer=null,started=false;
+let currentFrame=0,paused=false,speed=700,timer=null;
 
 function advance(){
   renderBars(currentFrame);drawLine(currentFrame);
@@ -827,15 +817,10 @@ function setSpeed(s){
   if(!paused)startTimer();
 }
 
-// Big play button
-document.getElementById('bigPlayBtn').addEventListener('click',()=>{
-  started=true;
-  document.getElementById('playGate').style.display='none';
-  document.getElementById('raceCharts').style.display='block';
-  document.getElementById('raceHeader').style.display='block';
-  resizeCanvas();
-  advance();startTimer();
-});
+// Autostart
+resizeCanvas();
+advance();
+startTimer();
 
 document.getElementById('btnPause').addEventListener('click',()=>{
   paused=!paused;
