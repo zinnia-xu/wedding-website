@@ -172,8 +172,10 @@ canvas.chart { width: 100% !important; }
 /* Bar chart */
 #chart-container { width: 100%; padding: 0.3rem 0 0.5rem; }
 .bar-row {
-  display: flex; align-items: center; margin-bottom: 3px; height: 25px;
-  transition: opacity 0.3s ease;
+  display: none; align-items: center; margin-bottom: 3px; height: 25px;
+}
+.bar-row.visible {
+  display: flex;
 }
 .rank-badge { width: 22px; min-width: 22px; font-size: 0.62rem; font-weight: 800; text-align: center; color: #f0d090; }
 .bar-label {
@@ -315,8 +317,8 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
     <button id="btnPause">⏸ Pause</button>
     <button id="btnRestart">↺ Restart</button>
     <span style="font-size:0.72rem;color:#6b5f7a">Speed:</span>
-    <button id="btn1x" class="active" onclick="setSpeed(700)">1×</button>
-    <button id="btn2x" onclick="setSpeed(350)">2×</button>
+    <button id="btn1x" onclick="setSpeed(700)">1×</button>
+    <button id="btn2x" class="active" onclick="setSpeed(350)">2×</button>
     <button id="btn4x" onclick="setSpeed(175)">4×</button>
   </div>
 </div>
@@ -695,7 +697,7 @@ const barContainer = document.getElementById('chart-container');
 const rows = [];
 for (let i=0;i<MAX_ENTRIES;i++) {
   const row = document.createElement('div');
-  row.className='bar-row'; row.style.opacity='0';
+  row.className='bar-row';
   row.innerHTML=
     `<div class="rank-badge" id="rank-${i}"></div>`+
     `<div class="bar-label" id="label-${i}"></div>`+
@@ -785,18 +787,18 @@ function renderBars(idx){
   for(let i=0;i<MAX_ENTRIES;i++){
     if(i<data.length){
       const [name,pts]=data[i];
-      rows[i].style.opacity='1';
+      rows[i].classList.add('visible');
       document.getElementById(`rank-${i}`).textContent=i+1;
       document.getElementById(`label-${i}`).textContent=i===0?'🥇 '+name:i===1?'🥈 '+name:i===2?'🥉 '+name:name;
       const bar=document.getElementById(`bar-${i}`);
       bar.style.width=(pts/maxPts*100).toFixed(1)+'%';
       bar.style.backgroundColor=nameColors[name]||'#7c4dff';
       document.getElementById(`pts-${i}`).textContent=pts.toLocaleString()+' pts';
-    } else rows[i].style.opacity='0';
+    } else rows[i].classList.remove('visible');
   }
 }
 
-let currentFrame=0,paused=false,speed=700,timer=null;
+let currentFrame=0,paused=false,speed=350,timer=null;
 
 function advance(){
   renderBars(currentFrame);drawLine(currentFrame);
