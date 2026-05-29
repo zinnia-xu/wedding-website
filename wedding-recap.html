@@ -331,6 +331,61 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
   <div id="done-msg">🏆 THE WINNERS HAVE BEEN CHOSEN. CONGRATULATIONS! 🏆</div>
 </div>
 
+<!-- ═══════════════ ANALYTICS ═══════════════ -->
+<div class="section-label">Activity Analytics</div>
+<div class="analytics-wrap">
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-number">1,438</div><div class="stat-label">Total Submissions</div></div>
+    <div class="stat-card"><div class="stat-number">25,761</div><div class="stat-label">Points Awarded</div></div>
+    <div class="stat-card"><div class="stat-number">65</div><div class="stat-label">Participating Guests</div></div>
+    <div class="stat-card"><div class="stat-number">24</div><div class="stat-label">Days of Competition</div></div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Most Completed Activities</h3>
+    <canvas class="chart" id="activityBar" height="780"></canvas>
+    <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
+      * <strong style="color:#9b8fa0">Special Requests ✨</strong> (115 entries): unique, creative, and one-off bonus submissions — emotional damages, granola perseverance through a broken oven, slug embodiment, boogie board sacrifice to Poseidon, fixing a child lock, lending binoculars, award nominations, and more.
+    </p>
+  </div>
+
+  <div class="chart-card">
+    <h3>Points Generated Per Activity</h3>
+    <canvas class="chart" id="activityPts" height="780"></canvas>
+    <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
+      * <strong style="color:#9b8fa0">Special Requests ✨</strong> (1,202 pts) includes creative bonus submissions. Wildlife and excursion activities (Spinner Dolphins, Chocolate Farm, Kilohana Railway, etc.) are now broken out into their own categories.
+    </p>
+  </div>
+
+  <div class="charts-row">
+    <div class="chart-card">
+      <h3>Activity Type Breakdown</h3>
+      <canvas class="chart" id="typePie" height="260"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Quick vs Big Point Activities</h3>
+      <canvas class="chart" id="smallBigPie" height="260"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-card">
+    <h3>Points Submitted Per Day</h3>
+    <canvas class="chart" id="dayBar" height="220"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <h3>Most Active Guests (by submissions)</h3>
+    <canvas class="chart" id="guestBar" height="300"></canvas>
+  </div>
+
+  <div class="chart-card">
+    <h3>Unique Guest Participation Per Activity</h3>
+    <canvas class="chart" id="participantsBar" height="780"></canvas>
+  </div>
+</div>
+
+
 <!-- ═══════════════ COMMUNITY REVIEWS ═══════════════ -->
 <div class="section-label">Movies &amp; Docs</div>
 <div class="reviews-wrap">
@@ -522,61 +577,6 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
     </div>
   </div>
 </div>
-
-<!-- ═══════════════ ANALYTICS ═══════════════ -->
-<div class="section-label">Activity Analytics</div>
-<div class="analytics-wrap">
-
-  <div class="stats-grid">
-    <div class="stat-card"><div class="stat-number">1,438</div><div class="stat-label">Total Submissions</div></div>
-    <div class="stat-card"><div class="stat-number">25,761</div><div class="stat-label">Points Awarded</div></div>
-    <div class="stat-card"><div class="stat-number">65</div><div class="stat-label">Participating Guests</div></div>
-    <div class="stat-card"><div class="stat-number">24</div><div class="stat-label">Days of Competition</div></div>
-  </div>
-
-  <div class="chart-card">
-    <h3>Most Completed Activities</h3>
-    <canvas class="chart" id="activityBar" height="780"></canvas>
-    <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
-      * <strong style="color:#9b8fa0">Special Requests ✨</strong> (115 entries): unique, creative, and one-off bonus submissions — emotional damages, granola perseverance through a broken oven, slug embodiment, boogie board sacrifice to Poseidon, fixing a child lock, lending binoculars, award nominations, and more.
-    </p>
-  </div>
-
-  <div class="chart-card">
-    <h3>Points Generated Per Activity</h3>
-    <canvas class="chart" id="activityPts" height="780"></canvas>
-    <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
-      * <strong style="color:#9b8fa0">Special Requests ✨</strong> (1,202 pts) includes creative bonus submissions. Wildlife and excursion activities (Spinner Dolphins, Chocolate Farm, Kilohana Railway, etc.) are now broken out into their own categories.
-    </p>
-  </div>
-
-  <div class="charts-row">
-    <div class="chart-card">
-      <h3>Activity Type Breakdown</h3>
-      <canvas class="chart" id="typePie" height="260"></canvas>
-    </div>
-    <div class="chart-card">
-      <h3>Quick vs Big Point Activities</h3>
-      <canvas class="chart" id="smallBigPie" height="260"></canvas>
-    </div>
-  </div>
-
-  <div class="chart-card">
-    <h3>Points Submitted Per Day</h3>
-    <canvas class="chart" id="dayBar" height="220"></canvas>
-  </div>
-
-  <div class="chart-card">
-    <h3>Most Active Guests (by submissions)</h3>
-    <canvas class="chart" id="guestBar" height="300"></canvas>
-  </div>
-
-  <div class="chart-card">
-    <h3>Unique Guest Participation Per Activity</h3>
-    <canvas class="chart" id="participantsBar" height="780"></canvas>
-  </div>
-</div>
-
 
 <footer>Points earned May 1–24, 2026 · 6-hour snapshots · All 65 participating guests</footer>
 
