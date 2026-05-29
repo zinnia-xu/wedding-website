@@ -347,7 +347,7 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 
   <div class="chart-card">
     <h3>Most Completed Activities</h3>
-    <canvas class="chart" id="activityBar" height="780"></canvas>
+    <canvas class="chart" id="activityBar" height="1300"></canvas>
     <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
       * <strong style="color:#9b8fa0">Special Requests ✨</strong> (115 entries): unique, creative, and one-off bonus submissions — emotional damages, granola perseverance through a broken oven, slug embodiment, boogie board sacrifice to Poseidon, fixing a child lock, lending binoculars, award nominations, and more.
     </p>
@@ -355,7 +355,7 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 
   <div class="chart-card">
     <h3>Points Generated Per Activity</h3>
-    <canvas class="chart" id="activityPts" height="780"></canvas>
+    <canvas class="chart" id="activityPts" height="1300"></canvas>
     <p style="font-size:0.68rem;color:#6b5f7a;margin-top:0.65rem;line-height:1.6">
       * <strong style="color:#9b8fa0">Special Requests ✨</strong> (1,202 pts) includes creative bonus submissions. Wildlife and excursion activities (Spinner Dolphins, Chocolate Farm, Kilohana Railway, etc.) are now broken out into their own categories.
     </p>
@@ -367,8 +367,8 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
       <canvas class="chart" id="typePie" height="260"></canvas>
     </div>
     <div class="chart-card">
-      <h3>Quick vs Big Point Activities</h3>
-      <canvas class="chart" id="smallBigPie" height="260"></canvas>
+      <h3>Entries by Point Value</h3>
+      <canvas class="chart" id="smallBigPie" height="300"></canvas>
     </div>
   </div>
 
@@ -384,7 +384,7 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 
   <div class="chart-card">
     <h3>Unique Guest Participation Per Activity</h3>
-    <canvas class="chart" id="participantsBar" height="780"></canvas>
+    <canvas class="chart" id="participantsBar" height="1300"></canvas>
   </div>
 </div>
 
@@ -585,7 +585,7 @@ footer { padding: 0.8rem; font-size: 0.67rem; color: #4a3f5a; text-align: center
 
 <script>
 // ── Analytics Charts ──
-const ANALYTICS = {"total_submissions":1438,"total_points":25761,"total_guests":65,"activity_freq":[["Try a New Fruit",206,1025,34],["Special Requests \u2728",115,1202,50],["Shave Ice",102,510,39],["Snorkeling",65,2398,35],["Sunrise / Sunset",64,325,37],["Rare Animal Photo",60,412,26],["Hiking",58,2219,38],["Beach Competition",57,3674,57],["Watch a Film/Show",54,448,27],["Try Poi",45,281,24],["Eurovision",45,559,21],["Rainbow Selfie",45,221,29],["Chicken Selfie",36,178,34],["Biking",35,670,22],["Napali Coast Kayak",34,2477,30],["Food Bingo",32,570,22],["Scuba Diving",28,1396,20],["Banana Slug Art",27,639,21],["Running",27,270,27],["Open Water Swimming",27,261,27],["Nene Sighting",26,190,25],["Surfing",26,1080,19],["Shared a Recipe",23,109,17],["Day Gecko",23,115,22],["Team Captain",22,864,16],["Kilauea Lighthouse",21,499,21],["Selfie with A&Z",18,90,17],["Botanical Gardens",17,510,15],["Bake Something",13,185,12],["E-Foiling",12,660,11],["Red-footed Booby",12,160,11],["Albatross Sighting",10,95,10],["Chocolate Farm",9,220,9],["Raised the Couple \ud83d\udc8d",7,511,7],["Spot a Spinner Dolphin",7,70,7],["Frigatebird Sighting",5,22,4],["Snail Eggs",5,50,5],["Mahjong",3,15,2],["Rent a Dog",3,61,2],["Kilohana Railway",3,90,3],["Wailua River Cruise",2,60,2],["Go Spearfishing",2,120,2],["Coffee Tour",2,60,2],["Honey Farm",2,60,2],["Camping at Salt Pond",2,100,2],["Napali Boat Tour",1,30,1]],"type_breakdown":[["Water \ud83c\udf0a",254,12196],["Land & Excursions \ud83c\udf3f",179,4719],["Wildlife \ud83e\udd8e",184,1292],["Nature \ud83c\udf05",109,546],["Food & Drink \ud83c\udf4d",398,2571],["Entertainment \ud83c\udfac",99,1007],["Social & Creative \ud83c\udfa8",100,2228],["Special Requests \u2728",115,1202]],"small_big":[["Under 30 pts",1083,7986],["30+ pts",355,17775]],"points_by_day":[["2026-05-01",24,4],["2026-05-02",40,3],["2026-05-03",49,6],["2026-05-04",49,6],["2026-05-05",102,6],["2026-05-06",36,4],["2026-05-07",123,12],["2026-05-08",62,4],["2026-05-09",58,9],["2026-05-10",60,2],["2026-05-11",5,1],["2026-05-12",33,6],["2026-05-13",15,1],["2026-05-14",60,4],["2026-05-15",76,5],["2026-05-16",612,32],["2026-05-17",805,83],["2026-05-18",917,75],["2026-05-19",923,63],["2026-05-20",1492,81],["2026-05-21",2155,126],["2026-05-22",2977,203],["2026-05-23",4443,246],["2026-05-24",10645,456]],"top_guests":[["Sidra Hussain",83,888],["Nicole Kreutter",83,866],["Audrey Musselman-Brown",62,795],["Rachel Macfarlane",58,858],["Auresa Nyctea",57,770],["Laura Carlson",51,834],["Adele Feng",45,631],["Kathleen Schaefer",44,660],["Adam Watson",43,580],["Anjali Kayal",43,627],["Tiffany Kha",40,726],["Julia Xu",39,496],["Devon Stork",37,502],["Ellen Hui",36,638],["Cameron Haydinger",33,556],["Zinnia Xu",33,561],["Saige Manier",31,504],["Lauren Nishizaki",29,444],["Scott Roepnack",29,567],["Evelyn Siu",28,425]]}
+const ANALYTICS = {"total_submissions":1438,"total_points":25761,"total_guests":65,"activity_freq":[["Try a New Fruit",206,1025,34],["Special Requests \u2728",115,1202,50],["Shave Ice",102,510,39],["Snorkeling",65,2398,35],["Sunrise / Sunset",64,325,37],["Rare Animal Photo",60,412,26],["Hiking",58,2219,38],["Beach Competition",57,3674,57],["Watch a Film/Show",54,448,27],["Try Poi",45,281,24],["Eurovision",45,559,21],["Rainbow Selfie",45,221,29],["Chicken Selfie",36,178,34],["Biking",35,670,22],["Napali Coast Kayak",34,2477,30],["Food Bingo",32,570,22],["Scuba Diving",28,1396,20],["Banana Slug Art",27,639,21],["Running",27,270,27],["Open Water Swimming",27,261,27],["Nene Sighting",26,190,25],["Surfing",26,1080,19],["Shared a Recipe",23,109,17],["Day Gecko",23,115,22],["Team Captain",22,864,16],["Kilauea Lighthouse",21,499,21],["Selfie with A&Z",18,90,17],["Botanical Gardens",17,510,15],["Bake Something",13,185,12],["E-Foiling",12,660,11],["Red-footed Booby",12,160,11],["Albatross Sighting",10,95,10],["Chocolate Farm",9,220,9],["Raised the Couple \ud83d\udc8d",7,511,7],["Spot a Spinner Dolphin",7,70,7],["Frigatebird Sighting",5,22,4],["Snail Eggs",5,50,5],["Mahjong",3,15,2],["Rent a Dog",3,61,2],["Kilohana Railway",3,90,3],["Wailua River Cruise",2,60,2],["Go Spearfishing",2,120,2],["Coffee Tour",2,60,2],["Honey Farm",2,60,2],["Camping at Salt Pond",2,100,2],["Napali Boat Tour",1,30,1]],"type_breakdown":[["Water \ud83c\udf0a",254,12196],["Land & Excursions \ud83c\udf3f",179,4719],["Wildlife \ud83e\udd8e",184,1292],["Nature \ud83c\udf05",109,546],["Food & Drink \ud83c\udf4d",398,2571],["Entertainment \ud83c\udfac",99,1007],["Social & Creative \ud83c\udfa8",100,2228],["Special Requests \u2728",115,1202]],"small_big":[["<5 pts",94,164],["5–9 pts",673,3382],["10–19 pts",226,2537],["20–29 pts",87,1950],["30–49 pts",219,8273],["50–74 pts",92,5418],["75–100 pts",44,4084]],"points_by_day":[["2026-05-01",24,4],["2026-05-02",40,3],["2026-05-03",49,6],["2026-05-04",49,6],["2026-05-05",102,6],["2026-05-06",36,4],["2026-05-07",123,12],["2026-05-08",62,4],["2026-05-09",58,9],["2026-05-10",60,2],["2026-05-11",5,1],["2026-05-12",33,6],["2026-05-13",15,1],["2026-05-14",60,4],["2026-05-15",76,5],["2026-05-16",612,32],["2026-05-17",805,83],["2026-05-18",917,75],["2026-05-19",923,63],["2026-05-20",1492,81],["2026-05-21",2155,126],["2026-05-22",2977,203],["2026-05-23",4443,246],["2026-05-24",10645,456]],"top_guests":[["Sidra Hussain",83,888],["Nicole Kreutter",83,866],["Audrey Musselman-Brown",62,795],["Rachel Macfarlane",58,858],["Auresa Nyctea",57,770],["Laura Carlson",51,834],["Adele Feng",45,631],["Kathleen Schaefer",44,660],["Adam Watson",43,580],["Anjali Kayal",43,627],["Tiffany Kha",40,726],["Julia Xu",39,496],["Devon Stork",37,502],["Ellen Hui",36,638],["Cameron Haydinger",33,556],["Zinnia Xu",33,561],["Saige Manier",31,504],["Lauren Nishizaki",29,444],["Scott Roepnack",29,567],["Evelyn Siu",28,425]]}
 
 Chart.defaults.color = 'rgba(255,255,255,0.5)';
 Chart.defaults.font.family = "'DM Sans','Segoe UI',sans-serif";
@@ -654,7 +654,7 @@ makePie('typePie',
 );
 makePie('smallBigPie',
   ANALYTICS.small_big.map(([l])=>l), ANALYTICS.small_big.map(([,c])=>c),
-  ['#7c4dff','#f0d090']
+  ['#4dd0e1','#29b6f6','#7c4dff','#ab47bc','#ec407a','#f0d090','#ffca28']
 );
 
 const dayData = ANALYTICS.points_by_day;
