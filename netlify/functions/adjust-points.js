@@ -183,6 +183,21 @@ exports.handler = async (event) => {
       }
 
       await store.setJSON("data", data);
+
+      // Post to #points-activity channel
+      const POINTS_WEBHOOK = process.env.WEDDING_POINTS_SLACK_WEBHOOK;
+      if (POINTS_WEBHOOK && process.env.DISABLE_SLACK !== "true") {
+        const updatedGuest = data.guests.find(g => g.name.toLowerCase() === who.toLowerCase());
+        const total = updatedGuest ? updatedGuest.points : adjustedPoints;
+        await fetch(POINTS_WEBHOOK, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: `✏️ *${who}* earned *+${adjustedPoints} pts* (adjusted from ${originalPoints}) for: _${reason}_ — now at *${total} pts total*`,
+          }),
+        }).catch(() => {});
+      }
+
       return { statusCode: 200, headers: jsonHeaders, body: JSON.stringify({ success: true }) };
     } catch (err) {
       console.error("adjust-points error:", err);
